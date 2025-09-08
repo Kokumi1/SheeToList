@@ -1,12 +1,21 @@
-﻿namespace SheeToList
+﻿using SheeToList.Services;
+
+namespace SheeToList
 {
     public partial class MainPage : ContentPage
     {
         int count = 0;
+        string dataString = "";
 
         public MainPage()
         {
             InitializeComponent();
+
+            //initialize Google Sheets API
+            GoogleApiTalker apiTalker = new();
+           dataString =   apiTalker.GetDataString();
+
+            LabelTextFromSheet.Text = dataString;
         }
 
         private void OnCounterClicked(object? sender, EventArgs e)
