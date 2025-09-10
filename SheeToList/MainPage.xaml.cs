@@ -1,33 +1,67 @@
-﻿using SheeToList.Services;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using SheeToList.Services;
 
 namespace SheeToList
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
+        
         string dataString = "";
 
         public MainPage()
         {
             InitializeComponent();
-
-            //initialize Google Sheets API
-            GoogleApiTalker apiTalker = new();
-           dataString =   apiTalker.GetDataString();
-
-            LabelTextFromSheet.Text = dataString;
+            BindingContext = new MainViewModel();
+            var Items = new MainViewModel().Items;
+         
         }
+    }
 
-        private void OnCounterClicked(object? sender, EventArgs e)
+    public class MainViewModel : INotifyPropertyChanged
+    {
+        public ObservableCollection<Item> Items { get; }
+
+        public MainViewModel()
         {
-            count++;
+            //initialize Google Sheets API
+            /*    GoogleApiTalker apiTalker = new();
+               dataString =   apiTalker.GetDataString();
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+                LabelTextFromSheet.Text = dataString;*/
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+
+            // Génère une liste "infinie" pour la démo (ici 10 éléments)
+            Items = new ObservableCollection<Item>(
+                Enumerable.Range(1, 10).Select(i => new Item { Text = $"Item {i}", IsChecked = false })
+            );
+            OnPropertyChanged();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged([CallerMemberName] string name = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+    public class Item : INotifyPropertyChanged
+    {
+        string text;
+        bool isChecked;
+
+        public string Text
+        {
+            get => text;
+            set { text = value; OnPropertyChanged(); }
+        }
+
+        public bool IsChecked
+        {
+            get => isChecked;
+            set { isChecked = value; OnPropertyChanged(); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged([CallerMemberName] string name = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

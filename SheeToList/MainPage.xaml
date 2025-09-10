@@ -3,33 +3,50 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SheeToList.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a hovercraft number nine" />
+    <Grid RowDefinitions="50,*,Auto,50" Padding="30,0">
 
+        <Grid  Grid.Row="0" ColumnDefinitions="*,Auto" Padding="0.10">
             <Label
-                Text="Hello, here what I read"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
-
-            <Label
-                x:Name="LabelTextFromSheet"
-                Text=""
-                SemanticProperties.Description="list" />
-
+                    Text="Importer votre google Sheet et
+                 obtener votre liste de course"/>
             <Button
-                x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />
-        </VerticalStackLayout>
-    </ScrollView>
+                 Text="Importer"
+                     Grid.Column="1"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center" />
+        </Grid>
+        
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout
+                Spacing="25">
 
+
+
+
+                <CollectionView x:Name="ItemsList"
+                 ItemsSource="{Binding Items}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10" ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding Text}" VerticalOptions="Center"/>
+                                <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="1" VerticalOptions="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="2" Padding="0.10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button
+                     Text="Révélez tout"
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center" />
+        </Grid>
+    </Grid>
 </ContentPage>
