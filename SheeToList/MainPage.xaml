@@ -20,9 +20,6 @@
             <VerticalStackLayout
                 Spacing="25">
 
-
-
-
                 <CollectionView x:Name="ItemsList"
                  ItemsSource="{Binding Items}">
                     <CollectionView.ItemTemplate>
@@ -42,9 +39,19 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+            
             <Button
-                     Text="Révélez tout"
+                   Command="{Binding AddItemCommand}"
+                     Text="+"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center" />
+
+            <Button
+                     Text="{Binding FilterShowButtonText}"
+                     Command="{Binding FilterShowCommand}"
                     Grid.Column="1"
+                    WidthRequest="130"
                     HorizontalOptions="End"
                     VerticalOptions="Center" />
         </Grid>
