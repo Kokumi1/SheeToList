@@ -31,7 +31,7 @@ namespace SheeToList
             }
         }
 
-        public ObservableCollection<ProductToBuy> Items { get; }
+        public ObservableCollection<ProductToBuy> Items { get; set; }
 
         public MainViewModel()
         {
@@ -56,12 +56,12 @@ namespace SheeToList
         public void ImportData()
         {
             GoogleApiTalker apiTalker = new();
-            IList<IList<Object>> sheetData = apiTalker.GetData();
-            foreach (var row in sheetData)
-            {
-                var itemName = string.Join(" / ", row);
-                Items.Add(new ProductToBuy { Name = itemName, IsChecked = false });
-            }
+           
+            var sorted = GoogleApiTalker.GetData().OrderBy(item => item.Name).ToList();
+            foreach (var item in sorted)
+                Items.Add(item);
+
+           
             OnPropertyChanged(nameof(Items));
         }
 
