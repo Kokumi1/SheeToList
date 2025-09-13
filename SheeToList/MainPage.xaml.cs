@@ -9,14 +9,10 @@ namespace SheeToList
 {
     public partial class MainPage : ContentPage
     {
-        //MainViewModel viewModel;
-
         public MainPage()
         {
             InitializeComponent();
-            //viewModel = new MainViewModel();
             BindingContext = new MainViewModel();
-            //var Items = new MainViewModel().Items;
 
         }
     }
@@ -35,35 +31,39 @@ namespace SheeToList
             }
         }
 
-        public ObservableCollection<Item> Items { get; }
+        public ObservableCollection<ProductToBuy> Items { get; }
 
         public MainViewModel()
         {
             FilterShowCommand = new Command(() => IsFilterVisible = !IsFilterVisible);
             AddItemCommand = new Command(() => AddItem("added thing"));
-            //initialize Google Sheets API
-            /*    GoogleApiTalker apiTalker = new();
-               dataString =   apiTalker.GetDataString();
+            ImportDataCommand = new Command(() => ImportData());
 
-                LabelTextFromSheet.Text = dataString;*/
-
-
-            // Génère une liste "infinie" pour la démo (ici 10 éléments)
-            Items = new ObservableCollection<Item>(
-                Enumerable.Range(1, 10).Select(i => new Item { Text = $"Item {i}", IsChecked = false })
-            );
-            OnPropertyChanged();
+                Items = [];
         }
 
         public void AddItem(string text)
         {
-            Items.Add(new Item { Text = text, IsChecked = false });
+            Items.Add(new ProductToBuy { Name = text, IsChecked = false });
             OnPropertyChanged(nameof(Items));
         }
 
         public ICommand AddItemCommand { get; }
         public ICommand FilterShowCommand { get; }
+        public ICommand ImportDataCommand { get; }
         public string FilterShowButtonText => IsFilterVisible ? "Cachez" : "Révélez tout";
+
+        public void ImportData()
+        {
+            GoogleApiTalker apiTalker = new();
+            IList<IList<Object>> sheetData = apiTalker.GetData();
+            foreach (var row in sheetData)
+            {
+                var itemName = string.Join(" / ", row);
+                Items.Add(new ProductToBuy { Name = itemName, IsChecked = false });
+            }
+            OnPropertyChanged(nameof(Items));
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         void OnPropertyChanged([CallerMemberName] string name = "") =>

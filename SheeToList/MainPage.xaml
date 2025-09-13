@@ -6,12 +6,11 @@
     <Grid RowDefinitions="50,*,Auto,50" Padding="30,0">
 
         <Grid  Grid.Row="0" ColumnDefinitions="*,Auto" Padding="0.10">
-            <Label
-                    Text="Importer votre google Sheet et
-                 obtener votre liste de course"/>
+            
             <Button
-                 Text="Importer"
-                     Grid.Column="1"
+                    Command="{Binding ImportDataCommand}"
+                    Text="Importer"
+                    Grid.Column="1"
                     HorizontalOptions="End"
                     VerticalOptions="Center" />
         </Grid>
@@ -25,7 +24,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Padding="10" ColumnDefinitions="*,Auto">
-                                <Label Text="{Binding Text}" VerticalOptions="Center"/>
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
                                 <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="1" VerticalOptions="Center"/>
                             </Grid>
                         </DataTemplate>

@@ -3,16 +3,15 @@ using System.Runtime.CompilerServices;
 
 namespace SheeToList.Model
 {
-    //TODO: rename: class name to Product
-    public class Item : INotifyPropertyChanged
+    public class ProductToBuy : INotifyPropertyChanged
     {
-        string text;
-    bool isChecked;
+        string name ="";
+         bool isChecked;
 
-    public string Text
+    public string Name
     {
-        get => text;
-        set { text = value; OnPropertyChanged(); }
+        get => name;
+        set { name = value; OnPropertyChanged(); }
     }
 
     public bool IsChecked

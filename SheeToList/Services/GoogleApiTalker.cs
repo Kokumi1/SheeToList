@@ -25,16 +25,15 @@ namespace SheeToList.Services
             }
         }
 
-        public string GetDataString()
+        public IList<IList<Object>> GetData()
         {
             var spreadsheetId = "1ChvD0OKtSh_LGO_F7zq2225cklbK4br0WFkkcirF7RM";
             var range = "menu semaine !C4:D25";
             var request = Service.Spreadsheets.Values.Get(spreadsheetId, range);
             var response = request.Execute();
             var values = response.Values;
-            var returnString = "";
 
-            if (values != null && values.Count > 0)
+          /*  if (values != null && values.Count > 0)
             {
                 foreach (var row in values)
                 {
@@ -44,8 +43,8 @@ namespace SheeToList.Services
             else
             {
                 returnString = "No data found.";
-            }
-            return returnString;
+            }*/
+            return values;
         }
     }
 }
