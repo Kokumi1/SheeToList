@@ -23,9 +23,27 @@
                  ItemsSource="{Binding Items}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="10" ColumnDefinitions="*,Auto">
+                            <Grid Padding="10" ColumnDefinitions="60*,15*,15*,10*">
                                 <Label Text="{Binding Name}" VerticalOptions="Center"/>
-                                <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="1" VerticalOptions="Center"/>
+                                <Button 
+                                    Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
+                                    CommandParameter="{Binding .}"
+                                    VerticalOptions="Center"
+                                    ImageSource="edit.png"
+                                    Grid.Column="1"
+                                    HeightRequest="20"
+                                    WidthRequest="20"
+                                    />
+                                <Button 
+                                    Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ItemsList}}"
+                                    CommandParameter="{Binding .}"
+                                    VerticalOptions="Center"
+                                    ImageSource="trash.png"
+                                    Grid.Column="2"
+                                     HeightRequest="20"
+                                    WidthRequest="20"
+                                    />
+                                <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" VerticalOptions="Center"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

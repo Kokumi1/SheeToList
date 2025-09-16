@@ -38,6 +38,8 @@ namespace SheeToList
             FilterShowCommand = new Command(() => IsFilterVisible = !IsFilterVisible);
             AddItemCommand = new Command(() => AddItem("added thing"));
             ImportDataCommand = new Command(() => ImportData());
+            EditItemCommand = new Command<ProductToBuy>(EditItem);
+            DeleteItemCommand = new Command<ProductToBuy>(DeleteItem);
 
                 Items = [];
         }
@@ -51,6 +53,8 @@ namespace SheeToList
         public ICommand AddItemCommand { get; }
         public ICommand FilterShowCommand { get; }
         public ICommand ImportDataCommand { get; }
+        public ICommand EditItemCommand { get; }
+        public ICommand DeleteItemCommand { get; }
         public string FilterShowButtonText => IsFilterVisible ? "Cachez" : "Révélez tout";
 
         public void ImportData()
@@ -63,6 +67,19 @@ namespace SheeToList
 
            
             OnPropertyChanged(nameof(Items));
+        }
+
+        private void EditItem(ProductToBuy item)
+        {
+            if (item == null) return;
+            // Logique d'édition (ex: ouvrir une popup de modification)
+            item.Name = "Edited Item";
+        }
+
+        private void DeleteItem(ProductToBuy item)
+        {
+            if (item == null) return;
+            Items.Remove(item);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
