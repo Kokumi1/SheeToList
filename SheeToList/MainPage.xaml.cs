@@ -12,13 +12,19 @@ namespace SheeToList
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainViewModel();
+            BindingContext = new MainViewModel(this);
 
+        }
+
+        public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "")
+        {
+            return  await DisplayPromptAsync(title, message, initialValue: initialValue);
         }
     }
 
     public class MainViewModel : INotifyPropertyChanged
     {
+        private readonly MainPage _page ;
         private bool _isFilterVisible;
         public bool IsFilterVisible
         {
@@ -33,19 +39,23 @@ namespace SheeToList
 
         public ObservableCollection<ProductToBuy> Items { get; set; }
 
-        public MainViewModel()
+        public MainViewModel(MainPage page)
         {
             FilterShowCommand = new Command(() => IsFilterVisible = !IsFilterVisible);
-            AddItemCommand = new Command(() => AddItem("added thing"));
+            AddItemCommand = new Command(AddItem);
             ImportDataCommand = new Command(() => ImportData());
             EditItemCommand = new Command<ProductToBuy>(EditItem);
             DeleteItemCommand = new Command<ProductToBuy>(DeleteItem);
 
-                Items = [];
+            Items = [];
+            _page = page;
         }
 
-        public void AddItem(string text)
+        public async void AddItem()
         {
+            string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
+            if (string.IsNullOrWhiteSpace(text)) return;
+
             Items.Add(new ProductToBuy { Name = text, IsChecked = false });
             OnPropertyChanged(nameof(Items));
         }
@@ -69,11 +79,14 @@ namespace SheeToList
             OnPropertyChanged(nameof(Items));
         }
 
-        private void EditItem(ProductToBuy item)
+        private async void EditItem(ProductToBuy item)
         {
             if (item == null) return;
             // Logique d'édition (ex: ouvrir une popup de modification)
-            item.Name = "Edited Item";
+            string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nouveau nom",
+                item.Name);
+            if (string.IsNullOrWhiteSpace(text)) return;
+            item.Name = text;
         }
 
         private void DeleteItem(ProductToBuy item)
