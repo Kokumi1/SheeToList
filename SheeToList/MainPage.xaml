@@ -36,7 +36,7 @@
                 Spacing="25">
 
                 <CollectionView x:Name="ItemsList"
-                 ItemsSource="{Binding FilteredItems}">
+                 ItemsSource="{Binding ToBuyProducts}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Padding="10" ColumnDefinitions="60*,15*,15*,10*">
