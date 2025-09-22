@@ -25,7 +25,7 @@ namespace SheeToList
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly MainPage _page ;
-        private bool _isFilterVisible;
+        private bool _isFilterVisible ;
         public bool IsFilterVisible
         {
             get => _isFilterVisible;
@@ -34,6 +34,17 @@ namespace SheeToList
                 _isFilterVisible = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(FilterShowButtonText));
+                OnPropertyChanged(nameof(FilteredItems));
+            }
+        }
+
+        public ObservableCollection<ProductToBuy> FilteredItems
+        {
+            get
+            {
+                if (IsFilterVisible)
+                    return Items;
+                return new ObservableCollection<ProductToBuy>(Items.Where(item => !item.IsChecked));
             }
         }
 
@@ -49,6 +60,17 @@ namespace SheeToList
 
             Items = [];
             _page = page;
+
+            Items.CollectionChanged += (s, e) =>
+            {
+                if(e.NewItems != null)
+                    foreach (ProductToBuy item in e.NewItems)
+                        item.PropertyChanged += Item_PropertyChanged;
+                    if(e.OldItems != null)
+                        foreach (ProductToBuy item in e.OldItems)
+                            item.PropertyChanged -= Item_PropertyChanged;
+                OnPropertyChanged(nameof(FilteredItems));
+            };
         }
 
         public async void AddItem()
@@ -93,6 +115,14 @@ namespace SheeToList
         {
             if (item == null) return;
             Items.Remove(item);
+        }
+
+        private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ProductToBuy.IsChecked))
+            {
+                OnPropertyChanged(nameof(FilteredItems));
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
