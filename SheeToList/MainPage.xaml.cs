@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using SheeToList.Model;
 using SheeToList.Services;
@@ -30,6 +31,7 @@ namespace SheeToList
     {
         private readonly MainPage _page ;
         private bool _isbuyedProductVisible ;
+        private bool _isLoading;
 
         #region Properties
         public bool IsbuyedProductVisible
@@ -41,6 +43,16 @@ namespace SheeToList
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(FilterShowButtonText));
                 OnPropertyChanged(nameof(ToBuyProducts));
+            }
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
             }
         }
 
@@ -72,13 +84,28 @@ namespace SheeToList
         #endregion
 
         #region Data Import
-        public void ImportData()
+        public async Task ImportData()
         {
+            IsLoading = true;
+            await _page.DisplayAlert("Debug", IsLoading.ToString(), "OK");
             GoogleApiTalker apiTalker = new();
-
-            var sorted = GoogleApiTalker.GetData().OrderBy(item => item.Name).ToList();
-            foreach (var item in sorted)
-                Products.Add(item);
+            try
+            {
+                var sorted = GoogleApiTalker.GetData().OrderBy(item => item.Name).ToList();
+                foreach (var item in sorted)
+                    Products.Add(item);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                var sorted = new List<ProductToBuy>();
+                await _page.DisplayAlert("Erreur", "Impossible de récupérer les données. Vérifiez votre connexion internet.", "OK");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+           // await _page.DisplayAlert("Debug", IsLoading.ToString(), "OK");
             OnPropertyChanged(nameof(Products));
         }
         #endregion

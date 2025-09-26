@@ -34,7 +34,13 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout
                 Spacing="25">
-
+                <ActivityIndicator
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    Color="BlueViolet"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                 />
                 <CollectionView x:Name="ItemsList"
                  ItemsSource="{Binding ToBuyProducts}">
                     <CollectionView.ItemTemplate>
@@ -68,6 +74,8 @@
                 </CollectionView>
             </VerticalStackLayout>
         </ScrollView>
+
+        
 
         <Grid Grid.Row="2" Padding="0.10">
             <Grid.ColumnDefinitions>
