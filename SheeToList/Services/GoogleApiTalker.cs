@@ -27,12 +27,12 @@ namespace SheeToList.Services
         }
 
         //Get data from the Google Sheet
-        public static IList<ProductToBuy> GetData()
+        public static async Task<IList<ProductToBuy>> GetData()
         {
             var spreadsheetId = "1ChvD0OKtSh_LGO_F7zq2225cklbK4br0WFkkcirF7RM";
             var range = "menu semaine !C4:D25";
             var request = Service.Spreadsheets.Values.Get(spreadsheetId, range);
-            var response = request.Execute();
+            var response = await Task.Run(() => request.Execute());
             var values = response.Values;
 
             if (values == null || values.Count == 0)

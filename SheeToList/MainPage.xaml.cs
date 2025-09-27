@@ -87,11 +87,13 @@ namespace SheeToList
         public async Task ImportData()
         {
             IsLoading = true;
-            await _page.DisplayAlert("Debug", IsLoading.ToString(), "OK");
+            OnPropertyChanged(nameof(IsLoading));
+
+            //await _page.DisplayAlert("Debug", IsLoading.ToString(), "OK");
             GoogleApiTalker apiTalker = new();
             try
             {
-                var sorted = GoogleApiTalker.GetData().OrderBy(item => item.Name).ToList();
+                var sorted =(await  GoogleApiTalker.GetData()).OrderBy(item => item.Name).ToList();
                 foreach (var item in sorted)
                     Products.Add(item);
             }
@@ -104,6 +106,7 @@ namespace SheeToList
             finally
             {
                 IsLoading = false;
+                OnPropertyChanged(nameof(IsLoading));
             }
            // await _page.DisplayAlert("Debug", IsLoading.ToString(), "OK");
             OnPropertyChanged(nameof(Products));
