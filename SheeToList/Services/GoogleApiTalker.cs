@@ -1,4 +1,6 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using System.Reflection;
+using System.Threading.Tasks;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using SheeToList.Model;
@@ -12,11 +14,32 @@ namespace SheeToList.Services
         public static void Initialize()
         {
         }
+
+        private static string GetCredentialPath()
+        {
+            var filename = "credential.json";
+
+#if ANDROID
+            var filepath = Path.Combine(FileSystem.AppDataDirectory, filename);
+            if (!File.Exists(filepath))
+            {
+                using var stream = FileSystem.OpenAppPackageFileAsync(filename);
+                using var fileStream = File.Create(filepath);
+                Task.Run(async () => await (await stream).CopyToAsync(fileStream)).Wait();
+            }
+            var file = File.ReadAllText(filepath);
+            return filepath;
+#else
+            return Path.Combine(AppContext.BaseDirectory, filename);
+#endif
+        }
+
         private static SheetsService Service
         {
             get
             {
-                credential = GoogleCredential.FromFile("credential.json")
+                credential = GoogleCredential.FromFile(GetCredentialPath())
+               // credential = GoogleCredential.FromFile("credential.json")
                 .CreateScoped(SheetsService.Scope.Spreadsheets);
                 return new SheetsService(new BaseClientService.Initializer()
                 {

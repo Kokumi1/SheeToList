@@ -101,7 +101,7 @@ namespace SheeToList
             {
                 Console.WriteLine(ex.Message);
                 var sorted = new List<ProductToBuy>();
-                await _page.DisplayAlert("Erreur", "Impossible de récupérer les données. Vérifiez votre connexion internet.", "OK");
+                await _page.DisplayAlert("Erreur", ex.Message, "OK");
             }
             finally
             {
