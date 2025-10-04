@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -30,16 +31,18 @@ namespace SheeToList
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly MainPage _page ;
-        private bool _isbuyedProductVisible ;
+        private bool _isBuyedProductVisible ;
+        private ObservableCollection<ProductToBuy>? _filteredProducts;
         private bool _isLoading;
 
         #region Properties
-        public bool IsbuyedProductVisible
+        public bool IsBuyedProductVisible
         {
-            get => _isbuyedProductVisible;
+            get => _isBuyedProductVisible;
             set
             {
-                _isbuyedProductVisible = value;
+                if(_isBuyedProductVisible == value) return;
+                _isBuyedProductVisible = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(FilterShowButtonText));
                 OnPropertyChanged(nameof(ToBuyProducts));
@@ -60,9 +63,10 @@ namespace SheeToList
         {
             get
             {
-                if (IsbuyedProductVisible)
+                if (IsBuyedProductVisible)
                     return Products;
-                return new ObservableCollection<ProductToBuy>(Products.Where(item => !item.IsChecked));
+                _filteredProducts ??= new ObservableCollection<ProductToBuy>(Products.Where(item => !item.IsChecked));
+                return _filteredProducts;
             }
         }
         public ObservableCollection<ProductToBuy> Products { get; set; }
@@ -71,14 +75,19 @@ namespace SheeToList
         #region Constructor
         public MainViewModel(MainPage page)
         {
-            FilterShowCommand = new Command(() => IsbuyedProductVisible = !IsbuyedProductVisible);
+            _page = page ?? throw new ArgumentNullException(nameof(page));
+
+            IsBuyedProductVisible = false;
+            Products = [];
+            _page = page;
+
+            //initialize commands
+            FilterShowCommand = new Command(() => IsBuyedProductVisible = !IsBuyedProductVisible);
             AddItemCommand = new Command(AddProduct);
             ImportDataCommand = new Command(() => ImportData());
             EditItemCommand = new Command<ProductToBuy>(EditProduct);
             DeleteItemCommand = new Command<ProductToBuy>(DeleteProduct);
 
-            Products = [];
-            _page = page;
             CollectionChangedSetup();
         }
         #endregion
@@ -86,20 +95,22 @@ namespace SheeToList
         #region Data Import
         public async Task ImportData()
         {
+            if (IsLoading) return;
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
+            _filteredProducts = null;
 
-            //await _page.DisplayAlert("Debug", IsLoading.ToString(), "OK");
             GoogleApiTalker apiTalker = new();
             try
             {
                 var sorted =(await  GoogleApiTalker.GetData()).OrderBy(item => item.Name).ToList();
-                foreach (var item in sorted)
-                    Products.Add(item);
+               // foreach (var item in sorted)
+               //     Products.Add(item);
+                Products = new ObservableCollection<ProductToBuy>(sorted);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
                 var sorted = new List<ProductToBuy>();
                 await _page.DisplayAlert("Erreur", ex.Message, "OK");
             }
@@ -108,58 +119,86 @@ namespace SheeToList
                 IsLoading = false;
                 OnPropertyChanged(nameof(IsLoading));
             }
-           // await _page.DisplayAlert("Debug", IsLoading.ToString(), "OK");
-            OnPropertyChanged(nameof(Products));
+            OnPropertyChanged(nameof(ToBuyProducts));
         }
         #endregion
 
         #region Command Region
-        public ICommand AddItemCommand { get; }
+        public  ICommand AddItemCommand { get; }
         public ICommand FilterShowCommand { get; }
         public ICommand ImportDataCommand { get; }
         public ICommand EditItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
-        public string FilterShowButtonText => IsbuyedProductVisible ? "Cachez" : "Révélez tout";
+        public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
         #endregion
 
         #region Products Management
         public async void AddProduct()
         {
             string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
+
             if (string.IsNullOrWhiteSpace(text)) return;
+            if(Products.Any(p => p.Name.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
+            {
+                await _page.DisplayAlert("Doublon", "Ce produit est déjà dans la liste.", "OK");
+                return;
+            }
 
             Products.Add(new ProductToBuy { Name = text, IsChecked = false });
-            OnPropertyChanged(nameof(Products));
-        }
-        private async void EditProduct(ProductToBuy Product)
-        {
-            if (Products == null) return;
-            string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nouveau nom",
-                Product.Name);
-            if (string.IsNullOrWhiteSpace(text)) return;
-            Product.Name = text;
+            _filteredProducts = null;
+            OnPropertyChanged(nameof(ToBuyProducts));
         }
 
-        private void DeleteProduct(ProductToBuy Product)
+        private async void EditProduct(ProductToBuy Product)
         {
-            if (Products == null) return;
+            string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nouveau nom",
+                Product.Name);
+            if (string.IsNullOrWhiteSpace(text) || Product == null) return;
+            Product.Name = text;
+            _filteredProducts = null;
+            OnPropertyChanged(nameof(ToBuyProducts));
+        }
+
+        private async void DeleteProduct(ProductToBuy Product)
+        {
+            // Confirm deletion
+            bool confirm = await  _page.DisplayAlert("Confirmer", $"Supprimer {Product.Name} ?", "Oui", "Non");
+            if (!confirm) return;
+
             Products.Remove(Product);
+            _filteredProducts = null;
+            OnPropertyChanged(nameof(ToBuyProducts));
         }
         #endregion
 
+        #region Collection Changed Setup
         private void CollectionChangedSetup()
         {
-            Products.CollectionChanged += (s, e) =>
-            {
-                if (e.NewItems != null)
-                    foreach (ProductToBuy item in e.NewItems)
-                        item.PropertyChanged += Item_PropertyChanged;
-                if (e.OldItems != null)
-                    foreach (ProductToBuy item in e.OldItems)
-                        item.PropertyChanged -= Item_PropertyChanged;
-                OnPropertyChanged(nameof(ToBuyProducts));
-            };
+            Products.CollectionChanged += Product_CollectionChanged;
+            foreach (var item in Products)
+                attachEventHandlers(item);
         }
+
+        private void Product_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+                foreach (ProductToBuy item in e.NewItems)
+                    attachEventHandlers(item);
+            if (e.OldItems != null)
+                foreach (ProductToBuy item in e.OldItems)
+                    detachEventHandlers(item);
+            OnPropertyChanged(nameof(ToBuyProducts));
+        }
+
+        private void detachEventHandlers(ProductToBuy item)
+        {
+            item.PropertyChanged -= Item_PropertyChanged;
+        }
+        private void attachEventHandlers(ProductToBuy item)
+        {
+            item.PropertyChanged += Item_PropertyChanged;
+        }
+        #endregion
 
         #region Event Handlers
         private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
