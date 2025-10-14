@@ -8,12 +8,10 @@
             <Setter Property="BackgroundColor" Value="Violet"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="BorderWidth" Value="1"/>
-            <Setter Property="Padding" Value="8"/>
-            <Setter Property="HeightRequest" Value="36"/>
-            <Setter Property="WidthRequest" Value="36"/>
+            <Setter Property="Padding" Value="1"/>
             <Setter Property="Aspect" Value="AspectFit"/>
-            <Setter Property="HorizontalOptions" Value="Center"/>
-            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="HorizontalOptions" Value="Fill"/>
+            <Setter Property="VerticalOptions" Value="Fill"/>
         </Style>
     </ContentPage.Resources>
     
@@ -45,29 +43,23 @@
                  ItemsSource="{Binding ToBuyProducts}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="10" ColumnDefinitions="60*,15*,15*,10*">
+                            <Grid Padding="10" ColumnDefinitions="50*,20*,2*,20*,2*,10*" MaximumHeightRequest="70">
                                 <Label Text="{Binding Name}" VerticalOptions="Center"/>
                                 <ImageButton 
                                     Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
                                     CommandParameter="{Binding .}"
-                                    VerticalOptions="Center"
                                     Source="edit.png"
                                     Style="{StaticResource ImageLikeButton}"
                                     Grid.Column="1"
-                                    HeightRequest="20"
-                                    WidthRequest="20"
                                     />
                                 <ImageButton 
                                     Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ItemsList}}"
                                     CommandParameter="{Binding .}"
-                                    VerticalOptions="Center"
                                     Source="trash.png"
                                     Style="{StaticResource ImageLikeButton}"
-                                    Grid.Column="2"
-                                     HeightRequest="20"
-                                    WidthRequest="20"
+                                    Grid.Column="3"
                                     />
-                                <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" VerticalOptions="Center"/>
+                                <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="5" VerticalOptions="Center" HorizontalOptions="Center"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

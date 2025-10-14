@@ -41,7 +41,6 @@ namespace SheeToList
             get => _isBuyedProductVisible;
             set
             {
-                if(_isBuyedProductVisible == value) return;
                 _isBuyedProductVisible = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(FilterShowButtonText));
@@ -82,11 +81,15 @@ namespace SheeToList
             _page = page;
 
             //initialize commands
-            FilterShowCommand = new Command(() => IsBuyedProductVisible = !IsBuyedProductVisible);
             AddItemCommand = new Command(AddProduct);
             ImportDataCommand = new Command(() => ImportData());
             EditItemCommand = new Command<ProductToBuy>(EditProduct);
             DeleteItemCommand = new Command<ProductToBuy>(DeleteProduct);
+            FilterShowCommand = new Command(() => 
+            {
+                _filteredProducts = null;
+                IsBuyedProductVisible = !IsBuyedProductVisible; 
+            });
 
             CollectionChangedSetup();
         }
@@ -129,6 +132,7 @@ namespace SheeToList
         public ICommand ImportDataCommand { get; }
         public ICommand EditItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
+        public ICommand BuyItemCommand { get; }
         public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
         #endregion
 
@@ -205,6 +209,7 @@ namespace SheeToList
         {
             if (e.PropertyName == nameof(ProductToBuy.IsChecked))
             {
+                _filteredProducts = null;
                 OnPropertyChanged(nameof(ToBuyProducts));
             }
         }
