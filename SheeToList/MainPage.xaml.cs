@@ -106,10 +106,9 @@ namespace SheeToList
             GoogleApiTalker apiTalker = new();
             try
             {
-                var sorted =(await  GoogleApiTalker.GetData()).OrderBy(item => item.Name).ToList();
-               // foreach (var item in sorted)
-               //     Products.Add(item);
-                Products = new ObservableCollection<ProductToBuy>(sorted);
+                var unSortedProducts = await GoogleApiTalker.GetData();
+                Products = new ObservableCollection<ProductToBuy>(unSortedProducts);
+                sortProducts();
             }
             catch (Exception ex)
             {
@@ -150,6 +149,8 @@ namespace SheeToList
 
             Products.Add(new ProductToBuy { Name = text, IsChecked = false });
             _filteredProducts = null;
+
+            sortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
         }
 
@@ -160,6 +161,8 @@ namespace SheeToList
             if (string.IsNullOrWhiteSpace(text) || Product == null) return;
             Product.Name = text;
             _filteredProducts = null;
+
+            sortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
         }
 
@@ -172,6 +175,13 @@ namespace SheeToList
             Products.Remove(Product);
             _filteredProducts = null;
             OnPropertyChanged(nameof(ToBuyProducts));
+        }
+
+        private void sortProducts()
+        {
+            var sorted = Products.OrderBy(item => item.Name).ToList();
+            Products = new ObservableCollection<ProductToBuy>(sorted);
+            CollectionChangedSetup();
         }
         #endregion
 
