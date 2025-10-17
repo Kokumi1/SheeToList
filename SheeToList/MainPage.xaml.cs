@@ -19,12 +19,12 @@ namespace SheeToList
 
         }
 
-        public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "")
+        public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "",string accept="Valider", string cancel="Annuler")
         {
-            return  await DisplayPromptAsync(title, message, initialValue: initialValue);
+            return  await DisplayPromptAsync(title, message, accept:accept, cancel:cancel, initialValue: initialValue);
         }
+        #endregion
     }
-    #endregion
 
 
     // ViewModel for MainPage
