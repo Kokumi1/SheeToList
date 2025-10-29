@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using SheeToList.Model;
 using SheeToList.Services;
+using SheeToList.View;
 
 namespace SheeToList
 {
@@ -22,6 +23,12 @@ namespace SheeToList
         public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "",string accept="Valider", string cancel="Annuler")
         {
             return  await DisplayPromptAsync(title, message, accept:accept, cancel:cancel, initialValue: initialValue);
+        }
+        
+
+        private async void Recipe_Button_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new RecipeList());
         }
         #endregion
     }
@@ -91,6 +98,7 @@ namespace SheeToList
                 IsBuyedProductVisible = !IsBuyedProductVisible; 
             });
 
+            //load saved productList
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
             Task loadTask = new(async () => { await LoadData(); });
