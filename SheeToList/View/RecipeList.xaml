@@ -3,46 +3,61 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SheeToList.View.RecipeList"
              Title="RecipeList">
-    <VerticalStackLayout>
+
+    <ContentPage.Resources>
+        <Style x:Key="ImageLikeButton" TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="Violet"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderWidth" Value="1"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Aspect" Value="AspectFit"/>
+            <Setter Property="HorizontalOptions" Value="Fill"/>
+            <Setter Property="VerticalOptions" Value="Fill"/>
+        </Style>
+    </ContentPage.Resources>
+    
         <Grid RowDefinitions="50,*,Auto,50" Padding="30,0">
 
-
             <ScrollView Grid.Row="1">
-                <VerticalStackLayout  Spacing="25">
-                    <ActivityIndicator
-                         IsRunning="{Binding IsLoading}"
-                         IsVisible="{Binding IsLoading}"
-                         Color="BlueViolet"
-                        HorizontalOptions="Center"
-                         VerticalOptions="Center"/>
-                    
-                    <CollectionView x:Name="RecipeList"  ItemsSource="{Binding RecipeList}">
+                <VerticalStackLayout
+                    Spacing="25">
+                    <CollectionView x:Name="ItemsList"
+                     ItemsSource="{Binding Recipes}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Padding="10" ColumnDefinitions="50*,20*,2*,20*,2*" MaximumHeightRequest="70">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.SelectItemCommand, Source={x:Reference ItemsList}}"
+                                            CommandParameter="{Binding .}"/>
+                                    </Grid.GestureRecognizers>
                                     <Label Text="{Binding Name}" VerticalOptions="Center"/>
                                     <ImageButton 
-                     Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
-                     CommandParameter="{Binding .}"
-                     Source="edit.png"
-                     Style="{StaticResource ImageLikeButton}"
-                     Grid.Column="1"
-                     />
-                                    <ImageButton 
-                     Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ItemsList}}"
-                     CommandParameter="{Binding .}"
-                     Source="trash.png"
-                     Style="{StaticResource ImageLikeButton}"
-                     Grid.Column="3"
-                     />
+                                             Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ItemsList}}"
+                                              CommandParameter="{Binding .}"
+                                              Source="trash.png"
+                                              Style="{StaticResource ImageLikeButton}"
+                                             Grid.Column="3"
+    />
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-
                 </VerticalStackLayout>
             </ScrollView>
 
+            <Grid Grid.Row="2" Padding="0.10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+           Command="{Binding AddItemCommand}"
+             Text="+"
+            Grid.Column="1"
+            HorizontalOptions="Start"
+            VerticalOptions="Center" />
+            </Grid>
         </Grid>
-    </VerticalStackLayout>
 </ContentPage>

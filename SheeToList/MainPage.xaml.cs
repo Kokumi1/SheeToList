@@ -101,8 +101,7 @@ namespace SheeToList
             //load saved productList
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
-            Task loadTask = new(async () => { await LoadData(); });
-            loadTask.Start();
+            LoadData();
 
             CollectionChangedSetup();
         }
@@ -122,8 +121,7 @@ namespace SheeToList
                 var unSortedProducts = await GoogleApiTalker.GetData();
                 Products = new ObservableCollection<ProductToBuy>(unSortedProducts);
                 sortProducts();
-                Task saveTask = new(async () => { await SaveData(); });
-                saveTask.Start();
+                SaveData();
             }
             catch (Exception ex)
             {
@@ -134,7 +132,6 @@ namespace SheeToList
             finally
             {
                 IsLoading = false;
-                OnPropertyChanged(nameof(IsLoading));
             }
             OnPropertyChanged(nameof(ToBuyProducts));
         }
@@ -146,7 +143,6 @@ namespace SheeToList
         public ICommand ImportDataCommand { get; }
         public ICommand EditItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
-        public ICommand BuyItemCommand { get; }
         public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
         #endregion
 
@@ -168,8 +164,7 @@ namespace SheeToList
             sortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            Task saveTask = new(async () => {await SaveData(); });
-            saveTask.Start();
+            SaveData();
         }
 
         private async void EditProduct(ProductToBuy Product)
@@ -183,8 +178,7 @@ namespace SheeToList
             sortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            Task saveTask = new(async () => { await SaveData(); });
-            saveTask.Start();
+            SaveData();
         }
 
         private async void DeleteProduct(ProductToBuy Product)
@@ -197,8 +191,8 @@ namespace SheeToList
             _filteredProducts = null;
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            Task saveTask = new(async () => { await SaveData(); });
-            saveTask.Start();
+            
+            SaveData();
             ;
         }
 
@@ -211,11 +205,11 @@ namespace SheeToList
         #endregion
 
         #region save/load data from json
-        private async Task SaveData()
+        private async void SaveData()
         {
             await SaveJsonTalker.SaveAsync(Products.ToList());
         }
-        public async Task LoadData()
+        public async void LoadData()
         {
             var loadedProducts = await SaveJsonTalker.LoadAsync();
             Products = new ObservableCollection<ProductToBuy>(loadedProducts);
@@ -228,7 +222,6 @@ namespace SheeToList
             OnPropertyChanged(nameof(ToBuyProducts));
 
             IsLoading = false;
-            OnPropertyChanged(nameof(IsLoading));
         }
 
         #endregion
