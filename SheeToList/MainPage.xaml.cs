@@ -114,8 +114,7 @@ namespace SheeToList
                 var unSortedProducts = await GoogleApiTalker.GetData();
                 Products = new ObservableCollection<ProductToBuy>(unSortedProducts);
                 sortProducts();
-                Task saveTask = new(async () => { await SaveData(); });
-                saveTask.Start();
+                SaveData();
             }
             catch (Exception ex)
             {
@@ -160,8 +159,7 @@ namespace SheeToList
             sortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            Task saveTask = new(async () => {await SaveData(); });
-            saveTask.Start();
+            SaveData();
         }
 
         private async void EditProduct(ProductToBuy Product)
@@ -175,8 +173,7 @@ namespace SheeToList
             sortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            Task saveTask = new(async () => { await SaveData(); });
-            saveTask.Start();
+            SaveData();
         }
 
         private async void DeleteProduct(ProductToBuy Product)
@@ -189,8 +186,7 @@ namespace SheeToList
             _filteredProducts = null;
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            Task saveTask = new(async () => { await SaveData(); });
-            saveTask.Start();
+            SaveData();
             ;
         }
 
@@ -203,9 +199,17 @@ namespace SheeToList
         #endregion
 
         #region save/load data from json
-        private async Task SaveData()
+        private async void SaveData()
         {
+            try {
             await SaveJsonTalker.SaveAsync(Products.ToList());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                var sorted = new List<ProductToBuy>();
+                await _page.DisplayAlert("Erreur", ex.Message, "OK");
+            }
         }
         public async Task LoadData()
         {
