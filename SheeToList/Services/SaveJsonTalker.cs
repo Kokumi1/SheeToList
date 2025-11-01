@@ -20,7 +20,7 @@ namespace SheeToList.Services
         {
 #if ANDROID
             string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            return System.IO.Path.Combine(folderPath, fileName);
+            return System.IO.Path.Combine(FileSystem.AppDataDirectory, fileName);
 #else
             return Path.Combine(AppContext.BaseDirectory, fileName);
 #endif
@@ -30,6 +30,7 @@ namespace SheeToList.Services
         public static async Task SaveAsync(List<ProductToBuy> products)
         {
             var filePath = GetFilePath("saveProducts.json");
+
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
