@@ -190,7 +190,6 @@ namespace SheeToList
             _filteredProducts = null;
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            
             SaveData();
             ;
         }
@@ -206,7 +205,15 @@ namespace SheeToList
         #region save/load data from json
         private async void SaveData()
         {
+            try {
             await SaveJsonTalker.SaveAsync(Products.ToList());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                var sorted = new List<ProductToBuy>();
+                await _page.DisplayAlert("Erreur", ex.Message, "OK");
+            }
         }
         public async void LoadData()
         {
