@@ -13,6 +13,11 @@ public partial class RecipeList : ContentPage
 		InitializeComponent();
 		BindingContext = new RecipeListViewModel(this);
     }
+
+    public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "", string accept = "Valider", string cancel = "Annuler")
+    {
+        return await DisplayPromptAsync(title, message, accept: accept, cancel: cancel, initialValue: initialValue);
+    }
 }
 
 public class RecipeListViewModel: INotifyPropertyChanged
@@ -38,24 +43,30 @@ public class RecipeListViewModel: INotifyPropertyChanged
         _page = recipeList;
 
 		AddItemCommand = new Command(AddRecipe);
-		EditItemCommand = new Command<Recipe>(EditRecipe);
 		DeleteItemCommand = new Command<Recipe>(DeleteRecipe);
 		SelectItemCommand = new Command<Recipe>(SelectRecipe);
     }
 
     public ICommand AddItemCommand { get; }
-    public ICommand EditItemCommand { get; }
     public ICommand DeleteItemCommand { get; }
 	public ICommand SelectItemCommand { get; }
 
-	private void AddRecipe()
+	private async void AddRecipe()
 	{
-		// Implementation for adding a recipe
-	}
-	private void EditRecipe(Recipe recipe)
-	{
+        string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
 
-	}
+		if (string.IsNullOrWhiteSpace(text)) return;
+        if (Recipes.Any(p => p.Name.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
+        {
+            await _page.DisplayAlert("Doublon", "Cette recette est déjà dans la liste.", "OK");
+            return;
+        }
+
+        Recipes?.Add(new Recipe { Name = text });
+        OnPropertyChanged(nameof(Recipes));
+        // Implementation for adding a recipe
+    }
+
 	private async void DeleteRecipe(Recipe recipe)
 	{
         // Confirm deletion

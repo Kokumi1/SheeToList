@@ -25,7 +25,6 @@ namespace SheeToList
             return  await DisplayPromptAsync(title, message, accept:accept, cancel:cancel, initialValue: initialValue);
         }
         
-
         private async void Recipe_Button_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new RecipeList());

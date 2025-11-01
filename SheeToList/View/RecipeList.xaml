@@ -25,7 +25,7 @@
                      ItemsSource="{Binding Recipes}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="10" ColumnDefinitions="50*,20*,2*,20*,2*" MaximumHeightRequest="70">
+                                <Grid Padding="10" ColumnDefinitions="60*,20*,2*,20*,2*" MaximumHeightRequest="70">
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer 
                                             Command="{Binding BindingContext.SelectItemCommand, Source={x:Reference ItemsList}}"
