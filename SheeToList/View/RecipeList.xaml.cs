@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using AndroidX.Navigation;
 using SheeToList.Model;
 
 namespace SheeToList.View;
@@ -17,6 +18,10 @@ public partial class RecipeList : ContentPage
     public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "", string accept = "Valider", string cancel = "Annuler")
     {
         return await DisplayPromptAsync(title, message, accept: accept, cancel: cancel, initialValue: initialValue);
+    }
+    public async void GotoRecipeDetailPage(Recipe recipe)
+    {
+        await Navigation.PushAsync(new RecipePage(recipe));
     }
 }
 
@@ -78,8 +83,8 @@ public class RecipeListViewModel: INotifyPropertyChanged
     }
 	private void SelectRecipe(Recipe recipe)
 	{
-
-	}
+        _page.GotoRecipeDetailPage(recipe);
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
     void OnPropertyChanged([CallerMemberName] string name = "") =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
