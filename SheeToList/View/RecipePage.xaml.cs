@@ -7,17 +7,25 @@ public partial class RecipePage : ContentPage
 	public RecipePage(Recipe recipe)
 	{
 		InitializeComponent();
-        BindingContext = new RecipeViewModel();
+        BindingContext = new RecipeViewModel(recipe);
     }
 }
 
 public class RecipeViewModel
 {
-	public RecipeViewModel()
+	private Recipe _recipe;
+    public RecipeViewModel(Recipe recipe)
 	{
-
+		_recipe = recipe;
 
     }
 
-
+	public string RecetteTitle
+    {
+			get => $"Liste des ingrédients pour : { _recipe.Name}";
+		set
+		{
+			_recipe.Name = value;
+        }
+    }
 }
