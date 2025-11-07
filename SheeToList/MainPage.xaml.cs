@@ -145,7 +145,7 @@ namespace SheeToList
         public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
         #endregion
 
-        #region Products Management
+        #region Data Management
         public async void AddProduct()
         {
             string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");

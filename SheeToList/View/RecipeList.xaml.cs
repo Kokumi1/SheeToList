@@ -43,7 +43,7 @@ public class RecipeListViewModel: INotifyPropertyChanged
     public RecipeListViewModel(RecipeList recipeList)
 	{
 		Recipes = [];
-		Recipes.Add(new Recipe { Name = "Tarte aux pommes" });
+		Recipes.Add(new Recipe { Name = "Tarte aux pommes", Ingredients= ["pomme"] });
         _page = recipeList;
 
 		AddItemCommand = new Command(AddRecipe);
