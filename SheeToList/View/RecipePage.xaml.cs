@@ -66,6 +66,16 @@ public class RecipeViewModel : INotifyPropertyChanged
     }
     private async void EditIngredient(string ingredient)
     {
+        string? text = await _page.ItemNameAskerAsync("Renommer un ingrédient", "Nom de l'ingrédient :");
+        if (string.IsNullOrWhiteSpace(text)) return;
+        if (RecipeIngredientList.Any(p => p.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
+        {
+            await _page.DisplayAlert("Doublon", "Ce produit est déjà dans la liste.", "OK");
+            return;
+        }
+
+        RecipeIngredientList[RecipeIngredientList.IndexOf(ingredient)] = text;
+        OnPropertyChanged(nameof(RecipeIngredientList));
     }
     private async void DeleteIngredient(string ingredient)
     {
@@ -76,6 +86,7 @@ public class RecipeViewModel : INotifyPropertyChanged
         RecipeIngredientList?.Remove(ingredient);
         OnPropertyChanged(nameof(RecipeIngredientList));
     }
+
 
     public event PropertyChangedEventHandler? PropertyChanged;
     void OnPropertyChanged([CallerMemberName] string name = "") =>
