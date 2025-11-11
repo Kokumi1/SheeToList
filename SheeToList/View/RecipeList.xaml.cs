@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
+using SheeToList.Services;
 
 namespace SheeToList.View;
 
@@ -42,8 +43,7 @@ public class RecipeListViewModel: INotifyPropertyChanged
 
     public RecipeListViewModel(RecipeList recipeList)
 	{
-		Recipes = [];
-		Recipes.Add(new Recipe { Name = "Tarte aux pommes", Ingredients= ["pomme"] });
+		Recipes = RecipeJsonTalker.Instance.Recipes;
         _page = recipeList;
 
 		AddItemCommand = new Command(AddRecipe);

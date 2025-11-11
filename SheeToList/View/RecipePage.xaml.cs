@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
+using SheeToList.Services;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace SheeToList.View;
@@ -26,9 +27,9 @@ public class RecipeViewModel : INotifyPropertyChanged
     private RecipePage _page;
     public RecipeViewModel(Recipe recipe, RecipePage page)
     {
-        _recipe = recipe;
+        int recipeIndex = RecipeJsonTalker.Instance.Recipes.IndexOf(recipe);
+        _recipe = RecipeJsonTalker.Instance.Recipes[recipeIndex];
         _page = page;
-        RecipeIngredientList = new ObservableCollection<string>(recipe.Ingredients);
 
         //initialize commands
         AddItemCommand = new Command(AddIngredient);
@@ -44,7 +45,7 @@ public class RecipeViewModel : INotifyPropertyChanged
 			_recipe.Name = value;
         }
     }
-    public ObservableCollection<string>? RecipeIngredientList { get; set; }
+    public ObservableCollection<string>? RecipeIngredientList => _recipe.Ingredients;
 
     public ICommand AddItemCommand { get; }
     public ICommand EditItemCommand { get; }
