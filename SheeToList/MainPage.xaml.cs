@@ -119,7 +119,6 @@ namespace SheeToList
             {
                 var unSortedProducts = await GoogleApiTalker.GetData();
                 Products = new ObservableCollection<ProductToBuy>(unSortedProducts);
-                sortProducts();
                 SaveData();
             }
             catch (Exception ex)

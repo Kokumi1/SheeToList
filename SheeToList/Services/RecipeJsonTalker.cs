@@ -23,7 +23,7 @@ namespace SheeToList.Services
         RecipeJsonTalker()
         {
             Recipes = [];
-            Recipes.Add(new Recipe { Name = "Tarte aux pommes", Ingredients = ["pomme"] });
+            Recipes.Add(new Recipe { Name = "Hamburger", Ingredients = ["Steak Haché","Pain hambuger","Fromage"] });
         }
 
         private static string GetFilePath(string fileName)

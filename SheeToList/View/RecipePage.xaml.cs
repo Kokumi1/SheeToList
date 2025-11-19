@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
 using SheeToList.Services;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SheeToList.View;
 

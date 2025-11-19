@@ -1,4 +1,6 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using SheeToList.Model;
@@ -9,9 +11,6 @@ namespace SheeToList.Services
     {
         private static GoogleCredential credential;
 
-        public static void Initialize()
-        {
-        }
 
         private static string GetCredentialPath()
         {
@@ -48,7 +47,7 @@ namespace SheeToList.Services
         }
 
         //Get data from the Google Sheet
-        public static async Task<IList<ProductToBuy>> GetData()
+        public static async Task<ObservableCollection<ProductToBuy>> GetData()
         {
             var spreadsheetId = "1ChvD0OKtSh_LGO_F7zq2225cklbK4br0WFkkcirF7RM";
             var range = "menu semaine !C4:D25";
@@ -68,9 +67,9 @@ namespace SheeToList.Services
         }
 
         //Tune data to split items separated by commas and remove empty entries
-        private static IList<ProductToBuy> TuneData(IList<IList<Object>> importedData)
+        private static ObservableCollection<ProductToBuy> TuneData(IList<IList<Object>> importedData)
         {
-            return [.. importedData
+            ObservableCollection<ProductToBuy> listProducts = [.. importedData
                  .SelectMany(row => row
                  .OfType<string>()
                  .Where(itemName => !string.IsNullOrWhiteSpace(itemName))
@@ -83,6 +82,38 @@ namespace SheeToList.Services
                 )
             )
             .Select(name => new ProductToBuy { Name = name, IsChecked = false })];
+
+             var  listProductsSorted =RecipeChecker(listProducts).OrderBy(item => item.Name).ToList();
+              listProducts = new ObservableCollection<ProductToBuy>(listProductsSorted);
+
+            return listProducts;
+        }
+
+        //Check for saved recipes in the products list and replace them with their ingredients
+        private static ObservableCollection<ProductToBuy> RecipeChecker(ObservableCollection<ProductToBuy> importedList)
+        {
+            if (importedList == null) return [];
+            var recipes = RecipeJsonTalker.Instance.Recipes;
+            var recipeDictionnary = recipes.ToDictionary(r => r.Name.ToLower(), r => r.Ingredients);
+
+            
+            foreach(ProductToBuy product in importedList.ToList())
+            {
+                var productNameLower = product.Name.ToLower();
+                // Check if any recipe name is contained in the product name
+                if (recipeDictionnary.Keys.FirstOrDefault(key => productNameLower.Contains(key, StringComparison.OrdinalIgnoreCase)) is string matchedKey)
+                {
+                    productNameLower = matchedKey;
+                    // If a match is found, replace the product with its ingredients
+                    foreach (var ingredient in recipeDictionnary[productNameLower])
+                    {
+                        importedList.Add(new ProductToBuy { Name = $"{ingredient} ({product.Name})", IsChecked = false });
+                    }
+                    importedList.Remove(product);
+                }
+            }
+
+            return importedList;
         }
     }
 }
