@@ -23,10 +23,11 @@ public partial class RecipePage : ContentPage
 public class RecipeViewModel : INotifyPropertyChanged
 {
 	private Recipe _recipe;
+    private int recipeIndex;
     private RecipePage _page;
     public RecipeViewModel(Recipe recipe, RecipePage page)
     {
-        int recipeIndex = RecipeJsonTalker.Instance.Recipes.IndexOf(recipe);
+        recipeIndex = RecipeJsonTalker.Instance.Recipes.IndexOf(recipe);
         _recipe = RecipeJsonTalker.Instance.Recipes[recipeIndex];
         _page = page;
 
@@ -57,11 +58,12 @@ public class RecipeViewModel : INotifyPropertyChanged
         if (string.IsNullOrWhiteSpace(text)) return;
         if (RecipeIngredientList.Any(p => p.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
         {
-            await _page.DisplayAlert("Doublon", "Ce produit est déjà dans la liste.", "OK");
+            await _page.DisplayAlert("Doublon", "Cette ingredient est déjà dans la liste.", "OK");
             return;
         }
 
         RecipeIngredientList?.Add(text);
+        SaveRecipeChanges();
         OnPropertyChanged(nameof(RecipeIngredientList));
     }
     private async void EditIngredient(string ingredient)
@@ -75,6 +77,7 @@ public class RecipeViewModel : INotifyPropertyChanged
         }
 
         RecipeIngredientList[RecipeIngredientList.IndexOf(ingredient)] = text;
+        SaveRecipeChanges();
         OnPropertyChanged(nameof(RecipeIngredientList));
     }
     private async void DeleteIngredient(string ingredient)
@@ -84,9 +87,15 @@ public class RecipeViewModel : INotifyPropertyChanged
         if (!confirm) return;
 
         RecipeIngredientList?.Remove(ingredient);
+        SaveRecipeChanges();
         OnPropertyChanged(nameof(RecipeIngredientList));
     }
 
+    private void SaveRecipeChanges()
+    {
+        RecipeJsonTalker.Instance.Recipes[recipeIndex] = _recipe;
+        RecipeJsonTalker.SaveAsync(RecipeJsonTalker.Instance.Recipes.ToList());
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
     void OnPropertyChanged([CallerMemberName] string name = "") =>

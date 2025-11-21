@@ -67,8 +67,8 @@ public class RecipeListViewModel: INotifyPropertyChanged
         }
 
         Recipes?.Add(new Recipe { Name = text });
+        await RecipeJsonTalker.SaveAsync([.. Recipes]);
         OnPropertyChanged(nameof(Recipes));
-        // Implementation for adding a recipe
     }
 
 	private async void DeleteRecipe(Recipe recipe)
@@ -78,7 +78,8 @@ public class RecipeListViewModel: INotifyPropertyChanged
         if (!confirm) return;
 
 		Recipes?.Remove(recipe);
-		OnPropertyChanged(nameof(Recipes));
+        await RecipeJsonTalker.SaveAsync([.. Recipes]);
+        OnPropertyChanged(nameof(Recipes));
     }
 	private void SelectRecipe(Recipe recipe)
 	{

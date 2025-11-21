@@ -84,6 +84,7 @@ namespace SheeToList
 
             IsBuyedProductVisible = false;
             Products = [];
+            
             _page = page;
 
             //initialize commands
@@ -97,10 +98,11 @@ namespace SheeToList
                 IsBuyedProductVisible = !IsBuyedProductVisible; 
             });
 
-            //load saved productList
+            //load saved productList and recipeList
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
             LoadData();
+            RecipeJsonTalker.LoadAsync();
 
             CollectionChangedSetup();
         }

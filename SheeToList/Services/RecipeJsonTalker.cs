@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using SheeToList.Model;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace SheeToList.Services
 {
@@ -22,8 +24,7 @@ namespace SheeToList.Services
 
         RecipeJsonTalker()
         {
-            Recipes = [];
-            Recipes.Add(new Recipe { Name = "Hamburger", Ingredients = ["Steak Haché","Pain hambuger","Fromage"] });
+            LoadAsync();
         }
 
         private static string GetFilePath(string fileName)
@@ -47,20 +48,24 @@ namespace SheeToList.Services
             }
             using FileStream createStream = File.Create(filePath);
 
+            Debug.WriteLine($"Saving {recipes.Count} recipes.");
             await JsonSerializer.SerializeAsync(createStream, recipes, _jsonOptions);
         }
 
         // load the json file
-        public static async Task<List<Recipe>> LoadAsync()
+        public static async void LoadAsync()
         {
             var filePath = GetFilePath("saveRecipes.json");
             if (!File.Exists(filePath))
             {
-                return new List<Recipe>();
+                // return new ObservableCollection<Recipe>();
+                RecipeJsonTalker.Instance.Recipes = [];
             }
             using FileStream openStream = File.OpenRead(filePath);
-            var recipes = await JsonSerializer.DeserializeAsync<List<Recipe>>(openStream, _jsonOptions);
-            return recipes ?? new List<Recipe>();
+            var recipes = await JsonSerializer.DeserializeAsync<ObservableCollection<Recipe>>(openStream, _jsonOptions);
+            Debug.WriteLine($"Loaded {recipes?.Count ?? 0} recipes.");
+            RecipeJsonTalker.Instance.Recipes = recipes ?? new ObservableCollection<Recipe>();
+            //return recipes ?? new ObservableCollection<Recipe>();
         }
     }
 }
