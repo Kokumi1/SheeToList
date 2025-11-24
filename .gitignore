@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /SheeToList/MauiProgram.cs
 /SheeToList/client_secret.apps.googleusercontent.com.json
 /com.companyname.sheetolist.aab
+*.keystore
