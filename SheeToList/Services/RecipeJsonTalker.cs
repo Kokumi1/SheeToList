@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
+﻿using System.Text.Json;
 using SheeToList.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace SheeToList.Services
 {
@@ -24,6 +18,7 @@ namespace SheeToList.Services
 
         RecipeJsonTalker()
         {
+            Debug.WriteLine("RecipeJsonTalker initialized.");
             LoadAsync();
         }
 
@@ -55,17 +50,31 @@ namespace SheeToList.Services
         // load the json file
         public static async void LoadAsync()
         {
+            Debug.WriteLine("Loading recipes from JSON.");
             var filePath = GetFilePath("saveRecipes.json");
-            if (!File.Exists(filePath))
+            var recipes = new ObservableCollection<Recipe>();
+
+            
+
+            if (File.Exists(filePath))
             {
-                // return new ObservableCollection<Recipe>();
-                RecipeJsonTalker.Instance.Recipes = [];
+                Debug.WriteLine("Saved recipes found, loading...");
+                using FileStream openStream = File.OpenRead(filePath);
+                recipes = await JsonSerializer.DeserializeAsync<ObservableCollection<Recipe>>(openStream, _jsonOptions);
             }
-            using FileStream openStream = File.OpenRead(filePath);
-            var recipes = await JsonSerializer.DeserializeAsync<ObservableCollection<Recipe>>(openStream, _jsonOptions);
-            Debug.WriteLine($"Loaded {recipes?.Count ?? 0} recipes.");
-            RecipeJsonTalker.Instance.Recipes = recipes ?? new ObservableCollection<Recipe>();
-            //return recipes ?? new ObservableCollection<Recipe>();
+            else
+            {
+                   Debug.WriteLine("No saved recipes found");
+                    recipes.Add(new Recipe
+                {
+                    Name = "Hamburger",
+                    Ingredients = ["Steak haché", "Pain hamburger","fromage"]
+                });
+                SaveAsync(recipes.ToList()).Wait();
+            }
+
+            Debug.WriteLine($"recipe size: {recipes.Count}");
+            RecipeJsonTalker.Instance.Recipes = recipes ?? [];
         }
     }
 }
