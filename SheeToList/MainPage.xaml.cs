@@ -158,8 +158,11 @@ namespace SheeToList
                 await _page.DisplayAlert("Doublon", "Ce produit est déjà dans la liste.", "OK");
                 return;
             }
+            ProductToBuy products = new ProductToBuy { Name =text, IsChecked = false};
+            var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
 
-            Products.Add(new ProductToBuy { Name = text, IsChecked = false });
+            Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));    
+            //Products.Add(new ProductToBuy { Name = text, IsChecked = false });
             _filteredProducts = null;
 
             sortProducts();

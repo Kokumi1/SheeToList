@@ -83,37 +83,10 @@ namespace SheeToList.Services
             )
             .Select(name => new ProductToBuy { Name = name, IsChecked = false })];
 
-             var  listProductsSorted =RecipeChecker(listProducts).OrderBy(item => item.Name).ToList();
+             var  listProductsSorted =RecipeJsonTalker.RecipeCheckInList(listProducts).OrderBy(item => item.Name).ToList();
               listProducts = new ObservableCollection<ProductToBuy>(listProductsSorted);
 
             return listProducts;
-        }
-
-        //Check for saved recipes in the products list and replace them with their ingredients
-        private static ObservableCollection<ProductToBuy> RecipeChecker(ObservableCollection<ProductToBuy> importedList)
-        {
-            if (importedList == null) return [];
-            var recipes = RecipeJsonTalker.Instance.Recipes;
-            var recipeDictionnary = recipes.ToDictionary(r => r.Name.ToLower(), r => r.Ingredients);
-
-            
-            foreach(ProductToBuy product in importedList.ToList())
-            {
-                var productNameLower = product.Name.ToLower();
-                // Check if any recipe name is contained in the product name
-                if (recipeDictionnary.Keys.FirstOrDefault(key => productNameLower.Contains(key, StringComparison.OrdinalIgnoreCase)) is string matchedKey)
-                {
-                    productNameLower = matchedKey;
-                    // If a match is found, replace the product with its ingredients
-                    foreach (var ingredient in recipeDictionnary[productNameLower])
-                    {
-                        importedList.Add(new ProductToBuy { Name = $"{ingredient} ({product.Name})", IsChecked = false });
-                    }
-                    importedList.Remove(product);
-                }
-            }
-
-            return importedList;
         }
     }
 }

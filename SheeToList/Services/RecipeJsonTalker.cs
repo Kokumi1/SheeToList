@@ -54,8 +54,6 @@ namespace SheeToList.Services
             var filePath = GetFilePath("saveRecipes.json");
             var recipes = new ObservableCollection<Recipe>();
 
-            
-
             if (File.Exists(filePath))
             {
                 Debug.WriteLine("Saved recipes found, loading...");
@@ -75,6 +73,48 @@ namespace SheeToList.Services
 
             Debug.WriteLine($"recipe size: {recipes.Count}");
             RecipeJsonTalker.Instance.Recipes = recipes ?? [];
+        }
+
+        public static ObservableCollection<ProductToBuy> RecipeCheckSingle(ProductToBuy productToBuy)
+        {
+            var recipes = RecipeJsonTalker.Instance.Recipes;
+            var recipeDictionnary = recipes.ToDictionary(r => r.Name.ToLower(), r => r.Ingredients);
+
+            if (recipeDictionnary.Keys.FirstOrDefault(key => productToBuy.Name.ToLower().Contains(key, StringComparison.OrdinalIgnoreCase)) 
+                is string matchedKey)
+            {
+                return new ObservableCollection<ProductToBuy>(
+                    recipeDictionnary[matchedKey].Select(ingredient => new ProductToBuy { Name = $"{ingredient} ({productToBuy.Name})", IsChecked = false })
+                );
+            }
+            return [productToBuy];
+        }
+
+        //Check for saved recipes in the products list and replace them with their ingredients
+        public static ObservableCollection<ProductToBuy> RecipeCheckInList(ObservableCollection<ProductToBuy> importedList)
+        {
+            if (importedList == null) return [];
+            var recipes = RecipeJsonTalker.Instance.Recipes;
+            var recipeDictionnary = recipes.ToDictionary(r => r.Name.ToLower(), r => r.Ingredients);
+
+
+            foreach (ProductToBuy product in importedList.ToList())
+            {
+                var productNameLower = product.Name.ToLower();
+                // Check if any recipe name is contained in the product name
+                if (recipeDictionnary.Keys.FirstOrDefault(key => productNameLower.Contains(key, StringComparison.OrdinalIgnoreCase)) is string matchedKey)
+                {
+                    productNameLower = matchedKey;
+                    // If a match is found, replace the product with its ingredients
+                    foreach (var ingredient in recipeDictionnary[productNameLower])
+                    {
+                        importedList.Add(new ProductToBuy { Name = $"{ingredient} ({product.Name})", IsChecked = false });
+                    }
+                    importedList.Remove(product);
+                }
+            }
+
+            return importedList;
         }
     }
 }
