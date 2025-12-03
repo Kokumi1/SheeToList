@@ -105,12 +105,16 @@ namespace SheeToList.Services
                 if (recipeDictionnary.Keys.FirstOrDefault(key => productNameLower.Contains(key, StringComparison.OrdinalIgnoreCase)) is string matchedKey)
                 {
                     productNameLower = matchedKey;
+
                     // If a match is found, replace the product with its ingredients
-                    foreach (var ingredient in recipeDictionnary[productNameLower])
-                    {
-                        importedList.Add(new ProductToBuy { Name = $"{ingredient} ({product.Name})", IsChecked = false });
+                    if(recipeDictionnary[productNameLower] == null || recipeDictionnary[productNameLower].Count == 0) continue;
+                    else { 
+                        foreach (var ingredient in recipeDictionnary[productNameLower])
+                            {
+                                importedList.Add(new ProductToBuy { Name = $"{ingredient} ({product.Name})", IsChecked = false });
+                            }
+                        importedList.Remove(product);
                     }
-                    importedList.Remove(product);
                 }
             }
 
