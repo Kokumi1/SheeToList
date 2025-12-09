@@ -69,6 +69,8 @@ public class RecipeListViewModel: INotifyPropertyChanged
         Recipes?.Add(new Recipe { Name = text });
         await RecipeJsonTalker.SaveAsync([.. Recipes]);
         OnPropertyChanged(nameof(Recipes));
+
+        _page.GotoRecipeDetailPage(Recipes.Last());
     }
 
 	private async void DeleteRecipe(Recipe recipe)
