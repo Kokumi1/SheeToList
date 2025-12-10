@@ -62,11 +62,11 @@ public class RecipeListViewModel: INotifyPropertyChanged
 		if (string.IsNullOrWhiteSpace(text)) return;
         if (Recipes.Any(p => p.Name.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
         {
-            await _page.DisplayAlert("Doublon", "Cette recette est déjà dans la liste.", "OK");
+            await _page.DisplayAlertAsync("Doublon", "Cette recette est déjà dans la liste.", "OK");
             return;
         }
 
-        Recipes?.Add(new Recipe { Name = text });
+        Recipes?.Add(new Recipe { Name = text.Trim() });
         await RecipeJsonTalker.SaveAsync([.. Recipes]);
         OnPropertyChanged(nameof(Recipes));
 
