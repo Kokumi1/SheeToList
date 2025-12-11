@@ -48,7 +48,7 @@ namespace SheeToList.Services
         }
 
         // load the json file
-        public static async void LoadAsync()
+        public static async Task LoadAsync()
         {
             Debug.WriteLine("Loading recipes from JSON.");
             var filePath = GetFilePath("saveRecipes.json");

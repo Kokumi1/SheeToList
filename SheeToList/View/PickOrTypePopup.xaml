@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="SheeToList.View.PickOrTypePopup">
+    <Border Padding="12" StrokeShape="RoundRectangle 8">
+        <VerticalStackLayout Spacing="10" WidthRequest="320">
+            <Label x:Name="MessageText" VerticalOptions="Center" TextColor="Black"/>
+
+            <!-- Tabs -->
+            <Grid ColumnDefinitions="*,*">
+                <Button x:Name="BtnType" Text="Saisir" Grid.Column="0" Clicked="OnTabClicked"/>
+                <Button x:Name="BtnPick" Text="Choisir" Grid.Column="1" Clicked="OnTabClicked"/>
+            </Grid>
+
+            <!-- Panels -->
+            <StackLayout x:Name="TypePanel" Spacing="8">
+                <Label Text="Saisir un nom" FontAttributes="Bold"/>
+                <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="Black" />
+            </StackLayout>
+
+            <StackLayout x:Name="PickPanel" IsVisible="False" Spacing="8">
+                <Label Text="Choisir dans la liste" FontAttributes="Bold"/>
+                <Picker x:Name="PickerList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" BackgroundColor="Black"/>
+            </StackLayout>
+
+            <!-- Buttons -->
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="End">
+                <Button Text="Annuler" Clicked="OnCancelClicked" />
+                <Button Text="Valider" Clicked="OnAcceptClicked" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </Border>
+</toolkit:Popup>

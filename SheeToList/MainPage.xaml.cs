@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Extensions;
 using SheeToList.Model;
 using SheeToList.Services;
 using SheeToList.View;
@@ -24,7 +26,15 @@ namespace SheeToList
         {
             return  await DisplayPromptAsync(title, message, accept:accept, cancel:cancel, initialValue: initialValue);
         }
-        
+        public async Task<string?> ItemNameOrPickAskerAsync(string title,/* IEnumerable<string> choices, */string initialValue = "")
+        {
+            var popup = new PickOrTypePopup(/*choices,*/ initialValue);
+            // Si vous voulez afficher un titre: vous pouvez envelopper popup avec un layout contenant un Label
+            // Affiche le popup et attend le résultat
+            this.ShowPopup(popup);
+            return await popup.WaitForResultAsync();
+        }
+
         private async void Recipe_Button_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new RecipeList());
@@ -150,7 +160,8 @@ namespace SheeToList
         #region Data Management
         public async void AddProduct()
         {
-            string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
+           // string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
+            string? text = await _page.ItemNameOrPickAskerAsync("Entrer le nom");
 
             if (string.IsNullOrWhiteSpace(text)) return;
             if(Products.Any(p => p.Name.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
