@@ -80,8 +80,11 @@ public partial class PickOrTypePopup : Popup
 
     void UpdateTabVisual()
     {
-        BtnType.BackgroundColor = TypePanel.IsVisible ? Colors.LightGray : Colors.Transparent;
-        BtnPick.BackgroundColor = PickPanel.IsVisible ? Colors.LightGray : Colors.Transparent;
+        var selectedColor = Colors.BlueViolet; // couleur onglet actif
+        var normalColor = Color.FromArgb("#202020"); // couleur onglet inactif
+
+        BtnType.BackgroundColor = TypePanel.IsVisible ? selectedColor : normalColor;
+        BtnPick.BackgroundColor = PickPanel.IsVisible ? selectedColor : normalColor;
     }
 
     async void OnAcceptClicked(object? sender, EventArgs e)
