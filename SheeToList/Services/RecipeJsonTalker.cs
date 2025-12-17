@@ -16,10 +16,11 @@ namespace SheeToList.Services
             WriteIndented = true
         };
 
-        RecipeJsonTalker()
+        private RecipeJsonTalker()
         {
             Debug.WriteLine("RecipeJsonTalker initialized.");
-            LoadAsync();
+            var task = LoadAsync();
+            task.Start();
         }
 
         private static string GetFilePath(string fileName)

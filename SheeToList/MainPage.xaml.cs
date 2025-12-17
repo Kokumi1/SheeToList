@@ -50,6 +50,8 @@ namespace SheeToList
         private bool _isBuyedProductVisible ;
         private ObservableCollection<ProductToBuy>? _filteredProducts;
         private bool _isLoading;
+        // Debounce pour les sauvegardes
+        private CancellationTokenSource? _saveCts;
 
         #region Properties
         public bool IsBuyedProductVisible
@@ -99,7 +101,7 @@ namespace SheeToList
 
             //initialize commands
             AddItemCommand = new Command(AddProduct);
-            ImportDataCommand = new Command(() => ImportData());
+            ImportDataCommand = new Command(async () => await ImportData());
             EditItemCommand = new Command<ProductToBuy>(EditProduct);
             DeleteItemCommand = new Command<ProductToBuy>(DeleteProduct);
             FilterShowCommand = new Command(() => 
@@ -132,13 +134,13 @@ namespace SheeToList
             {
                 var unSortedProducts = await GoogleApiTalker.GetData();
                 Products = new ObservableCollection<ProductToBuy>(unSortedProducts);
-                SaveData();
+                await SaveData();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
                 var sorted = new List<ProductToBuy>();
-                await _page.DisplayAlert("Erreur", ex.Message, "OK");
+                await _page.DisplayAlertAsync("Erreur", ex.Message, "OK");
             }
             finally
             {
@@ -164,9 +166,9 @@ namespace SheeToList
             string? text = await _page.ItemNameOrPickAskerAsync("Entrer le nom");
 
             if (string.IsNullOrWhiteSpace(text)) return;
-            if(Products.Any(p => p.Name.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
+            if (Products.Any(p => p.Name.Equals(text, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
             {
-                await _page.DisplayAlert("Doublon", "Ce produit est déjà dans la liste.", "OK");
+                await _page.DisplayAlertAsync("Doublon", "Ce produit est déjà dans la liste.", "OK");
                 return;
             }
             ProductToBuy products = new ProductToBuy { Name =text, IsChecked = false};
@@ -179,7 +181,7 @@ namespace SheeToList
             sortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            SaveData();
+            await SaveData();
         }
 
         private async void EditProduct(ProductToBuy Product)
@@ -193,20 +195,20 @@ namespace SheeToList
             sortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            SaveData();
+            await SaveData();
         }
 
         private async void DeleteProduct(ProductToBuy Product)
         {
             // Confirm deletion
-            bool confirm = await  _page.DisplayAlert("Confirmer", $"Supprimer {Product.Name} ?", "Oui", "Non");
+            bool confirm = await  _page.DisplayAlertAsync("Confirmer", $"Supprimer {Product.Name} ?", "Oui", "Non");
             if (!confirm) return;
 
             Products.Remove(Product);
             _filteredProducts = null;
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            SaveData();
+            await SaveData();
             ;
         }
 
@@ -219,7 +221,7 @@ namespace SheeToList
         #endregion
 
         #region save/load data from json
-        private async void SaveData()
+        private async Task SaveData()
         {
             try {
             await SaveJsonTalker.SaveAsync(Products.ToList());
@@ -228,9 +230,33 @@ namespace SheeToList
             {
                 Console.WriteLine(ex.StackTrace);
                 var sorted = new List<ProductToBuy>();
-                await _page.DisplayAlert("Erreur", ex.Message, "OK");
+                await _page.DisplayAlertAsync("Erreur", ex.Message, "OK");
             }
         }
+
+        // Schedule/debounce la sauvegarde (utilisé pour changements fréquents comme IsChecked)
+        private void ScheduleSave(int delayMs = 500)
+        {
+            _saveCts?.Cancel();
+            _saveCts = new CancellationTokenSource();
+            var token = _saveCts.Token;
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await Task.Delay(delayMs, token);
+                    if (!token.IsCancellationRequested)
+                        await SaveData();
+                }
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }, token);
+        }
+
         public async void LoadData()
         {
             var loadedProducts = await SaveJsonTalker.LoadAsync();
@@ -284,6 +310,8 @@ namespace SheeToList
             {
                 _filteredProducts = null;
                 OnPropertyChanged(nameof(ToBuyProducts));
+
+                ScheduleSave();
             }
         }
 
