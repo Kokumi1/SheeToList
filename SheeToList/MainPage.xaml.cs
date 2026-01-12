@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using CommunityToolkit.Maui.Extensions;
 using SheeToList.Model;
 using SheeToList.Services;
 using SheeToList.View;
+using SheeToList.Utils;
 
 namespace SheeToList
 {
@@ -134,6 +136,8 @@ namespace SheeToList
             {
                 var unSortedProducts = await GoogleApiTalker.GetData();
                 Products = new ObservableCollection<ProductToBuy>(unSortedProducts);
+                CategoryDefiner.AssignCategories(Products, overwriteExisting: true);
+                BuildGroups();
                 await SaveData();
             }
             catch (Exception ex)
@@ -178,7 +182,8 @@ namespace SheeToList
             //Products.Add(new ProductToBuy { Name = text, IsChecked = false });
             _filteredProducts = null;
 
-            sortProducts();
+            SortProducts();
+            CategoryDefiner.AssignCategories(Products, overwriteExisting: false);
             OnPropertyChanged(nameof(ToBuyProducts));
 
             await SaveData();
@@ -192,7 +197,7 @@ namespace SheeToList
             Product.Name = text;
             _filteredProducts = null;
 
-            sortProducts();
+            SortProducts();
             OnPropertyChanged(nameof(ToBuyProducts));
 
             await SaveData();
@@ -212,11 +217,32 @@ namespace SheeToList
             ;
         }
 
-        private void sortProducts()
+        private void SortProducts()
         {
+            BuildGroups();
             var sorted = Products.OrderBy(item => item.Name).ToList();
             Products = new ObservableCollection<ProductToBuy>(sorted);
             CollectionChangedSetup();
+        }
+
+        private void BuildGroups()
+        {
+            var groups = ToBuyProducts
+                .GroupBy(p =>p.Categorie)
+                .OrderBy(g =>(int)g.Key)
+                .Select(g => new Grouping<string, ProductToBuy>(
+                    (g.Key == Category.Autre ) ? "Autres" : g.Key.ToString(),
+                    g.OrderBy(p => p.Name)));
+
+            var ToBuyProductsGrouped = new ObservableCollection<Grouping<string, ProductToBuy>>(groups);
+            Products = new ObservableCollection<ProductToBuy>(ToBuyProductsGrouped.SelectMany(g => g));
+
+            foreach(ProductToBuy item in Products)
+            {
+                Debug.WriteLine($"{item.Name} - {item.Categorie}");
+            }
+
+            OnPropertyChanged(nameof(ToBuyProductsGrouped));
         }
         #endregion
 
@@ -264,7 +290,7 @@ namespace SheeToList
 
             _filteredProducts = null;
 
-            sortProducts();
+            SortProducts();
             CollectionChangedSetup();
             OnPropertyChanged(nameof(Products));
             OnPropertyChanged(nameof(ToBuyProducts));

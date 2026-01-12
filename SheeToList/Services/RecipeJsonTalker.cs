@@ -20,7 +20,7 @@ namespace SheeToList.Services
         {
             Debug.WriteLine("RecipeJsonTalker initialized.");
             var task = LoadAsync();
-            task.Start();
+           //task.Start();
         }
 
         private static string GetFilePath(string fileName)

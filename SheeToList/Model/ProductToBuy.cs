@@ -6,7 +6,8 @@ namespace SheeToList.Model
     public class ProductToBuy : INotifyPropertyChanged
     {
         string name ="";
-         bool isChecked;
+        Category categorie = Category.Autre;
+        bool isChecked;
 
     public string Name
     {
@@ -20,7 +21,13 @@ namespace SheeToList.Model
         set { isChecked = value; OnPropertyChanged(); }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public Category Categorie
+    {
+        get => categorie;
+        set { categorie = value; OnPropertyChanged(); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     void OnPropertyChanged([CallerMemberName] string name = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
