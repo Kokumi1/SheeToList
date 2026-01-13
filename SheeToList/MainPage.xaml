@@ -48,7 +48,17 @@
                     VerticalOptions="Center"
                  />
                 <CollectionView x:Name="ItemsList"
-                 ItemsSource="{Binding ToBuyProducts}">
+                 ItemsSource="{Binding ToBuyProductsGrouped}"
+                                IsGrouped="True"
+                                SelectionMode="None">
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Grid BackgroundColor="#AC99EA" Padding="10">
+                                <Label Text="{Binding Key}" FontAttributes="Bold" FontSize="Medium" VerticalOptions="Center" TextColor="Black"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
+
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Padding="10" ColumnDefinitions="50*,20*,2*,20*,2*,10*" MaximumHeightRequest="70">

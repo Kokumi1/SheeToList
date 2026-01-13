@@ -48,13 +48,15 @@ namespace SheeToList
     // ViewModel for MainPage
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly MainPage _page ;
-        private bool _isBuyedProductVisible ;
+        private readonly MainPage _page;
+        private bool _isBuyedProductVisible;
         private ObservableCollection<ProductToBuy>? _filteredProducts;
         private bool _isLoading;
         // Debounce pour les sauvegardes
         private CancellationTokenSource? _saveCts;
 
+        //----------------------
+        //Properties
         #region Properties
         public bool IsBuyedProductVisible
         {
@@ -88,9 +90,12 @@ namespace SheeToList
                 return _filteredProducts;
             }
         }
+        public ObservableCollection<Grouping<string, ProductToBuy>> ToBuyProductsGrouped { get; private set; } = new();
         public ObservableCollection<ProductToBuy> Products { get; set; }
         #endregion
 
+        //----------------------
+        //Constructor
         #region Constructor
         public MainViewModel(MainPage page)
         {
@@ -98,7 +103,7 @@ namespace SheeToList
 
             IsBuyedProductVisible = false;
             Products = [];
-            
+
             _page = page;
 
             //initialize commands
@@ -106,10 +111,10 @@ namespace SheeToList
             ImportDataCommand = new Command(async () => await ImportData());
             EditItemCommand = new Command<ProductToBuy>(EditProduct);
             DeleteItemCommand = new Command<ProductToBuy>(DeleteProduct);
-            FilterShowCommand = new Command(() => 
+            FilterShowCommand = new Command(() =>
             {
                 _filteredProducts = null;
-                IsBuyedProductVisible = !IsBuyedProductVisible; 
+                IsBuyedProductVisible = !IsBuyedProductVisible;
             });
 
             //load saved productList and recipeList
@@ -123,6 +128,8 @@ namespace SheeToList
         }
         #endregion
 
+        //----------------------
+        //Data Import
         #region Data Import
         public async Task ImportData()
         {
@@ -154,8 +161,10 @@ namespace SheeToList
         }
         #endregion
 
+        //----------------------
+        //Commands
         #region Command Region
-        public  ICommand AddItemCommand { get; }
+        public ICommand AddItemCommand { get; }
         public ICommand FilterShowCommand { get; }
         public ICommand ImportDataCommand { get; }
         public ICommand EditItemCommand { get; }
@@ -163,10 +172,12 @@ namespace SheeToList
         public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
         #endregion
 
+        //----------------------
+        //Data manament
         #region Data Management
         public async void AddProduct()
         {
-           // string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
+            // string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
             string? text = await _page.ItemNameOrPickAskerAsync("Entrer le nom");
 
             if (string.IsNullOrWhiteSpace(text)) return;
@@ -175,10 +186,10 @@ namespace SheeToList
                 await _page.DisplayAlertAsync("Doublon", "Ce produit est déjà dans la liste.", "OK");
                 return;
             }
-            ProductToBuy products = new ProductToBuy { Name =text, IsChecked = false};
+            ProductToBuy products = new ProductToBuy { Name = text, IsChecked = false };
             var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
 
-            Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));    
+            Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));
             //Products.Add(new ProductToBuy { Name = text, IsChecked = false });
             _filteredProducts = null;
 
@@ -206,7 +217,7 @@ namespace SheeToList
         private async void DeleteProduct(ProductToBuy Product)
         {
             // Confirm deletion
-            bool confirm = await  _page.DisplayAlertAsync("Confirmer", $"Supprimer {Product.Name} ?", "Oui", "Non");
+            bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer {Product.Name} ?", "Oui", "Non");
             if (!confirm) return;
 
             Products.Remove(Product);
@@ -228,29 +239,26 @@ namespace SheeToList
         private void BuildGroups()
         {
             var groups = ToBuyProducts
-                .GroupBy(p =>p.Categorie)
-                .OrderBy(g =>(int)g.Key)
+                .GroupBy(p => p.Categorie)
+                .OrderBy(g => (int)g.Key)
                 .Select(g => new Grouping<string, ProductToBuy>(
-                    (g.Key == Category.Autre ) ? "Autres" : g.Key.ToString(),
+                    (g.Key == Category.Autre) ? "Autres" : g.Key.ToString(),
                     g.OrderBy(p => p.Name)));
 
-            var ToBuyProductsGrouped = new ObservableCollection<Grouping<string, ProductToBuy>>(groups);
+            ToBuyProductsGrouped = new ObservableCollection<Grouping<string, ProductToBuy>>(groups);
             Products = new ObservableCollection<ProductToBuy>(ToBuyProductsGrouped.SelectMany(g => g));
-
-            foreach(ProductToBuy item in Products)
-            {
-                Debug.WriteLine($"{item.Name} - {item.Categorie}");
-            }
 
             OnPropertyChanged(nameof(ToBuyProductsGrouped));
         }
         #endregion
 
+        //----------------------
+        //Save /Load Data
         #region save/load data from json
         private async Task SaveData()
         {
             try {
-            await SaveJsonTalker.SaveAsync(Products.ToList());
+                await SaveJsonTalker.SaveAsync(Products.ToList());
             }
             catch (Exception ex)
             {
@@ -300,6 +308,8 @@ namespace SheeToList
 
         #endregion
 
+        //----------------------
+        //Collection Changed Setup
         #region Collection Changed Setup
         private void CollectionChangedSetup()
         {
@@ -329,6 +339,8 @@ namespace SheeToList
         }
         #endregion
 
+        //----------------------
+        // Event Handlers
         #region Event Handlers
         private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
@@ -342,8 +354,10 @@ namespace SheeToList
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        void OnPropertyChanged([CallerMemberName] string name = "") =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
     #endregion
 }
