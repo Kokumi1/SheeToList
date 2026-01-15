@@ -28,7 +28,7 @@ namespace SheeToList.Model
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-    void OnPropertyChanged([CallerMemberName] string name = null) =>
+    void OnPropertyChanged([CallerMemberName] string name = "") =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
 }

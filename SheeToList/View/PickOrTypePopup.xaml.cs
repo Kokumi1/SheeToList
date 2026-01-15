@@ -29,14 +29,12 @@ public partial class PickOrTypePopup : Popup
         if(RecipeJsonTalker.LoadAsync() != null)
             await RecipeJsonTalker.LoadAsync();
 
-        var recipes = RecipeJsonTalker.Instance.Recipes ?? new System.Collections.ObjectModel.ObservableCollection<Recipe>();
+        var recipes = RecipeJsonTalker.Instance.Recipes ?? [];
         Items = recipes.Select(r => r.Name).ToList();
-        //Items = [.. items ?? []];
         await MainThread.InvokeOnMainThreadAsync(() =>
         {
             foreach (var it in recipes)
             {
-                Debug.WriteLine("PickerList Add " + it.Name);
                 PickerList.Items.Add(it.Name);
             }
 

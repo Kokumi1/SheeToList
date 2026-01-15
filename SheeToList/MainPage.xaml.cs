@@ -64,9 +64,8 @@ namespace SheeToList
             set
             {
                 _isBuyedProductVisible = value;
+                //BuildGroups();
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(FilterShowButtonText));
-                OnPropertyChanged(nameof(ToBuyProducts));
             }
         }
 
@@ -86,8 +85,9 @@ namespace SheeToList
             {
                 if (IsBuyedProductVisible)
                     return Products;
-                _filteredProducts ??= new ObservableCollection<ProductToBuy>(Products.Where(item => !item.IsChecked));
-                return _filteredProducts;
+                if (Products is null)
+                    return [];
+                return _filteredProducts ??= new ObservableCollection<ProductToBuy>(Products.Where(item => !item.IsChecked)); 
             }
         }
         public ObservableCollection<Grouping<string, ProductToBuy>> ToBuyProductsGrouped { get; private set; } = new();
@@ -138,7 +138,7 @@ namespace SheeToList
             OnPropertyChanged(nameof(IsLoading));
             _filteredProducts = null;
 
-            GoogleApiTalker apiTalker = new();
+            //GoogleApiTalker apiTalker = new();
             try
             {
                 var unSortedProducts = await GoogleApiTalker.GetData();
@@ -177,7 +177,6 @@ namespace SheeToList
         #region Data Management
         public async void AddProduct()
         {
-            // string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
             string? text = await _page.ItemNameOrPickAskerAsync("Entrer le nom");
 
             if (string.IsNullOrWhiteSpace(text)) return;
@@ -186,16 +185,15 @@ namespace SheeToList
                 await _page.DisplayAlertAsync("Doublon", "Ce produit est déjà dans la liste.", "OK");
                 return;
             }
-            ProductToBuy products = new ProductToBuy { Name = text, IsChecked = false };
+            ProductToBuy products = new() { Name = text, IsChecked = false };
             var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
 
             Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));
-            //Products.Add(new ProductToBuy { Name = text, IsChecked = false });
             _filteredProducts = null;
 
-            SortProducts();
             CategoryDefiner.AssignCategories(Products, overwriteExisting: false);
-            OnPropertyChanged(nameof(ToBuyProducts));
+            SortProducts();
+            //OnPropertyChanged(nameof(ToBuyProducts));
 
             await SaveData();
         }
@@ -209,7 +207,7 @@ namespace SheeToList
             _filteredProducts = null;
 
             SortProducts();
-            OnPropertyChanged(nameof(ToBuyProducts));
+            //OnPropertyChanged(nameof(ToBuyProducts));
 
             await SaveData();
         }
@@ -222,7 +220,8 @@ namespace SheeToList
 
             Products.Remove(Product);
             _filteredProducts = null;
-            OnPropertyChanged(nameof(ToBuyProducts));
+            BuildGroups();
+            //OnPropertyChanged(nameof(ToBuyProducts));
 
             await SaveData();
             ;
@@ -246,9 +245,11 @@ namespace SheeToList
                     g.OrderBy(p => p.Name)));
 
             ToBuyProductsGrouped = new ObservableCollection<Grouping<string, ProductToBuy>>(groups);
-            Products = new ObservableCollection<ProductToBuy>(ToBuyProductsGrouped.SelectMany(g => g));
+
+            CollectionChangedSetup();
 
             OnPropertyChanged(nameof(ToBuyProductsGrouped));
+            OnPropertyChanged(nameof(ToBuyProducts));
         }
         #endregion
 
@@ -300,8 +301,6 @@ namespace SheeToList
 
             SortProducts();
             CollectionChangedSetup();
-            OnPropertyChanged(nameof(Products));
-            OnPropertyChanged(nameof(ToBuyProducts));
 
             IsLoading = false;
         }
@@ -313,6 +312,8 @@ namespace SheeToList
         #region Collection Changed Setup
         private void CollectionChangedSetup()
         {
+            //try { Products.CollectionChanged -= Product_CollectionChanged; } catch { }
+
             Products.CollectionChanged += Product_CollectionChanged;
             foreach (var item in Products)
                 attachEventHandlers(item);
@@ -347,7 +348,8 @@ namespace SheeToList
             if (e.PropertyName == nameof(ProductToBuy.IsChecked))
             {
                 _filteredProducts = null;
-                OnPropertyChanged(nameof(ToBuyProducts));
+                BuildGroups();
+                //OnPropertyChanged(nameof(ToBuyProducts));
 
                 ScheduleSave();
             }
@@ -356,7 +358,7 @@ namespace SheeToList
         public event PropertyChangedEventHandler? PropertyChanged;
         void OnPropertyChanged([CallerMemberName] string name = "")
         {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
     #endregion
