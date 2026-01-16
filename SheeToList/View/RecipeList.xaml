@@ -6,7 +6,7 @@
 
     <ContentPage.Resources>
         <Style x:Key="ImageLikeButton" TargetType="ImageButton">
-            <Setter Property="BackgroundColor" Value="Violet"/>
+            <Setter Property="BackgroundColor" Value="#AC99EA"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="BorderWidth" Value="1"/>
             <Setter Property="Padding" Value="1"/>

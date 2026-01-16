@@ -5,7 +5,7 @@
     
     <ContentPage.Resources>
         <Style x:Key="ImageLikeButton" TargetType="ImageButton">
-            <Setter Property="BackgroundColor" Value="Violet"/>
+            <Setter Property="BackgroundColor" Value="#AC99EA"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="BorderWidth" Value="1"/>
             <Setter Property="Padding" Value="1"/>
@@ -61,23 +61,22 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="10" ColumnDefinitions="50*,20*,2*,20*,2*,10*" MaximumHeightRequest="70">
-                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
-                                <ImageButton 
-                                    Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
-                                    CommandParameter="{Binding .}"
-                                    Source="edit.png"
-                                    Style="{StaticResource ImageLikeButton}"
-                                    Grid.Column="1"
-                                    />
+                            <Grid Padding="10" ColumnDefinitions="70*,20*,2*,10*" MaximumHeightRequest="70">
+                                <Label Text="{Binding Name}" VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
+                                            CommandParameter="{Binding .}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
                                 <ImageButton 
                                     Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ItemsList}}"
                                     CommandParameter="{Binding .}"
                                     Source="trash.png"
                                     Style="{StaticResource ImageLikeButton}"
-                                    Grid.Column="3"
+                                    Grid.Column="1"
                                     />
-                                <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="5" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                <CheckBox IsChecked="{Binding IsChecked}" Grid.Column="3" VerticalOptions="Center" HorizontalOptions="Center"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

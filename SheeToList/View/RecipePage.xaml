@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SheeToList.View.RecipePage"
-             Title="{Binding RecetteTitle}">
+             x:Name="RecipePageUI">
 
     <ContentPage.Resources>
         <Style x:Key="ImageLikeButton" TargetType="ImageButton">
-            <Setter Property="BackgroundColor" Value="Violet"/>
+            <Setter Property="BackgroundColor" Value="#AC99EA"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="BorderWidth" Value="1"/>
             <Setter Property="Padding" Value="1"/>
@@ -16,10 +16,18 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="50,*,Auto,50" Padding="30,0">
+    <Grid RowDefinitions="20,50,*,Auto,50" Padding="30,0">
 
+        <Label Text="{Binding RecetteTitle}" FontSize="Title" TextColor="#AC99EA" FontAttributes="Bold"
+               Grid.Row="1" VerticalOptions="Center">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer
+                    Command="{Binding BindingContext.EditRecipeNameCommand, Source={x:Reference RecipePageUI}}"
+                    />
+            </Label.GestureRecognizers>
+        </Label>
 
-        <ScrollView Grid.Row="1">
+        <ScrollView Grid.Row="2">
             <VerticalStackLayout  Spacing="25">
                 <ActivityIndicator
              IsRunning="{Binding IsLoading}"
@@ -32,21 +40,22 @@
           ItemsSource="{Binding RecipeIngredientList}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="10" ColumnDefinitions="50*,20*,2*,20*,2*" MaximumHeightRequest="70">
-                                <Label Text="{Binding .}"  VerticalOptions="Center"/>
-                                <ImageButton 
-                             Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ingredientList}}"
-                             CommandParameter="{Binding .}"
-                             Source="edit.png"
-                             Style="{StaticResource ImageLikeButton}"
-                             Grid.Column="1"
-                             />
+                            <Grid Padding="10" ColumnDefinitions="70*,20*,2*" MaximumHeightRequest="70">
+
+                                <Label Text="{Binding .}"  VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ingredientList}}"
+                                            CommandParameter="{Binding .}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+
                                 <ImageButton 
                              Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ingredientList}}"
                              CommandParameter="{Binding .}"
                              Source="trash.png"
                              Style="{StaticResource ImageLikeButton}"
-                             Grid.Column="3"
+                             Grid.Column="1"
                              />
                             </Grid>
                         </DataTemplate>
@@ -59,7 +68,7 @@
         <Button
          Command="{Binding AddItemCommand}"
          Text="+"
-         Grid.Row="2"
+         Grid.Row="3"
          Grid.Column="0"
         HorizontalOptions="Start"
         VerticalOptions="Center" />
