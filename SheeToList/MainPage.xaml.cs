@@ -42,6 +42,8 @@ namespace SheeToList
             await Navigation.PushAsync(new RecipeList());
         }
         #endregion
+
+        
     }
 
 
@@ -64,7 +66,7 @@ namespace SheeToList
             set
             {
                 _isBuyedProductVisible = value;
-                //BuildGroups();
+                Debug.WriteLine("IsBuyedProductVisible set to " + value);
                 OnPropertyChanged();
             }
         }
@@ -83,6 +85,7 @@ namespace SheeToList
         {
             get
             {
+                Debug.WriteLine("ToBuyProducts getter called");
                 if (IsBuyedProductVisible)
                     return Products;
                 if (Products is null)
@@ -90,7 +93,7 @@ namespace SheeToList
                 return _filteredProducts ??= new ObservableCollection<ProductToBuy>(Products.Where(item => !item.IsChecked)); 
             }
         }
-        public ObservableCollection<Grouping<string, ProductToBuy>> ToBuyProductsGrouped { get; private set; } = new();
+        public ObservableCollection<Grouping<string, ProductToBuy>> ToBuyProductsGrouped { get; private set; } = [];
         public ObservableCollection<ProductToBuy> Products { get; set; }
         #endregion
 
@@ -115,7 +118,9 @@ namespace SheeToList
             {
                 _filteredProducts = null;
                 IsBuyedProductVisible = !IsBuyedProductVisible;
+                    BuildGroups();
             });
+            ToggleCheckedCommand = new Command(ToggleChecked);
 
             //load saved productList and recipeList
             IsLoading = true;
@@ -170,6 +175,11 @@ namespace SheeToList
         public ICommand EditItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
+        public ICommand ToggleCheckedCommand { get; }
+        public void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            BuildGroups();
+        }
         #endregion
 
         //----------------------
@@ -227,9 +237,9 @@ namespace SheeToList
             ;
         }
 
-        private void SortProducts()
+        private async void SortProducts()
         {
-            BuildGroups();
+             BuildGroups();
             var sorted = Products.OrderBy(item => item.Name).ToList();
             Products = new ObservableCollection<ProductToBuy>(sorted);
             CollectionChangedSetup();
@@ -243,13 +253,28 @@ namespace SheeToList
                 .Select(g => new Grouping<string, ProductToBuy>(
                     (g.Key == Category.Autre) ? "Autres" : g.Key.ToString(),
                     g.OrderBy(p => p.Name)));
+            Debug.WriteLine("Building groups:");
 
             ToBuyProductsGrouped = new ObservableCollection<Grouping<string, ProductToBuy>>(groups);
 
-            CollectionChangedSetup();
+            //CollectionChangedSetup();
 
             OnPropertyChanged(nameof(ToBuyProductsGrouped));
             OnPropertyChanged(nameof(ToBuyProducts));
+        }
+
+        // Command exécutée lorsque la checkbox change d'état
+        private void ToggleChecked()
+        {
+            // _filteredProducts est réinitialisé pour forcer le rafraîchissement de la vue filtrée
+            _filteredProducts = null;
+            OnPropertyChanged(nameof(ToBuyProducts));
+
+            
+            try { BuildGroups(); } catch { /* safe-fail si BuildGroups non finalisé */ }
+
+            // Debounce/sauvegarde
+            ScheduleSave();
         }
         #endregion
 
@@ -348,8 +373,7 @@ namespace SheeToList
             if (e.PropertyName == nameof(ProductToBuy.IsChecked))
             {
                 _filteredProducts = null;
-                BuildGroups();
-                //OnPropertyChanged(nameof(ToBuyProducts));
+                //BuildGroups();
 
                 ScheduleSave();
             }

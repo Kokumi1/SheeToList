@@ -16,7 +16,7 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="20,50,*,Auto,50" Padding="30,0">
+    <Grid RowDefinitions="20,90,*,Auto,50" Padding="30,0">
 
         <Label Text="{Binding RecetteTitle}" FontSize="Title" TextColor="#AC99EA" FontAttributes="Bold"
                Grid.Row="1" VerticalOptions="Center">
