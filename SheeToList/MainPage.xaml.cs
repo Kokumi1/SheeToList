@@ -3,9 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Extensions;
 using SheeToList.Model;
 using SheeToList.Services;
@@ -47,6 +45,7 @@ namespace SheeToList
     }
 
 
+
     // ViewModel for MainPage
     public class MainViewModel : INotifyPropertyChanged
     {
@@ -67,7 +66,8 @@ namespace SheeToList
             {
                 _isBuyedProductVisible = value;
                 Debug.WriteLine("IsBuyedProductVisible set to " + value);
-                OnPropertyChanged();
+                BuildGroups();
+                //OnPropertyChanged();
             }
         }
 
@@ -86,16 +86,24 @@ namespace SheeToList
             get
             {
                 Debug.WriteLine("ToBuyProducts getter called");
-                if (IsBuyedProductVisible)
+                if (IsBuyedProductVisible) { 
+                    Debug.WriteLine("Returning all products");
                     return Products;
+                   //return _filteredProducts ??= new ObservableCollection<ProductToBuy>(Products.Where(item =>! item.IsChecked));
+                }
                 if (Products is null)
                     return [];
+                Debug.WriteLine("Returning filtered products");
                 return _filteredProducts ??= new ObservableCollection<ProductToBuy>(Products.Where(item => !item.IsChecked)); 
             }
         }
         public ObservableCollection<Grouping<string, ProductToBuy>> ToBuyProductsGrouped { get; private set; } = [];
         public ObservableCollection<ProductToBuy> Products { get; set; }
         #endregion
+
+
+
+
 
         //----------------------
         //Constructor
@@ -118,7 +126,6 @@ namespace SheeToList
             {
                 _filteredProducts = null;
                 IsBuyedProductVisible = !IsBuyedProductVisible;
-                    BuildGroups();
             });
             ToggleCheckedCommand = new Command(ToggleChecked);
 
@@ -126,12 +133,16 @@ namespace SheeToList
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
             LoadData();
-            //RecipeJsonTalker.LoadAsync();
             var recipe = RecipeJsonTalker.Instance.Recipes;
 
             CollectionChangedSetup();
         }
         #endregion
+
+
+
+
+
 
         //----------------------
         //Data Import
@@ -143,7 +154,6 @@ namespace SheeToList
             OnPropertyChanged(nameof(IsLoading));
             _filteredProducts = null;
 
-            //GoogleApiTalker apiTalker = new();
             try
             {
                 var unSortedProducts = await GoogleApiTalker.GetData();
@@ -166,6 +176,11 @@ namespace SheeToList
         }
         #endregion
 
+
+
+
+
+
         //----------------------
         //Commands
         #region Command Region
@@ -176,11 +191,12 @@ namespace SheeToList
         public ICommand DeleteItemCommand { get; }
         public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
         public ICommand ToggleCheckedCommand { get; }
-        public void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
-        {
-            BuildGroups();
-        }
         #endregion
+
+
+
+
+
 
         //----------------------
         //Data manament
@@ -203,7 +219,6 @@ namespace SheeToList
 
             CategoryDefiner.AssignCategories(Products, overwriteExisting: false);
             SortProducts();
-            //OnPropertyChanged(nameof(ToBuyProducts));
 
             await SaveData();
         }
@@ -217,7 +232,6 @@ namespace SheeToList
             _filteredProducts = null;
 
             SortProducts();
-            //OnPropertyChanged(nameof(ToBuyProducts));
 
             await SaveData();
         }
@@ -231,7 +245,6 @@ namespace SheeToList
             Products.Remove(Product);
             _filteredProducts = null;
             BuildGroups();
-            //OnPropertyChanged(nameof(ToBuyProducts));
 
             await SaveData();
             ;
@@ -257,8 +270,8 @@ namespace SheeToList
 
             ToBuyProductsGrouped = new ObservableCollection<Grouping<string, ProductToBuy>>(groups);
 
-            //CollectionChangedSetup();
 
+            Debug.WriteLine($"Built {ToBuyProductsGrouped.Count} groups.");
             OnPropertyChanged(nameof(ToBuyProductsGrouped));
             OnPropertyChanged(nameof(ToBuyProducts));
         }
@@ -267,16 +280,22 @@ namespace SheeToList
         private void ToggleChecked()
         {
             // _filteredProducts est réinitialisé pour forcer le rafraîchissement de la vue filtrée
+            Debug.WriteLine("ToggleChecked called");
             _filteredProducts = null;
             OnPropertyChanged(nameof(ToBuyProducts));
 
-            
+            if (!IsBuyedProductVisible)
             try { BuildGroups(); } catch { /* safe-fail si BuildGroups non finalisé */ }
 
             // Debounce/sauvegarde
             ScheduleSave();
         }
         #endregion
+
+
+
+
+
 
         //----------------------
         //Save /Load Data
@@ -309,7 +328,7 @@ namespace SheeToList
                     if (!token.IsCancellationRequested)
                         await SaveData();
                 }
-                catch (TaskCanceledException) { }
+                catch (TaskCanceledException) {}
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
@@ -329,16 +348,17 @@ namespace SheeToList
 
             IsLoading = false;
         }
-
         #endregion
+
+
+
+
 
         //----------------------
         //Collection Changed Setup
         #region Collection Changed Setup
         private void CollectionChangedSetup()
         {
-            //try { Products.CollectionChanged -= Product_CollectionChanged; } catch { }
-
             Products.CollectionChanged += Product_CollectionChanged;
             foreach (var item in Products)
                 attachEventHandlers(item);
@@ -365,6 +385,11 @@ namespace SheeToList
         }
         #endregion
 
+
+
+
+
+
         //----------------------
         // Event Handlers
         #region Event Handlers
@@ -373,7 +398,6 @@ namespace SheeToList
             if (e.PropertyName == nameof(ProductToBuy.IsChecked))
             {
                 _filteredProducts = null;
-                //BuildGroups();
 
                 ScheduleSave();
             }
