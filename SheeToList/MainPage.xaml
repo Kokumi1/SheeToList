@@ -97,6 +97,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="140" />
             </Grid.ColumnDefinitions>
             
             <Button
@@ -107,9 +108,16 @@
                     VerticalOptions="Center" />
 
             <Button
+                     Text="X"
+                     Command="{Binding DeleteAllItemsCommand}"
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center" />
+
+            <Button
                      Text="{Binding FilterShowButtonText}"
                      Command="{Binding FilterShowCommand}"
-                    Grid.Column="1"
+                    Grid.Column="2"
                     WidthRequest="130"
                     HorizontalOptions="End"
                     VerticalOptions="Center" />

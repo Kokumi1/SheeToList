@@ -128,6 +128,7 @@ namespace SheeToList
                 IsBuyedProductVisible = !IsBuyedProductVisible;
             });
             ToggleCheckedCommand = new Command(ToggleChecked);
+            DeleteAllItemsCommand = new Command(DeleteAllProducts);
 
             //load saved productList and recipeList
             IsLoading = true;
@@ -149,7 +150,8 @@ namespace SheeToList
         #region Data Import
         public async Task ImportData()
         {
-            if (IsLoading) return;
+            bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Cela supprimeras toute la liste. Continuer?", "Oui", "Non");
+            if (IsLoading || !confirm) return;
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
             _filteredProducts = null;
@@ -190,6 +192,7 @@ namespace SheeToList
         public ICommand EditItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
+        public ICommand DeleteAllItemsCommand { get; }
         public ICommand ToggleCheckedCommand { get; }
         #endregion
 
@@ -246,6 +249,18 @@ namespace SheeToList
             _filteredProducts = null;
             BuildGroups();
 
+            await SaveData();
+            ;
+        }
+
+        private async void DeleteAllProducts()
+        {
+            // Confirm deletion
+            bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer tous les produits ?", "Oui", "Non");
+            if (!confirm) return;
+            Products.Clear();
+            _filteredProducts = null;
+            BuildGroups();
             await SaveData();
             ;
         }
