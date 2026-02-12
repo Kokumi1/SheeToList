@@ -30,6 +30,14 @@
                     VerticalOptions="Center" />
 
             <Button
+                    Clicked="Category_Button_Clicked"
+                    Text="Catégorie"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center" 
+                    Margin="100,0,0,0"/>
+
+            <Button
                     Command="{Binding ImportDataCommand}"
                     Text="Importer"
                     Grid.Column="1"

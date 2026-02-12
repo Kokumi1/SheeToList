@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SheeToList.View.CategoryListPage"
+             Title="Catégories">
+    
+    <Grid RowDefinitions="50,*,Auto,50" Padding="30,0">
+
+        <StackLayout Padding="16" Spacing="12" Grid.Row="1">
+            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" />
+            <CollectionView x:Name="CategoryList"
+                        ItemsSource="{Binding Categories}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedCategory, Mode=TwoWay}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="20" ColumnDefinitions="*,Auto">
+                            <Label Text="{Binding Name}" VerticalOptions="Center" >
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.OpenDetailCommand, Source={x:Reference CategoryList}}"
+                                            CommandParameter="{Binding .}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+        </StackLayout>
+    </Grid>
+</ContentPage>

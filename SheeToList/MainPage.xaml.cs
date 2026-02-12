@@ -9,6 +9,7 @@ using SheeToList.Model;
 using SheeToList.Services;
 using SheeToList.View;
 using SheeToList.Utils;
+using System.Threading.Tasks;
 
 namespace SheeToList
 {
@@ -39,9 +40,13 @@ namespace SheeToList
         {
             await Navigation.PushAsync(new RecipeList());
         }
+        private async void Category_Button_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CategoryListPage());
+        }
         #endregion
 
-        
+
     }
 
 

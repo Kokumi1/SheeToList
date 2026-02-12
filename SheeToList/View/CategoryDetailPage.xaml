@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SheeToList.View.CategoryDetailPage"
+             Title="Détails catégorie">
+	
+	 <ContentPage.Resources>
+        <Style x:Key="ImageLikeButton" TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="#AC99EA"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderWidth" Value="1"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Aspect" Value="AspectFit"/>
+            <Setter Property="HorizontalOptions" Value="Fill"/>
+            <Setter Property="VerticalOptions" Value="Fill"/>
+        </Style>
+    </ContentPage.Resources>
+		
+	
+		
+	<Grid RowDefinitions="50,60,*,50" Padding="10,0,10,10">
+		<Grid ColumnDefinitions="20*,80*">
+            <Label Text="Nom" VerticalOptions="Center"/>
+            <Entry Text="{Binding Category.Name}" Placeholder="Nom de la catégorie" Grid.Column="1" />
+		</Grid>
+
+        <Label Text="Mots-clés: " Grid.Row="1" Margin="10,30,0,10" BackgroundColor="#AC99EA" TextColor="Black" />
+		
+        <ScrollView Grid.Row="2">
+         <VerticalStackLayout Spacing="25">
+				
+            <CollectionView ItemsSource="{Binding Category.Keywords}"  x:Name="KeywordList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="60*,20*,2*,20*,2*" Padding="20,10,20,10" MaximumHeightRequest="70">
+                            <Label Text="{Binding .}" VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.EditKeywordCommand, Source={x:Reference KeywordList}}"
+                                            CommandParameter="{Binding .}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+						    <ImageButton 
+                                    Command="{Binding DeleteKeywordCommand, Source={x:Reference KeywordList}}"
+                                    CommandParameter="{Binding .}"
+                                    Source="trash.png"
+                                    Style="{StaticResource ImageLikeButton}"
+                                    Grid.Column="3"
+                                    />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+				
+         </VerticalStackLayout>
+        </ScrollView>
+
+		<Grid Grid.Row="3"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="140" />
+            </Grid.ColumnDefinitions>
+			
+		        <Button Text="+" Command="{Binding AddKeywordCommand}" />
+              <Button Text="Enregistrer" Command="{Binding SaveAndCloseCommand}" Grid.Column="2" HorizontalOptions="End"/>
+		
+			</Grid>
+    
+		</Grid>
+</ContentPage>
