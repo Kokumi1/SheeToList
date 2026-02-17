@@ -14,8 +14,9 @@
                         SelectedItem="{Binding SelectedCategory, Mode=TwoWay}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="20" ColumnDefinitions="*,Auto">
-                            <Label Text="{Binding Name}" VerticalOptions="Center" >
+                        <Grid Padding="10" ColumnDefinitions="*,Auto">
+                            <Border Stroke="#AC99EA" StrokeShape="RoundRectangle 10,10,10,10"/>
+                            <Label Text="{Binding Name}" VerticalOptions="Center"  Margin="10">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer 
                                             Command="{Binding BindingContext.OpenDetailCommand, Source={x:Reference CategoryList}}"

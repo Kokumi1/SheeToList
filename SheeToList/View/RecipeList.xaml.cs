@@ -76,7 +76,7 @@ public class RecipeListViewModel: INotifyPropertyChanged
 	private async void DeleteRecipe(Recipe recipe)
 	{
         // Confirm deletion
-        bool confirm = await _page.DisplayAlert("Confirmer", $"Supprimer {recipe.Name} ?", "Oui", "Non");
+        bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer {recipe.Name} ?", "Oui", "Non");
         if (!confirm) return;
 
 		Recipes?.Remove(recipe);

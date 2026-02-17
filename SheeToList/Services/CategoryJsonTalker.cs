@@ -49,17 +49,70 @@ namespace SheeToList.Services
             {
                 using FileStream openStream = File.OpenRead(filePath);
                 categories = await JsonSerializer.DeserializeAsync<ObservableCollection<CategoryDefinition>>(openStream, _jsonOptions)
-                             ?? new ObservableCollection<CategoryDefinition>();
+                             ?? [];
             }
             else
             {
-                // valeurs par défaut
-                categories.Add(new CategoryDefinition { Name = "Fruit", Keywords = new ObservableCollection<string> { "pomme", "banane", "orange" } });
-                categories.Add(new CategoryDefinition { Name = "Viande", Keywords = new ObservableCollection<string> { "poulet", "boeuf" } });
-                await SaveAsync(categories.ToList());
+                // valeurs par défaut 
+                categories = AddDefaultCategory();
+                await SaveAsync([.. categories]);
             }
 
             CategoryJsonTalker.Instance.Categories = categories;
+        }
+
+        public static ObservableCollection<CategoryDefinition> AddDefaultCategory()
+        {
+            var DefaultCategory = new ObservableCollection<CategoryDefinition>
+            {
+                new(){
+                    Name = "Fruit",
+                    Keywords = ["pomme", "banane", "orange", "fraise", "raisin", "kiwi", "citron", "ananas", "poire", "clementine"]
+                },
+                new(){
+                    Name = "Viande",
+                    Keywords = ["poulet", "boeuf", "porc", "agneau", "steak", "saucisse", "dinde", "roti", "chippolata", "charcuterie", "jambon"]
+                },
+                new() {
+                    Name = "Surgelé",
+                    Keywords = ["surgeles", "congele", "glace", "pdt sautees", "pdt rissolees", "frite"]
+                },
+                new()
+                {
+                    Name = "Légumes",
+                    Keywords = [ "tomate", "carotte", "salade", "laitue", "poivron", "oignon", "courgette", "concombre", "aubergine", "haricots",
+                "leg provencal", "poireau", "endive", "choux", "chou "]
+                },
+                new()
+                {
+                    Name = "Poissons",
+                    Keywords = ["poisson", "saumon", "thon", "crevette", "merlan", "truite", "morue", "cabillaud"]
+                },
+                new()
+                {
+                    Name = "ProduitLaitier",
+                    Keywords = [ "lait", "yaourt", "fromage", "beurre", "crème", "yaourt", "maroilles", "caprice des dieux", "port salut",
+                "chausse aux moines", "buche de chevre", "pave d'affinois","chevre nature", "rocamadour", "petit basque", "etorki", "st albray", "boursin",
+                "mimolette", "cousteron", "bleu"]
+                },
+                new()
+                {
+                    Name = "Boulangerie",
+                    Keywords = ["pain", "baguette", "croissant", "brioche", "pain de mie"]
+                },
+                new()
+                {
+                    Name = "Boisson",
+                    Keywords = [  "eau", "jus", "soda", "coca", "vin", "biere", "café" ]
+                },
+                new()
+                {
+                    Name = "ProduitMenager",
+                    Keywords = ["lessive", "savon", "shampoing", "détergent", "produit vaisselle", "eponges", "papier toilette"]
+                }
+            };
+
+            return DefaultCategory;
         }
     }
 }
