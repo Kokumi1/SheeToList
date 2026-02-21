@@ -139,7 +139,8 @@ namespace SheeToList
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
             LoadData();
-            var recipe = RecipeJsonTalker.Instance.Recipes;
+            var _R = RecipeJsonTalker.Instance;
+            var _C = CategoryJsonTalker.InitializeAsync();
 
             CollectionChangedSetup();
         }

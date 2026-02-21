@@ -5,13 +5,15 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using SheeToList.Model;
+using SheeToList.Services;
 
 namespace SheeToList.Utils
 {
     public static class CategoryDefiner
     {
+        //TODO: Déplacer les mots clés par défault et l'applatisseur dans une classe dédié.
         // Dictionnaire de mots-clés => catégorie
-        private static readonly Dictionary<Category, string[]> Keywords = new()
+        private static readonly Dictionary<Category, string[]> DefaultKeywords = new()
         {
             { Category.Surgelé, new[] { "surgeles", "congele", "glace", "pdt sautees", "pdt rissolees", "frite"} },
             {Category.Épicerie, new[] { "épicerie", "epicerie", "conserve","plats préparés", "conserves", "sauce", "sauces", "pate",
@@ -34,7 +36,59 @@ namespace SheeToList.Utils
 
         static void KeywordFlattener()
         {
-            FlatKeywords = [.. Keywords.SelectMany(kvp => kvp.Value.Select(k => (keyNormalized: RemoveDiacritics(k).ToLowerInvariant(), cat: kvp.Key)))];
+            //FlatKeywords = [.. Keywords.SelectMany(kvp => kvp.Value.Select(k => (keyNormalized: RemoveDiacritics(k).ToLowerInvariant(), cat: kvp.Key)))];
+            var pairs = new List<(string key, Category cat)>(capacity: 256);
+
+            try
+            {
+                var store = CategoryJsonTalker.Instance;
+                var storeCategories = store?.Categories;
+
+                if (storeCategories != null && storeCategories.Count > 0)
+                {
+                    foreach (var categoryDefinition in storeCategories)
+                    {
+                        if (categoryDefinition == null || categoryDefinition.Keywords == null) continue;
+
+                        // Tenter de mapper le nom (string) vers l'enum Category.
+                        // Si échoue, on utilise Category.Autre.
+                        if (!Enum.TryParse<Category>(categoryDefinition.Name, ignoreCase: true, out var mappedCategory))
+                            mappedCategory = Category.Autre;
+
+                        foreach (var key in categoryDefinition.Keywords)
+                        {
+                            
+                            if (string.IsNullOrWhiteSpace(key)) continue;
+                            var keyNormalized = RemoveDiacritics(key).ToLowerInvariant();
+                            pairs.Add((keyNormalized, mappedCategory));
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // ignore et fallback vers DefaultKeywords
+                Debug.WriteLine("Erreur lors du chargement des catégories personnalisées. Utilisation des catégories par défaut.");
+            }
+
+            // Si aucune paire issue du store, utilise les keywords par défaut
+            if (pairs.Count == 0)
+            {
+                foreach (var kvp in DefaultKeywords)
+                {
+                    foreach (var key in kvp.Value)
+                    {
+                        if (string.IsNullOrWhiteSpace(key)) continue;
+                        var keyNormalized = RemoveDiacritics(key).ToLowerInvariant();
+                        pairs.Add((keyNormalized, kvp.Key));
+                    }
+                }
+            }
+
+            // Dédupliquer par clé normalisée en gardant la première occurrence
+            FlatKeywords = [.. pairs
+                .GroupBy(p => p.key)
+                .Select(g => g.First())];
         }
 
         /// <summary>

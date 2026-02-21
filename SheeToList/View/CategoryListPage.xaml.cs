@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
@@ -52,8 +53,8 @@ public class CategoryListViewModel : INotifyPropertyChanged
     private async Task Load()
     {
         IsLoading = true;
-        await CategoryJsonTalker.LoadAsync();
         Categories = CategoryJsonTalker.Instance.Categories;
+        Debug.WriteLine("Category instance" + Categories.Count);
         OnPropertyChanged(nameof(Categories));
         IsLoading = false;
     }

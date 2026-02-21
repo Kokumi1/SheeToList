@@ -21,6 +21,7 @@ namespace SheeToList.Services
             Debug.WriteLine("CategoryJsonTalker initialized.");
             var _ = LoadAsync();
         }
+        public static Task InitializeAsync() => LoadAsync();
 
         private static string GetFilePath(string fileName)
         {
@@ -55,10 +56,10 @@ namespace SheeToList.Services
             {
                 // valeurs par défaut 
                 categories = AddDefaultCategory();
+                Debug.WriteLine("No categories file found. Added default categories.");
                 await SaveAsync([.. categories]);
             }
-
-            CategoryJsonTalker.Instance.Categories = categories;
+            MainThread.BeginInvokeOnMainThread(() => CategoryJsonTalker.Instance.Categories = categories);
         }
 
         public static ObservableCollection<CategoryDefinition> AddDefaultCategory()
@@ -79,9 +80,16 @@ namespace SheeToList.Services
                 },
                 new()
                 {
-                    Name = "Légumes",
+                    Name = "Épicerie",
+                    Keywords = ["épicerie", "epicerie", "conserve","plats préparés", "conserves", "sauce", "sauces", "pate",
+                "cereale", "patate", "pdt", "legumineuse", "flageolets", "pois", "tarte", "flamekuche","pizza", "huile", "vinaigre",
+                "vin blanc", "moutarde", "mayonnaise", "ketchup", "soupe", "bouillon","carbonara", "epinards creme", "lentille", "semoule"]
+                },
+                new()
+                {
+                    Name = "Legume",
                     Keywords = [ "tomate", "carotte", "salade", "laitue", "poivron", "oignon", "courgette", "concombre", "aubergine", "haricots",
-                "leg provencal", "poireau", "endive", "choux", "chou "]
+                "leg provencal", "poireau", "endive", "choux", "chou ", "betterave"]
                 },
                 new()
                 {
