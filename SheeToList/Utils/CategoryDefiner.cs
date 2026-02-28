@@ -46,7 +46,8 @@ namespace SheeToList.Utils
             // Recherche la première catégorie dont un mot clé est contenu dans le nom
             foreach (var (keyNormalized, cat) in FlatKeywords!)
             {
-                if (normalized.Contains(keyNormalized + " ", StringComparison.Ordinal))
+                if (normalized.Contains(keyNormalized + " ", StringComparison.Ordinal) || 
+                    normalized.Contains(keyNormalized + "s ",StringComparison.Ordinal))
                     return cat;
             }
             return Category.Autre;

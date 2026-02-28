@@ -2,6 +2,7 @@ using System.Text.Json;
 using SheeToList.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace SheeToList.Services
 {
@@ -32,8 +33,10 @@ namespace SheeToList.Services
 #endif
         }
 
-        public static async Task SaveAsync(List<CategoryDefinition> categories)
+        public static async Task SaveAsync(ObservableCollection<CategoryDefinition> categories)
         {
+            MainThread.BeginInvokeOnMainThread(() => Instance.Categories = categories);
+
             var filePath = GetFilePath("saveCategories.json");
             if (File.Exists(filePath)) File.Delete(filePath);
             using FileStream createStream = File.Create(filePath);
@@ -57,7 +60,7 @@ namespace SheeToList.Services
                 // valeurs par défaut 
                 categories = AddDefaultCategory();
                 Debug.WriteLine("No categories file found. Added default categories.");
-                await SaveAsync([.. categories]);
+                await SaveAsync(categories);
             }
             MainThread.BeginInvokeOnMainThread(() => CategoryJsonTalker.Instance.Categories = categories);
         }

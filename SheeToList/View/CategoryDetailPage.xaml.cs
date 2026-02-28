@@ -84,7 +84,7 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
             {
                 store.Categories.Add(Category);
             }
-            await CategoryJsonTalker.SaveAsync(store.Categories.ToList());
+            await CategoryJsonTalker.SaveAsync([.. store.Categories]);
         }
         catch (Exception ex)
         {

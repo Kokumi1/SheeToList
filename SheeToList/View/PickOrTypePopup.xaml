@@ -34,13 +34,13 @@
 
         <!-- Panels -->
         <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}">
-            <Label Text="Saisir un nom du produit" FontAttributes="Bold"/>
+            <Label Text="Saisir un nom du produit" FontAttributes="Bold" TextColor="White"/>
             <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="White" BackgroundColor="#202020" />
         </StackLayout>
 
         <StackLayout x:Name="PickPanel" IsVisible="False" Style="{StaticResource StackLayoutBackground}">
             <Label Text="Choisir dans la liste" FontAttributes="Bold" TextColor="White"/>
-            <Picker x:Name="PickerList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" BackgroundColor="#202020"/>
+            <Picker x:Name="PickerList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" BackgroundColor="#202020" TextColor="White"/>
         </StackLayout>
 
         <!-- Buttons -->

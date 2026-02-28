@@ -109,7 +109,7 @@ public class CategoryListViewModel : INotifyPropertyChanged
     {
         try
         {
-            await CategoryJsonTalker.SaveAsync(Categories.ToList());
+            await CategoryJsonTalker.SaveAsync(Categories);
         }
         catch (Exception ex)
         {
