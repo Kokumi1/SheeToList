@@ -33,9 +33,25 @@
         </Grid>
 
         <!-- Panels -->
-        <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}">
+        <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}" HeightRequest="500">
             <Label Text="Saisir un nom du produit" FontAttributes="Bold" TextColor="White"/>
-            <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="White" BackgroundColor="#202020" />
+            <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="White" BackgroundColor="#202020" TextChanged="EntryName_TextChanged"/>
+            <CollectionView
+                x:Name="SuggestionsList"
+                IsVisible="True"
+                BackgroundColor="#202020"
+                SelectionMode="Single"
+                SelectionChanged="SuggestionsList_SelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding}" Padding="10" TextColor="White">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SuggestionTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
 
         <StackLayout x:Name="PickPanel" IsVisible="False" Style="{StaticResource StackLayoutBackground}">
