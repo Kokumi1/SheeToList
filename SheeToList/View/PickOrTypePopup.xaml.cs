@@ -16,10 +16,10 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
 {
     readonly TaskCompletionSource<string?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
-    public IReadOnlyList<string> CategoriesProducts { get; set; }
+    public IReadOnlyList<SuggestionItem> CategoriesProducts { get; set; }
     public string TitleText { get; set; } = "Choisis ou taper le produit à ajouter";
-    private ObservableCollection<String> Suggestion = [];
-    public ObservableCollection<string> Suggestions
+    private ObservableCollection<SuggestionItem> Suggestion = [];
+    public ObservableCollection<SuggestionItem> Suggestions
     {
         get => Suggestion;
         set
@@ -61,7 +61,9 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
     private async void PopulateCategoriesProducts()
     {
         var products = KeywordFlattener.KeywordFlattening();
-        CategoriesProducts = products.Select(p =>$"{p.keyNormalized} ({p.cat})").ToList();
+        CategoriesProducts = products
+            .Select( p => new SuggestionItem(p.keyNormalized, p.cat.ToString()))
+            .ToList();
     }
 
     private async void PopulatePicker()
@@ -96,18 +98,18 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         var source = CategoriesProducts ?? [];
         if (string.IsNullOrWhiteSpace(searchText))
         {
-            Suggestions= new ObservableCollection<string>(source.Take(50));
+            Suggestions= new ObservableCollection<SuggestionItem>(source.Take(50));
             try { MainThread.BeginInvokeOnMainThread(() => SuggestionsList.IsVisible = Suggestions.Count > 0); } catch {}
             return;
         }
         var normalized = searchText.Trim();
         var matches = source
-            .Where(s => s.StartsWith(normalized, StringComparison.OrdinalIgnoreCase))
-            .Concat(source.Where(s => !s.StartsWith(normalized, StringComparison.OrdinalIgnoreCase)
-                                      && s.IndexOf(normalized, StringComparison.OrdinalIgnoreCase) >= 0))
+            .Where(s => s.Name.StartsWith(normalized, StringComparison.OrdinalIgnoreCase))
+            .Concat(source.Where(s => !s.Name.StartsWith(normalized, StringComparison.OrdinalIgnoreCase)
+                                      && s.Name.IndexOf(normalized, StringComparison.OrdinalIgnoreCase) >= 0))
             .Distinct()
             .Take(50);
-        Suggestions = new ObservableCollection<string>(matches);
+        Suggestions = new ObservableCollection<SuggestionItem>(matches);
         try { MainThread.BeginInvokeOnMainThread(() => SuggestionsList.IsVisible = Suggestions.Count > 0); } catch {}
         SuggestionsList.ItemsSource = Suggestions;
     }
@@ -121,7 +123,6 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
 
     void SuggestionsList_SelectionChanged(object? sender, Microsoft.Maui.Controls.SelectionChangedEventArgs e)
     {
-        Debug.WriteLine("Suggestion selected: " + (e.CurrentSelection != null && e.CurrentSelection.Count > 0 ? e.CurrentSelection[0] : "null"));
         if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
         {
             var chosen = e.CurrentSelection[0] as string;
@@ -138,13 +139,12 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
     void SuggestionTapped(object? sender, EventArgs e)
     {
         // sender is the TapGestureRecognizer; its BindingContext is the item string
-        if (sender is Microsoft.Maui.Controls.TapGestureRecognizer tap)
+        if (sender is Microsoft.Maui.Controls.BindableObject bo && bo.BindingContext is SuggestionItem item)
         {
-            var text = tap.BindingContext as string;
-            if (!string.IsNullOrWhiteSpace(text))
+            if (!string.IsNullOrWhiteSpace(item.Name))
             {
-                EntryName.Text = text;
-                SearchText = text;
+                EntryName.Text = item.Name;
+                SearchText = item.Name;
             }
         }
         try { MainThread.BeginInvokeOnMainThread(() => SuggestionsList.IsVisible = false); } catch {}
@@ -226,3 +226,13 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
     void OnPropertyChanged([CallerMemberName] string name = "") =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
+
+//---------------------------------
+// SuggestionItem class
+#region SuggestionItem class
+public class SuggestionItem(string name, string category)
+{
+    public string Name { get; set; } = name;
+    public string Category { get; set; } = $"[{category}]";
+}
+#endregion

@@ -44,11 +44,13 @@
                 SelectionChanged="SuggestionsList_SelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Label Text="{Binding}" Padding="10" TextColor="White">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="SuggestionTapped"/>
-                            </Label.GestureRecognizers>
-                        </Label>
+                        <HorizontalStackLayout Padding="10" VerticalOptions="Center" >
+                            <Label Text="{Binding Name}" Padding="10" TextColor="White"  />
+                            <Label Text="{Binding Category}" Padding="10" TextColor="White" />
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SuggestionTapped" />
+                            </HorizontalStackLayout.GestureRecognizers>
+                        </HorizontalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
