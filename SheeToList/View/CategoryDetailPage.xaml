@@ -61,11 +61,10 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="140" />
             </Grid.ColumnDefinitions>
-			
-		        <Button Text="+" Command="{Binding AddKeywordCommand}" />
-              <Button Text="Enregistrer" Command="{Binding SaveAndCloseCommand}" Grid.Column="2" HorizontalOptions="End"/>
-		
-			</Grid>
+
+            <Button Text="+" Command="{Binding AddKeywordCommand}" />
+
+        </Grid>
     
 		</Grid>
 </ContentPage>

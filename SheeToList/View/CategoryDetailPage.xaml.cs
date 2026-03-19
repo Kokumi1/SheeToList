@@ -30,7 +30,6 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
     public ICommand AddKeywordCommand { get; }
     public ICommand EditKeywordCommand { get; }
     public ICommand DeleteKeywordCommand { get; }
-    public ICommand SaveAndCloseCommand { get; }
 
     public CategoryDetailViewModel(CategoryDefinition category, Page page)
     {
@@ -40,7 +39,6 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
         AddKeywordCommand = new Command(AddKeyword);
         EditKeywordCommand = new Command<string>(EditKeyword);
         DeleteKeywordCommand = new Command(DeleteKeyword, () => SelectedKeyword != null);
-        SaveAndCloseCommand = new Command(async () => await SaveAndClose());
     }
 
     private async void AddKeyword()
@@ -53,6 +51,7 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
             return;
         }
         Category.Keywords.Add(text.Trim());
+        await SaveCategoryAsync();
     }
 
     private async void EditKeyword(string keyword)
@@ -62,7 +61,11 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
         if (string.IsNullOrWhiteSpace(newVal)) return;
         if (Category.Keywords.Any(k => k.Equals(newVal, StringComparison.OrdinalIgnoreCase))) { await _page.DisplayAlertAsync("Doublon", "Ce mot-clé existe déjà.", "OK"); return; }
         int idx = Category.Keywords.IndexOf(keyword);
-        if (idx >= 0) Category.Keywords[idx] = newVal.Trim();
+        if (idx >= 0) 
+        {
+            Category.Keywords[idx] = newVal.Trim();
+            await SaveCategoryAsync();
+        }
     }
 
     private async void DeleteKeyword()
@@ -72,9 +75,10 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
         if (!confirm) return;
         Category.Keywords.Remove(SelectedKeyword);
         SelectedKeyword = null;
+        await SaveCategoryAsync();
     }
 
-    private async Task SaveAndClose()
+    private async Task SaveCategoryAsync()
     {
         try
         {
@@ -90,8 +94,6 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
         {
             await _page.DisplayAlertAsync("Erreur", ex.Message, "OK");
         }
-
-        await _page.Navigation.PopAsync();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
