@@ -25,7 +25,8 @@ namespace SheeToList.Utils
                 "mimolette", "cousteron", "bleu"} },
             { Category.Boulangerie, new[] { "pain", "baguette", "croissant", "brioche", "pain de mie" } },
             { Category.Boisson, new[] { "eau", "jus", "soda", "coca", "vin", "biere", "café" } },
-            { Category.ProduitMenager, new[] { "lessive", "savon", "shampoing", "détergent", "produit vaisselle", "eponges", "papier toilette" } }
+            { Category.ProduitMenager, new[] { "lessive", "savon", "shampoing", "détergent", "produit vaisselle", "eponges", "papier toilette" } },
+            { Category.Conserve, new[] { "conserve", "bocal", "boite", "terrine", "rillette", "pate", "cornichon", "olive", "caperis" } }
         };
 
         /// <summary>

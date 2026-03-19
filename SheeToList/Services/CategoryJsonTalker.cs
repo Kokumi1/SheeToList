@@ -1,8 +1,8 @@
-using System.Text.Json;
-using SheeToList.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using SheeToList.Model;
 
 namespace SheeToList.Services
 {
@@ -62,7 +62,27 @@ namespace SheeToList.Services
                 Debug.WriteLine("No categories file found. Added default categories.");
                 await SaveAsync(categories);
             }
+            categories = UpdateCategories(categories);
+            await SaveAsync(categories);
+            // Vérifier si la catégorie "Conserve" existe, sinon l'ajouter
+
             MainThread.BeginInvokeOnMainThread(() => CategoryJsonTalker.Instance.Categories = categories);
+        }
+
+        public static ObservableCollection<CategoryDefinition> UpdateCategories(ObservableCollection<CategoryDefinition> categories)
+        {
+            var conserveCategory = categories.FirstOrDefault(c => c.Name.Equals("Conserve", StringComparison.OrdinalIgnoreCase));
+            if (conserveCategory == null)
+            {
+                Debug.WriteLine("Conserve category not found. Adding it...");
+                categories.Add(new CategoryDefinition
+                {
+                    Name = "Conserve",
+                    Keywords = ["conserve", "bocal", "boite", "terrine", "rillette", "pate", "cornichon", "olive", "caperis"]
+                });
+                
+            }
+            return categories;
         }
 
         public static ObservableCollection<CategoryDefinition> AddDefaultCategory()
@@ -120,6 +140,11 @@ namespace SheeToList.Services
                 {
                     Name = "ProduitMenager",
                     Keywords = ["lessive", "savon", "shampoing", "détergent", "produit vaisselle", "eponges", "papier toilette"]
+                },
+                new()
+                {
+                    Name = "Conserve",
+                    Keywords = ["conserve", "bocal", "boite", "terrine", "rillette", "pate", "cornichon", "olive", "caperis"]
                 }
             };
 

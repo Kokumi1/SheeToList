@@ -15,6 +15,7 @@ namespace SheeToList.Model
         Boisson = 7,
         ProduitMenager = 8,
         Surgelé = 9,
+        Conserve = 10,
         Autre = 99
     }
 }
