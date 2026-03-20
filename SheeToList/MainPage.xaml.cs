@@ -27,13 +27,15 @@ namespace SheeToList
         {
             return  await DisplayPromptAsync(title, message, accept:accept, cancel:cancel, initialValue: initialValue);
         }
-        public async Task<string?> ItemNameOrPickAskerAsync(string title,/* IEnumerable<string> choices, */string initialValue = "")
+    
+        public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync(string title,/* IEnumerable<string> choices, */string initialValue = "")
         {
             var popup = new PickOrTypePopup(/*choices,*/ initialValue);
             // Si vous voulez afficher un titre: vous pouvez envelopper popup avec un layout contenant un Label
             // Affiche le popup et attend le résultat
             this.ShowPopup(popup);
-            return await popup.WaitForResultAsync();
+            var result = await popup.WaitForResultAsync();
+            return (result?.Name, result?.Category);
         }
 
         private async void Recipe_Button_Clicked(object sender, EventArgs e)
@@ -212,15 +214,22 @@ namespace SheeToList
         #region Data Management
         public async void AddProduct()
         {
-            string? text = await _page.ItemNameOrPickAskerAsync("Entrer le nom");
+            var (name, category) = await _page.ItemNameOrPickAskerAsync("Entrer le nom");
 
-            if (string.IsNullOrWhiteSpace(text)) return;
-            if (Products.Any(p => p.Name.Equals(text, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
+            if (string.IsNullOrWhiteSpace(name)) return;
+            if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
             {
                 await _page.DisplayAlertAsync("Doublon", "Ce produit est déjà dans la liste.", "OK");
                 return;
             }
-            ProductToBuy products = new() { Name = text, IsChecked = false };
+            ProductToBuy products = new() { Name = name, IsChecked = false };
+
+            // Si une catégorie a été détectée via les suggestions, l'assigner directement
+            if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
+            {
+                products.Categorie = parsedCategory;
+            }
+
             var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
 
             Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));

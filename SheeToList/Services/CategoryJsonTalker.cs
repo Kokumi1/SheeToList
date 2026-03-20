@@ -78,7 +78,7 @@ namespace SheeToList.Services
                 categories.Add(new CategoryDefinition
                 {
                     Name = "Conserve",
-                    Keywords = ["conserve", "bocal", "boite", "terrine", "rillette", "pate", "cornichon", "olive", "caperis"]
+                    Keywords = ["conserve", "bocal", "boite", "terrine", "rillette", "caperis"]
                 });
                 
             }
@@ -89,6 +89,11 @@ namespace SheeToList.Services
         {
             var DefaultCategory = new ObservableCollection<CategoryDefinition>
             {
+                new()
+                {
+                    Name = "Conserve",
+                    Keywords = ["conserve", "bocal", "boite", "terrine", "rillette", "cornichon", "caperis"]
+                },
                 new(){
                     Name = "Fruit",
                     Keywords = ["pomme", "banane", "orange", "fraise", "raisin", "kiwi", "citron", "ananas", "poire", "clementine"]
@@ -140,11 +145,6 @@ namespace SheeToList.Services
                 {
                     Name = "ProduitMenager",
                     Keywords = ["lessive", "savon", "shampoing", "détergent", "produit vaisselle", "eponges", "papier toilette"]
-                },
-                new()
-                {
-                    Name = "Conserve",
-                    Keywords = ["conserve", "bocal", "boite", "terrine", "rillette", "pate", "cornichon", "olive", "caperis"]
                 }
             };
 
