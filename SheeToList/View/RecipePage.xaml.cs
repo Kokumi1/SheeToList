@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using CommunityToolkit.Maui.Extensions;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
@@ -15,10 +16,18 @@ public partial class RecipePage : ContentPage
 		InitializeComponent();
         BindingContext = new RecipeViewModel(recipe, this);
     }
-    public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "", string accept = "Valider", string cancel = "Annuler")
-    {
-        return await DisplayPromptAsync(title, message, accept: accept, cancel: cancel, initialValue: initialValue);
-    }
+	public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "", string accept = "Valider", string cancel = "Annuler")
+	{
+		return await DisplayPromptAsync(title, message, accept: accept, cancel: cancel, initialValue: initialValue);
+	}
+
+	public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync(string title, string initialValue = "")
+	{
+		var popup = new PickOrTypePopup(initialValue);
+		this.ShowPopup(popup);
+		var result = await popup.WaitForResultAsync();
+		return (result?.Name, result?.Category);
+	}
 }
 
 public class RecipeViewModel : INotifyPropertyChanged
@@ -34,65 +43,79 @@ public class RecipeViewModel : INotifyPropertyChanged
 
         //initialize commands
         AddItemCommand = new Command(AddIngredient);
-        EditItemCommand = new Command<string>(EditIngredient);
-        DeleteItemCommand = new Command<string>(DeleteIngredient);
+        EditItemCommand = new Command<ProductToBuy>(EditIngredient);
+        DeleteItemCommand = new Command<ProductToBuy>(DeleteIngredient);
         EditRecipeNameCommand = new Command(EditRecipeName);
     }
 
-    public string RecetteTitle
-    {
-			get => $"ingrédients pour : { _recipe.Name}";
+	public string RecetteTitle
+	{
+		get => $"ingrédients pour : { _recipe.Name}";
 		set
 		{
 			_recipe.Name = value;
-        }
-    }
-    public ObservableCollection<string>? RecipeIngredientList => _recipe.Ingredients;
+		}
+	}
+	public ObservableCollection<ProductToBuy>? RecipeIngredientList => _recipe.Ingredients;
 
-    public ICommand AddItemCommand { get; }
-    public ICommand EditItemCommand { get; }
-    public ICommand EditRecipeNameCommand { get; }
-    public ICommand DeleteItemCommand { get; }
+	public ICommand AddItemCommand { get; }
+	public ICommand EditItemCommand { get; }
+	public ICommand EditRecipeNameCommand { get; }
+	public ICommand DeleteItemCommand { get; }
 
-    private async void AddIngredient()
-    {
-        string? text = await _page.ItemNameAskerAsync("Ajouter un ingrédient", "Nom de l'ingrédient :");
-       
-        if (string.IsNullOrWhiteSpace(text)) return;
-        if (RecipeIngredientList.Any(p => p.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
-        {
-            await _page.DisplayAlertAsync("Doublon", "Cette ingredient est déjà dans la liste.", "OK");
-            return;
-        }
+	private async void AddIngredient()
+	{
+		var (name, category) = await _page.ItemNameOrPickAskerAsync("Ajouter un ingrédient");
 
-        RecipeIngredientList?.Add(text.Trim());
-        SaveRecipeChanges();
-        OnPropertyChanged(nameof(RecipeIngredientList));
-    }
-    private async void EditIngredient(string ingredient)
-    {
-        string? text = await _page.ItemNameAskerAsync("Renommer un ingrédient", "Nom de l'ingrédient :");
-        if (string.IsNullOrWhiteSpace(text)) return;
-        if (RecipeIngredientList.Any(p => p.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
-        {
-            await _page.DisplayAlertAsync("Doublon", "Ce produit est déjà dans la liste.", "OK");
-            return;
-        }
+		if (string.IsNullOrWhiteSpace(name)) return;
+		if (RecipeIngredientList.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
+		{
+			await _page.DisplayAlertAsync("Doublon", "Cette ingredient est déjà dans la liste.", "OK");
+			return;
+		}
 
-        RecipeIngredientList[RecipeIngredientList.IndexOf(ingredient)] = text;
-        SaveRecipeChanges();
-        OnPropertyChanged(nameof(RecipeIngredientList));
-    }
-    private async void DeleteIngredient(string ingredient)
-    {
-        // Confirm deletion
-        bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer {ingredient} ?", "Oui", "Non");
-        if (!confirm) return;
+		var ingredient = new ProductToBuy { Name = name.Trim(), IsChecked = false };
+		// Assigner la catégorie si elle a été détectée
+		if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
+		{
+			ingredient.Categorie = parsedCategory;
+		}
 
-        RecipeIngredientList?.Remove(ingredient);
-        SaveRecipeChanges();
-        OnPropertyChanged(nameof(RecipeIngredientList));
-    }
+		RecipeIngredientList?.Add(ingredient);
+		SaveRecipeChanges();
+		OnPropertyChanged(nameof(RecipeIngredientList));
+	}
+
+	private async void EditIngredient(ProductToBuy ingredient)
+	{
+		var (newName, newCategory) = await _page.ItemNameOrPickAskerAsync("Renommer un ingrédient", ingredient.Name);
+		if (string.IsNullOrWhiteSpace(newName)) return;
+		if (RecipeIngredientList.Any(p => p.Name.Equals(newName, StringComparison.OrdinalIgnoreCase) && p != ingredient))      //Check for duplicates
+		{
+			await _page.DisplayAlertAsync("Doublon", "Ce produit est déjà dans la liste.", "OK");
+			return;
+		}
+
+		ingredient.Name = newName.Trim();
+		if (!string.IsNullOrWhiteSpace(newCategory) && Enum.TryParse<Category>(newCategory, ignoreCase: true, out var parsedCategory))
+		{
+			ingredient.Categorie = parsedCategory;
+		}
+
+		SaveRecipeChanges();
+		OnPropertyChanged(nameof(RecipeIngredientList));
+	}
+
+	private async void DeleteIngredient(ProductToBuy ingredient)
+	{
+		// Confirm deletion
+		bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer {ingredient.Name} ?", "Oui", "Non");
+		if (!confirm) return;
+
+		RecipeIngredientList?.Remove(ingredient);
+		SaveRecipeChanges();
+		OnPropertyChanged(nameof(RecipeIngredientList));
+	}
 
     private async void EditRecipeName()
     {

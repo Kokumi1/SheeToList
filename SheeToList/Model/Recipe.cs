@@ -10,9 +10,9 @@ namespace SheeToList.Model
     public class Recipe
     {
         string name="";
-        ObservableCollection<string> ingredients = [];
+        ObservableCollection<ProductToBuy> ingredients = [];
 
         public string Name { get => name; set => name = value; }    
-        public ObservableCollection<string> Ingredients { get => ingredients; set => ingredients = value; }
+        public ObservableCollection<ProductToBuy> Ingredients { get => ingredients; set => ingredients = value; }
     }
 }

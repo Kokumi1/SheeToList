@@ -60,14 +60,30 @@ namespace SheeToList.Services
                 Debug.WriteLine("Saved recipes found, loading...");
                 using FileStream openStream = File.OpenRead(filePath);
                 recipes = await JsonSerializer.DeserializeAsync<ObservableCollection<Recipe>>(openStream, _jsonOptions);
+                // Convertir les anciens ingrédients string en ProductToBuy si nécessaire
+                foreach (var recipe in recipes)
+                {
+                    if (recipe?.Ingredients?.Any(i => i == null || string.IsNullOrEmpty(i.Name)) ?? false)
+                    {
+                        // Si les ingrédients ne sont pas correctement initialisés, les recréer
+                        recipe.Ingredients = new ObservableCollection<ProductToBuy>(
+                            recipe.Ingredients.Where(i => i != null).ToList()
+                        );
+                    }
+                }
             }
             else
             {
-                   Debug.WriteLine("No saved recipes found");
-                    recipes.Add(new Recipe
+                Debug.WriteLine("No saved recipes found");
+                recipes.Add(new Recipe
                 {
                     Name = "Hamburger",
-                    Ingredients = ["Steak haché", "Pain hamburger","fromage"]
+                    Ingredients = new ObservableCollection<ProductToBuy>
+                    {
+                        new ProductToBuy { Name = "Steak haché", IsChecked = false },
+                        new ProductToBuy { Name = "Pain hamburger", IsChecked = false },
+                        new ProductToBuy { Name = "fromage", IsChecked = false }
+                    }
                 });
                 SaveAsync(recipes.ToList()).Wait();
             }
@@ -79,13 +95,19 @@ namespace SheeToList.Services
         public static ObservableCollection<ProductToBuy> RecipeCheckSingle(ProductToBuy productToBuy)
         {
             var recipes = RecipeJsonTalker.Instance.Recipes;
-            var recipeDictionnary = recipes.ToDictionary(r => r.Name.ToLower(), r => r.Ingredients);
+            var recipeDictionary = recipes.ToDictionary(r => r.Name.ToLower(), r => r.Ingredients);
 
-            if (recipeDictionnary.Keys.FirstOrDefault(key => productToBuy.Name.ToLower().Contains(key, StringComparison.OrdinalIgnoreCase)) 
+            if (recipeDictionary.Keys.FirstOrDefault(key => productToBuy.Name.ToLower().Contains(key, StringComparison.OrdinalIgnoreCase)) 
                 is string matchedKey)
             {
                 return new ObservableCollection<ProductToBuy>(
-                    recipeDictionnary[matchedKey].Select(ingredient => new ProductToBuy { Name = $"{ingredient} ({productToBuy.Name})", IsChecked = false })
+                    recipeDictionary[matchedKey].Select(ingredient => 
+                        new ProductToBuy 
+                        { 
+                            Name = $"{ingredient.Name} ({productToBuy.Name})", 
+                            IsChecked = false,
+                            Categorie = ingredient.Categorie
+                        })
                 );
             }
             return [productToBuy];
@@ -96,24 +118,29 @@ namespace SheeToList.Services
         {
             if (importedList == null) return [];
             var recipes = RecipeJsonTalker.Instance.Recipes;
-            var recipeDictionnary = recipes.ToDictionary(r => r.Name.ToLower(), r => r.Ingredients);
+            var recipeDictionary = recipes.ToDictionary(r => r.Name.ToLower(), r => r.Ingredients);
 
 
             foreach (ProductToBuy product in importedList.ToList())
             {
                 var productNameLower = product.Name.ToLower();
                 // Check if any recipe name is contained in the product name
-                if (recipeDictionnary.Keys.FirstOrDefault(key => productNameLower.Contains(key, StringComparison.OrdinalIgnoreCase)) is string matchedKey)
+                if (recipeDictionary.Keys.FirstOrDefault(key => productNameLower.Contains(key, StringComparison.OrdinalIgnoreCase)) is string matchedKey)
                 {
                     productNameLower = matchedKey;
 
                     // If a match is found, replace the product with its ingredients
-                    if(recipeDictionnary[productNameLower] == null || recipeDictionnary[productNameLower].Count == 0) continue;
+                    if(recipeDictionary[productNameLower] == null || recipeDictionary[productNameLower].Count == 0) continue;
                     else { 
-                        foreach (var ingredient in recipeDictionnary[productNameLower])
-                            {
-                                importedList.Add(new ProductToBuy { Name = $"{ingredient} ({product.Name})", IsChecked = false });
-                            }
+                        foreach (var ingredient in recipeDictionary[productNameLower])
+                        {
+                            importedList.Add(new ProductToBuy 
+                            { 
+                                Name = $"{ingredient.Name} ({product.Name})", 
+                                IsChecked = false,
+                                Categorie = ingredient.Categorie
+                            });
+                        }
                         importedList.Remove(product);
                     }
                 }
