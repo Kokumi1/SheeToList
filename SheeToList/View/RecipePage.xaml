@@ -40,7 +40,7 @@
           ItemsSource="{Binding RecipeIngredientList}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="10" ColumnDefinitions="70*,20*,2*" MaximumHeightRequest="70">
+                            <Grid Padding="10" ColumnDefinitions="70*,20*,30*,20*,2*" MaximumHeightRequest="70">
 
                                 <Label Text="{Binding Name}"  VerticalOptions="Center">
                                     <Label.GestureRecognizers>
@@ -49,13 +49,21 @@
                                             CommandParameter="{Binding .}" />
                                     </Label.GestureRecognizers>
                                 </Label>
+                                <Label Text="{Binding Categorie}" VerticalOptions="Center" Grid.Column="2">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ingredientList}}"
+                                            CommandParameter="{Binding .}"
+                                            />
+                                    </Label.GestureRecognizers>
+                                </Label>
 
                                 <ImageButton 
                              Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ingredientList}}"
                              CommandParameter="{Binding .}"
                              Source="trash.png"
                              Style="{StaticResource ImageLikeButton}"
-                             Grid.Column="1"
+                             Grid.Column="3"
                              />
                             </Grid>
                         </DataTemplate>
