@@ -2,6 +2,7 @@
 using SheeToList.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using SheeToList.Utils;
 
 namespace SheeToList.Services
 {
@@ -13,7 +14,8 @@ namespace SheeToList.Services
         // Mise en cache de l'instance JsonSerializerOptions pour éviter la recréation
         private static readonly JsonSerializerOptions _jsonOptions = new()
         {
-            WriteIndented = true
+            WriteIndented = true,
+            Converters = { new ProductToBuyConverter() }
         };
 
         private RecipeJsonTalker()
@@ -59,18 +61,8 @@ namespace SheeToList.Services
             {
                 Debug.WriteLine("Saved recipes found, loading...");
                 using FileStream openStream = File.OpenRead(filePath);
-                recipes = await JsonSerializer.DeserializeAsync<ObservableCollection<Recipe>>(openStream, _jsonOptions);
-                // Convertir les anciens ingrédients string en ProductToBuy si nécessaire
-                foreach (var recipe in recipes)
-                {
-                    if (recipe?.Ingredients?.Any(i => i == null || string.IsNullOrEmpty(i.Name)) ?? false)
-                    {
-                        // Si les ingrédients ne sont pas correctement initialisés, les recréer
-                        recipe.Ingredients = new ObservableCollection<ProductToBuy>(
-                            recipe.Ingredients.Where(i => i != null).ToList()
-                        );
-                    }
-                }
+                    recipes = await JsonSerializer.DeserializeAsync<ObservableCollection<Recipe>>(openStream, _jsonOptions);
+                
             }
             else
             {
@@ -78,12 +70,12 @@ namespace SheeToList.Services
                 recipes.Add(new Recipe
                 {
                     Name = "Hamburger",
-                    Ingredients = new ObservableCollection<ProductToBuy>
-                    {
-                        new ProductToBuy { Name = "Steak haché", IsChecked = false },
-                        new ProductToBuy { Name = "Pain hamburger", IsChecked = false },
-                        new ProductToBuy { Name = "fromage", IsChecked = false }
-                    }
+                    Ingredients =
+                    [
+                        new() { Name = "Steak haché", IsChecked = false },
+                        new () { Name = "Pain hamburger", IsChecked = false },
+                        new () { Name = "fromage", IsChecked = false }
+                    ]
                 });
                 SaveAsync(recipes.ToList()).Wait();
             }
@@ -91,6 +83,7 @@ namespace SheeToList.Services
             Debug.WriteLine($"recipe size: {recipes.Count}");
             RecipeJsonTalker.Instance.Recipes = recipes ?? [];
         }
+
 
         public static ObservableCollection<ProductToBuy> RecipeCheckSingle(ProductToBuy productToBuy)
         {
@@ -145,7 +138,6 @@ namespace SheeToList.Services
                     }
                 }
             }
-
             return importedList;
         }
     }
