@@ -23,7 +23,7 @@ public partial class RecipePage : ContentPage
 
 	public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync(string title, string initialValue = "")
 	{
-		var popup = new PickOrTypePopup(initialValue);
+		var popup = new TypeOnlyPopup(initialValue);
 		this.ShowPopup(popup);
 		var result = await popup.WaitForResultAsync();
 		return (result?.Name, result?.Category);

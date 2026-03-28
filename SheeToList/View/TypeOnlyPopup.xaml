@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="SheeToList.View.TypeOnlyPopup"
+               BackgroundColor="#2b2b2b">
+
+    <toolkit:Popup.Resources>
+        <Style x:Key="ButtonColor" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#202020"/>
+            <Setter Property="TextColor" Value="White"/>
+        </Style>
+        <Style x:Key="VerticalLayoutBackground" TargetType="VerticalStackLayout" >
+            <Setter Property="BackgroundColor" Value="#2b2b2b"/>
+            <Setter Property="Spacing" Value="10"/>
+        </Style>
+        <Style x:Key="StackLayoutBackground" TargetType="StackLayout" >
+            <Setter Property="BackgroundColor" Value="#2b2b2b"/>
+            <Setter Property="Spacing" Value="8"/>
+        </Style>
+    </toolkit:Popup.Resources>
+
+    <VerticalStackLayout WidthRequest="320" Style="{StaticResource VerticalLayoutBackground}">
+        <Label x:Name="MessageText" VerticalOptions="Center" TextColor="White"/>
+
+
+        <!-- Panels -->
+        <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}" HeightRequest="500">
+            <Label Text="Saisir un nom du produit" FontAttributes="Bold" TextColor="White"/>
+            <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="White" BackgroundColor="#202020" TextChanged="EntryName_TextChanged"/>
+            <CollectionView
+                x:Name="SuggestionsList"
+                IsVisible="True"
+                BackgroundColor="#202020"
+                SelectionMode="Single"
+                SelectionChanged="SuggestionsList_SelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <HorizontalStackLayout Padding="10" VerticalOptions="Center" >
+                            <Label Text="{Binding Name}" Padding="10" TextColor="White"  />
+                            <Label Text="{Binding Category}" Padding="10" TextColor="White" />
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="SuggestionTapped" />
+                            </HorizontalStackLayout.GestureRecognizers>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+
+        <!-- Buttons -->
+        <HorizontalStackLayout Spacing="8" HorizontalOptions="End" BackgroundColor="#2b2b2b">
+            <Button Text="Annuler" Clicked="OnCancelClicked"  Style="{StaticResource ButtonColor}"/>
+            <Button Text="Valider" Clicked="OnAcceptClicked"  Style="{StaticResource ButtonColor}"/>
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+</toolkit:Popup>
