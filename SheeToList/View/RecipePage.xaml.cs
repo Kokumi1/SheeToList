@@ -21,7 +21,7 @@ public partial class RecipePage : ContentPage
 		return await DisplayPromptAsync(title, message, accept: accept, cancel: cancel, initialValue: initialValue);
 	}
 
-	public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync(string title, string initialValue = "")
+	public async Task<(string? name, string? category)> ItemNameOnlyPopupAskerAsync(string title, string initialValue = "")
 	{
 		var popup = new TypeOnlyPopup(initialValue);
 		this.ShowPopup(popup);
@@ -65,7 +65,7 @@ public class RecipeViewModel : INotifyPropertyChanged
 
 	private async void AddIngredient()
 	{
-		var (name, category) = await _page.ItemNameOrPickAskerAsync("Ajouter un ingrédient");
+		var (name, category) = await _page.ItemNameOnlyPopupAskerAsync("Ajouter un ingrédient");
 
 		if (string.IsNullOrWhiteSpace(name)) return;
 		if (RecipeIngredientList.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
@@ -74,11 +74,12 @@ public class RecipeViewModel : INotifyPropertyChanged
 			return;
 		}
 
-		var ingredient = new ProductToBuy { Name = name.Trim(), IsChecked = false };
-		// Assigner la catégorie si elle a été détectée
-		if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
-		{
-			ingredient.Categorie = parsedCategory;
+		ProductToBuy  ingredient = new() { Name = name.Trim(), IsChecked = false};
+        // Assigner la catégorie si elle a été détectée
+        if (!string.IsNullOrWhiteSpace(category) &&
+                Enum.TryParse<Category>(category[1..^1], ignoreCase: true, out var parsedCategory))
+        {
+            ingredient.Categorie = parsedCategory;
 		}
 
 		RecipeIngredientList?.Add(ingredient);
@@ -88,7 +89,7 @@ public class RecipeViewModel : INotifyPropertyChanged
 
 	private async void EditIngredient(ProductToBuy ingredient)
 	{
-		var (newName, newCategory) = await _page.ItemNameOrPickAskerAsync("Renommer un ingrédient", ingredient.Name);
+		var (newName, newCategory) = await _page.ItemNameOnlyPopupAskerAsync("Renommer un ingrédient", ingredient.Name);
 		if (string.IsNullOrWhiteSpace(newName)) return;
 		if (RecipeIngredientList.Any(p => p.Name.Equals(newName, StringComparison.OrdinalIgnoreCase) && p != ingredient))      //Check for duplicates
 		{
