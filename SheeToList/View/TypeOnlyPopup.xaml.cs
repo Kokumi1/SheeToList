@@ -42,26 +42,39 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
     }
 
 
-    public TypeOnlyPopup(string initialValue = "")
+	public TypeOnlyPopup(string initialValue = "")
 	{
-        InitializeComponent();
-        BindingContext = this;
-        EntryName.TextChanged += EntryName_TextChanged;
-        MessageText.Text = TitleText;
+		InitializeComponent();
+		BindingContext = this;
+		EntryName.TextChanged += EntryName_TextChanged;
+		MessageText.Text = TitleText;
 
-        if (!string.IsNullOrWhiteSpace(initialValue))
-            EntryName.Text = initialValue;
+		if (!string.IsNullOrWhiteSpace(initialValue))
+			EntryName.Text = initialValue;
 
-        PopulateCategoriesProducts();
-    }
+		PopulateCategoriesProducts();
+		PopulateCategoryPicker();
+	}
 
-    private async void PopulateCategoriesProducts()
-    {
-        var products = KeywordFlattener.KeywordFlattening();
-        CategoriesProducts = products
-            .Select(p => new SuggestionItem(p.keyNormalized, p.cat.ToString()))
-            .ToList();
-    }
+	private void PopulateCategoryPicker()
+	{
+		var categories = Enum.GetNames(typeof(Category))
+			.OrderBy(c => c)
+			.ToList();
+
+		foreach (var category in categories)
+		{
+			PickerCategoryList.Items.Add(category);
+		}
+	}
+
+	private async void PopulateCategoriesProducts()
+	{
+		var products = KeywordFlattener.KeywordFlattening();
+		CategoriesProducts = products
+			.Select(p => new SuggestionItem(p.keyNormalized, p.cat.ToString()))
+			.ToList();
+	}
 
     //----------------------------------
     #region Suggestions logic
@@ -102,23 +115,17 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
             {
                 EntryName.Text = chosen.Name;
                 SearchText = chosen.Name;
+                // Pré-remplir la catégorie sélectionnée dans le Picker
+                if (!string.IsNullOrWhiteSpace(chosen?.Category))
+                {
+                    var categoryName = chosen.Category.Trim('[', ']');
+                    int categoryIndex = PickerCategoryList.Items.IndexOf(categoryName);
+                    if (categoryIndex >= 0)
+                        PickerCategoryList.SelectedIndex = categoryIndex;
+                }
             }
         }
         // hide suggestions after selection
-        try { MainThread.BeginInvokeOnMainThread(() => SuggestionsList.IsVisible = false); } catch { }
-    }
-
-    void SuggestionTapped(object? sender, EventArgs e)
-    {
-        // sender is the HorizontalStackLayout; its BindingContext is the SuggestionItem
-        if (sender is Microsoft.Maui.Controls.BindableObject bo && bo.BindingContext is SuggestionItem item)
-        {
-            if (!string.IsNullOrWhiteSpace(item.Name))
-            {
-                EntryName.Text = item.Name;
-                SearchText = item.Name;
-            }
-        }
         try { MainThread.BeginInvokeOnMainThread(() => SuggestionsList.IsVisible = false); } catch { }
     }
     #endregion
@@ -129,15 +136,16 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
     {
         ProductSelection? result = null;
 
-            var productName = SearchText;
-            // Chercher la catégorie du produit dans les suggestions
-            var suggestion = CategoriesProducts?.FirstOrDefault(p => p.Name.Equals(productName, StringComparison.OrdinalIgnoreCase));
-            var category = suggestion?.Category;
+        var productName = SearchText;
+        // Récupérer la catégorie sélectionnée depuis le Picker
+        string? category = PickerCategoryList.SelectedIndex >= 0 
+            ? PickerCategoryList.Items[PickerCategoryList.SelectedIndex] 
+            : null;
 
-            if (!string.IsNullOrWhiteSpace(productName))
-                result = new ProductSelection(productName, category);
+        if (!string.IsNullOrWhiteSpace(productName))
+            result = new ProductSelection(productName, category);
 
-        Debug.WriteLine($"PickOrTypePopup result: Name={result?.Name}, Category={result?.Category}");
+        Debug.WriteLine($"TypeOnlyPopup result: Name={result?.Name}, Category={result?.Category}");
 
         _tcs.TrySetResult(result);
         _ = CloseAsync();
@@ -147,6 +155,20 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
     {
         _tcs.TrySetResult(null);
         CloseAsync();
+    }
+
+    void PickerList_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (PickerCategoryList.SelectedIndex >= 0 && PickerCategoryList.SelectedIndex < PickerCategoryList.Items.Count)
+        {
+            var chosen = PickerCategoryList.Items[PickerCategoryList.SelectedIndex];
+            // titre dynamique : affiche le choix de l'utilisateur
+            PickerCategoryList.Title = $"Sélectionné : {chosen}";
+        }
+        else
+        {
+            PickerCategoryList.Title = "Sélectionner...";
+        }
     }
     #endregion
 

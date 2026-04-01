@@ -66,7 +66,6 @@ public class RecipeViewModel : INotifyPropertyChanged
 	private async void AddIngredient()
 	{
 		var (name, category) = await _page.ItemNameOnlyPopupAskerAsync("Ajouter un ingrédient");
-
 		if (string.IsNullOrWhiteSpace(name)) return;
 		if (RecipeIngredientList.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
 		{
@@ -77,7 +76,7 @@ public class RecipeViewModel : INotifyPropertyChanged
 		ProductToBuy  ingredient = new() { Name = name.Trim(), IsChecked = false};
         // Assigner la catégorie si elle a été détectée
         if (!string.IsNullOrWhiteSpace(category) &&
-                Enum.TryParse<Category>(category[1..^1], ignoreCase: true, out var parsedCategory))
+                Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
         {
             ingredient.Categorie = parsedCategory;
 		}

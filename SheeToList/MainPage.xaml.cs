@@ -225,7 +225,7 @@ namespace SheeToList
             ProductToBuy products = new() { Name = name, IsChecked = false };
             // Si une catégorie a été détectée via les suggestions, l'assigner directement
             if (!string.IsNullOrWhiteSpace(category) && 
-                Enum.TryParse<Category>(category[1..^1], ignoreCase: true, out var parsedCategory))
+                Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
             {
                     products.Categorie = parsedCategory;
             }

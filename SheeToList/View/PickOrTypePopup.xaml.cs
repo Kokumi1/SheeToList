@@ -211,7 +211,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             var productName = SearchText;
             // Chercher la catégorie du produit dans les suggestions
             var suggestion = CategoriesProducts?.FirstOrDefault(p => p.Name.Equals(productName, StringComparison.OrdinalIgnoreCase));
-            var category = suggestion?.Category;
+            var category = suggestion?.Category.Trim('[', ']');
             
             if (!string.IsNullOrWhiteSpace(productName))
                 result = new ProductSelection(productName, category);
