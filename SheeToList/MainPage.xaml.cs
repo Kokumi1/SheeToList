@@ -35,6 +35,7 @@ namespace SheeToList
             // Affiche le popup et attend le résultat
             this.ShowPopup(popup);
             var result = await popup.WaitForResultAsync();
+            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category );
             return (result?.Name, result?.Category);
         }
 
@@ -215,6 +216,7 @@ namespace SheeToList
         public async void AddProduct()
         {
             var (name, category) = await _page.ItemNameOrPickAskerAsync("Entrer le nom");
+            Debug.WriteLine($"AddProduct called with name: {name}, category: {category}");
 
             if (string.IsNullOrWhiteSpace(name)) return;
             if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
@@ -231,6 +233,8 @@ namespace SheeToList
             }
 
             var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
+            Debug.WriteLine($"Recipe check found {recipeCheck.Count} related products");
+            Debug.WriteLine("Related products: " + string.Join(", ", recipeCheck.Select(p => p.Name+ " categorie "+ p.Categorie)));
 
             Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));
             _filteredProducts = null;

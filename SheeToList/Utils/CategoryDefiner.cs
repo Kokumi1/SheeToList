@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using SheeToList.Model;
 
@@ -27,7 +28,11 @@ namespace SheeToList.Utils
                 bool shouldAssign = overwriteExisting
                                     || product.Categorie.Equals(Category.Autre)
                                     || EqualityComparer<Category>.Default.Equals(product.Categorie, default(Category));
-                if (!shouldAssign) continue;
+                if (!shouldAssign)
+                {
+                    Debug.WriteLine($"Skipping category assignment for '{product.Name}' because it already has a specific category: {product.Categorie}");
+                    continue;
+                }
 
                 product.Categorie = InferCategoryFromName(product.Name);
             }

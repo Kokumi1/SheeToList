@@ -101,7 +101,6 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
 
     void EntryName_TextChanged(object? sender, Microsoft.Maui.Controls.TextChangedEventArgs e)
     {
-        Debug.WriteLine("Entry text changed: " + e.NewTextValue);
         // keep SearchText in sync with Entry text
         SearchText = e.NewTextValue ?? string.Empty;
     }
