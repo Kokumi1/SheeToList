@@ -366,3 +366,4 @@ FodyWeavers.xsd
 /com.companyname.sheetolist.aab
 *.keystore
 /SheeToList/Resources/Raw/credential.json
+/SheeToList/Resources/Raw/ncredential.json

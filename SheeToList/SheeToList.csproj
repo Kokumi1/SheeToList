@@ -27,7 +27,7 @@
 		<ApplicationId>com.myself.sheetolist</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.1.2</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.1.2.6</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
@@ -65,7 +65,6 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-		<MauiAsset Include="Resources\Raw\credential.json" />
 	</ItemGroup>
 
 	<ItemGroup>

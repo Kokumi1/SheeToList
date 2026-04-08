@@ -14,29 +14,56 @@ namespace SheeToList.Services
 
         private static string GetCredentialPath()
         {
-            var filename = "credential.json";
+            var filename = "ncredential.json";
 
 #if ANDROID
             var filepath = Path.Combine(FileSystem.AppDataDirectory, filename);
+            
             if (!File.Exists(filepath))
             {
                 using var stream = FileSystem.OpenAppPackageFileAsync(filename);
                 using var fileStream = File.Create(filepath);
                 Task.Run(async () => await (await stream).CopyToAsync(fileStream)).Wait();
             }
+            
+
+            //var credentialTask = Task.Run(async () => await GetCredentialPathAsync(filename));
+            //filepath = credentialTask.Result;
             var file = File.ReadAllText(filepath);
+            Debug.WriteLine($"-------------------Credential file path: {filepath} ------------------------------------------");
+            Debug.WriteLine($"Credential file content: {file}");
             return filepath;
 #else
             return Path.Combine(AppContext.BaseDirectory, filename);
 #endif
         }
 
+        private async static Task<string> GetCredentialPathAsync(string filename)
+        {
+            
+            var filepath = Path.Combine(FileSystem.AppDataDirectory, filename);
+            var storedCredential = await SecureStorage.GetAsync("credential_path");
+            if (string.IsNullOrEmpty(storedCredential))
+            {
+                // Copier depuis les ressources et stocker de manière sécurisée
+                using var stream = await FileSystem.OpenAppPackageFileAsync(filename);
+                using var reader = new StreamReader(stream);
+                var credentialContent = await reader.ReadToEndAsync();
+
+                // Stocker dans le secure storage (chiffré par le système)
+                await SecureStorage.SetAsync("google_credential", credentialContent);
+            }
+
+            return filepath;
+        }
+
         private static SheetsService Service
         {
             get
             {
-                credential = GoogleCredential.FromFile(GetCredentialPath())
-               // credential = GoogleCredential.FromFile("credential.json")
+                credential = CredentialFactory.FromFile<ServiceAccountCredential>(GetCredentialPath()).ToGoogleCredential()
+                //credential = GoogleCredential.FromFile(GetCredentialPath())
+                // credential = GoogleCredential.FromFile("credential.json")
                 .CreateScoped(SheetsService.Scope.Spreadsheets);
                 return new SheetsService(new BaseClientService.Initializer()
                 {
