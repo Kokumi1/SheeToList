@@ -58,8 +58,8 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
 
 	private void PopulateCategoryPicker()
 	{
-		var categories = Enum.GetNames(typeof(Category))
-			.OrderBy(c => c)
+		var categories = Enum.GetNames<Category>()
+            .OrderBy(c => c)
 			.ToList();
 
 		foreach (var category in categories)

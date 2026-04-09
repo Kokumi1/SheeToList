@@ -41,7 +41,7 @@
                                     </Label.GestureRecognizers>
                                 </Label>
 						    <ImageButton 
-                                    Command="{Binding DeleteKeywordCommand, Source={x:Reference KeywordList}}"
+                                    Command="{Binding BindingContext.DeleteKeywordCommand, Source={x:Reference KeywordList}}"
                                     CommandParameter="{Binding .}"
                                     Source="trash.png"
                                     Style="{StaticResource ImageLikeButton}"

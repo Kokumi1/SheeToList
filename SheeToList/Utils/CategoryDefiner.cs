@@ -26,8 +26,7 @@ namespace SheeToList.Utils
 
                 // Détermine si on doit écraser
                 bool shouldAssign = overwriteExisting
-                                    || product.Categorie.Equals(Category.Autre)
-                                    || EqualityComparer<Category>.Default.Equals(product.Categorie, default(Category));
+                                    || product.Categorie.Equals(Category.Autre);
                 if (!shouldAssign)
                 {
                     Debug.WriteLine($"Skipping category assignment for '{product.Name}' because it already has a specific category: {product.Categorie}");
@@ -46,10 +45,12 @@ namespace SheeToList.Utils
         {
             if (string.IsNullOrWhiteSpace(name)) return Category.Autre;
 
+            FlatKeywords ??= KeywordFlattener.KeywordFlattening();
+
             var normalized = RemoveDiacritics(name).ToLowerInvariant() + " ";
 
             // Recherche la première catégorie dont un mot clé est contenu dans le nom
-            foreach (var (keyNormalized, cat) in FlatKeywords!)
+            foreach (var (keyNormalized, cat) in FlatKeywords)
             {
                 if (normalized.Contains(keyNormalized + " ", StringComparison.Ordinal) || 
                     normalized.Contains(keyNormalized + "s ",StringComparison.Ordinal))

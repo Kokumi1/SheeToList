@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
@@ -38,7 +39,7 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
 
         AddKeywordCommand = new Command(AddKeyword);
         EditKeywordCommand = new Command<string>(EditKeyword);
-        DeleteKeywordCommand = new Command(DeleteKeyword, () => SelectedKeyword != null);
+        DeleteKeywordCommand = new Command<string>(DeleteKeyword);
     }
 
     private async void AddKeyword()
@@ -68,13 +69,12 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
         }
     }
 
-    private async void DeleteKeyword()
+    private async void DeleteKeyword(string keyword)
     {
-        if (SelectedKeyword == null) return;
-        bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer '{SelectedKeyword}' ?", "Oui", "Non");
+        if (keyword == null) return;
+        bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer '{keyword}' ?", "Oui", "Non");
         if (!confirm) return;
-        Category.Keywords.Remove(SelectedKeyword);
-        SelectedKeyword = null;
+        Category.Keywords.Remove(keyword);
         await SaveCategoryAsync();
     }
 
