@@ -6,7 +6,7 @@
 
     <ContentPage.Resources>
         <Style x:Key="ImageLikeButton" TargetType="ImageButton">
-            <Setter Property="BackgroundColor" Value="#AC99EA"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="BorderWidth" Value="1"/>
             <Setter Property="Padding" Value="1"/>
@@ -18,7 +18,7 @@
 
     <Grid RowDefinitions="20,90,*,Auto,50" Padding="30,0">
 
-        <Label Text="{Binding RecetteTitle}" FontSize="Title" TextColor="#AC99EA" FontAttributes="Bold"
+        <Label Text="{Binding RecetteTitle}" FontSize="Title" TextColor="{StaticResource PrimaryDark}" FontAttributes="Bold"
                Grid.Row="1" VerticalOptions="Center">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer
@@ -32,7 +32,7 @@
                 <ActivityIndicator
              IsRunning="{Binding IsLoading}"
              IsVisible="{Binding IsLoading}"
-             Color="BlueViolet"
+             Color="{StaticResource Primary}"
              HorizontalOptions="Center"
              VerticalOptions="Center"
           />

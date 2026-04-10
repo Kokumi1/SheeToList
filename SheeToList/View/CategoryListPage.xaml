@@ -15,7 +15,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10" ColumnDefinitions="*,Auto">
-                            <Border Stroke="#AC99EA" StrokeShape="RoundRectangle 10,10,10,10"/>
+                            <Border Stroke="{StaticResource PrimaryDark}" StrokeShape="RoundRectangle 10,10,10,10"/>
                             <Label Text="{Binding Name}" VerticalOptions="Center"  Margin="10">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer 

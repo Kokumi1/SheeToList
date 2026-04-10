@@ -3,25 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="SheeToList.View.PickOrTypePopup"
-               BackgroundColor="#2b2b2b">
+               BackgroundColor="{StaticResource BackgroundSecondary}">
 
     <toolkit:Popup.Resources>
         <Style x:Key="ButtonColor" TargetType="Button">
-            <Setter Property="BackgroundColor" Value="#202020"/>
-            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundPrimary}"/>
+            <Setter Property="TextColor" Value="{StaticResource WhiteText}"/>
         </Style>
         <Style x:Key="VerticalLayoutBackground" TargetType="VerticalStackLayout" >
-            <Setter Property="BackgroundColor" Value="#2b2b2b"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundSecondary}"/>
             <Setter Property="Spacing" Value="10"/>
         </Style>
         <Style x:Key="StackLayoutBackground" TargetType="StackLayout" >
-            <Setter Property="BackgroundColor" Value="#2b2b2b"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundSecondary}"/>
             <Setter Property="Spacing" Value="8"/>
         </Style>
     </toolkit:Popup.Resources>
 
     <VerticalStackLayout WidthRequest="320" Style="{StaticResource VerticalLayoutBackground}">
-        <Label x:Name="MessageText" VerticalOptions="Center" TextColor="White"/>
+        <Label x:Name="MessageText" VerticalOptions="Center" TextColor="{StaticResource WhiteText}"/>
 
         <!-- Tabs -->
         <Grid ColumnDefinitions="*,*">
@@ -34,19 +34,20 @@
 
         <!-- Panels -->
         <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}" HeightRequest="500">
-            <Label Text="Saisir un nom du produit" FontAttributes="Bold" TextColor="White"/>
-            <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="White" BackgroundColor="#202020" TextChanged="EntryName_TextChanged"/>
+            <Label Text="Saisir un nom du produit" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
+            <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="{StaticResource WhiteText}" 
+                   BackgroundColor="{StaticResource BackgroundSecondary}" TextChanged="EntryName_TextChanged"/>
             <CollectionView
                 x:Name="SuggestionsList"
                 IsVisible="True"
-                BackgroundColor="#202020"
+                BackgroundColor="{StaticResource BackgroundPrimary}"
                 SelectionMode="Single"
                 SelectionChanged="SuggestionsList_SelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <HorizontalStackLayout Padding="10" VerticalOptions="Center" >
-                            <Label Text="{Binding Name}" Padding="10" TextColor="White"  />
-                            <Label Text="{Binding Category}" Padding="10" TextColor="White" />
+                            <Label Text="{Binding Name}" Padding="10" TextColor="{StaticResource WhiteText}"  />
+                            <Label Text="{Binding Category}" Padding="10" TextColor="{StaticResource WhiteText}" />
                             <HorizontalStackLayout.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="SuggestionTapped" />
                             </HorizontalStackLayout.GestureRecognizers>
@@ -57,12 +58,13 @@
         </StackLayout>
 
         <StackLayout x:Name="PickPanel" IsVisible="False" Style="{StaticResource StackLayoutBackground}">
-            <Label Text="Choisir dans la liste" FontAttributes="Bold" TextColor="White"/>
-            <Picker x:Name="PickerList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" BackgroundColor="#202020" TextColor="White"/>
+            <Label Text="Choisir dans la liste" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
+            <Picker x:Name="PickerList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" 
+                    BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
         </StackLayout>
 
         <!-- Buttons -->
-        <HorizontalStackLayout Spacing="8" HorizontalOptions="End" BackgroundColor="#2b2b2b">
+        <HorizontalStackLayout Spacing="8" HorizontalOptions="End" BackgroundColor="{StaticResource BackgroundSecondary}">
             <Button Text="Annuler" Clicked="OnCancelClicked"  Style="{StaticResource ButtonColor}"/>
             <Button Text="Valider" Clicked="OnAcceptClicked"  Style="{StaticResource ButtonColor}"/>
         </HorizontalStackLayout>

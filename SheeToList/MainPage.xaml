@@ -6,7 +6,7 @@
     
     <ContentPage.Resources>
         <Style x:Key="ImageLikeButton" TargetType="ImageButton">
-            <Setter Property="BackgroundColor" Value="#AC99EA"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="BorderWidth" Value="1"/>
             <Setter Property="Padding" Value="1"/>
@@ -52,7 +52,7 @@
                 <ActivityIndicator
                     IsRunning="{Binding IsLoading}"
                     IsVisible="{Binding IsLoading}"
-                    Color="BlueViolet"
+                    Color="{StaticResource PrimaryDark}"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                  />
@@ -62,8 +62,8 @@
                                 SelectionMode="None">
                     <CollectionView.GroupHeaderTemplate>
                         <DataTemplate>
-                            <Grid BackgroundColor="#AC99EA" Padding="10">
-                                <Label Text="{Binding Key}" FontAttributes="Bold" FontSize="Medium" VerticalOptions="Center" TextColor="Black"/>
+                            <Grid BackgroundColor="{StaticResource PrimaryDark}" Padding="10">
+                                <Label Text="{Binding Key}" FontAttributes="Bold" FontSize="Medium" VerticalOptions="Center" TextColor="{StaticResource PrimaryDarkText}"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.GroupHeaderTemplate>

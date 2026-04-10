@@ -6,7 +6,7 @@
 	
 	 <ContentPage.Resources>
         <Style x:Key="ImageLikeButton" TargetType="ImageButton">
-            <Setter Property="BackgroundColor" Value="#AC99EA"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="BorderWidth" Value="1"/>
             <Setter Property="Padding" Value="1"/>
@@ -24,7 +24,7 @@
             <Entry Text="{Binding Category.Name}" Placeholder="Nom de la catégorie" Grid.Column="1" />
 		</Grid>
 
-        <Label Text="Mots-clés: " Grid.Row="1" Margin="10,30,0,10" BackgroundColor="#AC99EA" TextColor="Black" />
+        <Label Text="Mots-clés: " Grid.Row="1" Margin="10,30,0,10" BackgroundColor="{StaticResource PrimaryDark}" TextColor="{StaticResource PrimaryDarkText}" />
 		
         <ScrollView Grid.Row="2">
          <VerticalStackLayout Spacing="25">
