@@ -10,6 +10,7 @@ using SheeToList.Services;
 using SheeToList.View;
 using SheeToList.Utils;
 using System.Threading.Tasks;
+using SheeToList.Resources.String;
 
 namespace SheeToList
 {
@@ -57,6 +58,11 @@ namespace SheeToList
     // ViewModel for MainPage
     public class MainViewModel : INotifyPropertyChanged
     {
+        #region strings ressources
+        public string recipeTitle => AppString.Recette;
+        public string categoryTitle => AppString.Categorie;
+        #endregion
+
         private readonly MainPage _page;
         private bool _isBuyedProductVisible;
         private ObservableCollection<ProductToBuy>? _filteredProducts;
