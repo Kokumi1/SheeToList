@@ -61,6 +61,7 @@ namespace SheeToList
         #region strings ressources
         public string recipeTitle => AppString.Recette;
         public string categoryTitle => AppString.Categorie;
+        private string _filterShowButtonText => IsBuyedProductVisible ? AppString.Main_cachez : AppString.main_revelez;
         #endregion
 
         private readonly MainPage _page;
@@ -206,7 +207,7 @@ namespace SheeToList
         public ICommand ImportDataCommand { get; }
         public ICommand EditItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
-        public string FilterShowButtonText => IsBuyedProductVisible ? "Cachez" : "Révélez tout";
+        public string FilterShowButtonText => _filterShowButtonText;
         public ICommand DeleteAllItemsCommand { get; }
         public ICommand ToggleCheckedCommand { get; }
         #endregion

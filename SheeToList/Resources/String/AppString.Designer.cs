@@ -70,11 +70,290 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Détails catégorie.
+        /// </summary>
+        internal static string category_detail_title {
+            get {
+                return ResourceManager.GetString("category_detail_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Catégories.
+        /// </summary>
+        internal static string category_title {
+            get {
+                return ResourceManager.GetString("category_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cachez.
+        /// </summary>
+        internal static string Main_cachez {
+            get {
+                return ResourceManager.GetString("Main_cachez", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Révélez tout.
+        /// </summary>
+        internal static string main_revelez {
+            get {
+                return ResourceManager.GetString("main_revelez", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Saisir un nom du produit.
+        /// </summary>
+        internal static string pick_popup_title {
+            get {
+                return ResourceManager.GetString("pick_popup_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Valider.
+        /// </summary>
+        internal static string pick_popup_valid {
+            get {
+                return ResourceManager.GetString("pick_popup_valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ajouter un ingrédient.
+        /// </summary>
+        internal static string popup_add {
+            get {
+                return ResourceManager.GetString("popup_add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Entrez le nom....
+        /// </summary>
+        internal static string popup_addproduct_placeholder {
+            get {
+                return ResourceManager.GetString("popup_addproduct_placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Saisir un nom du produit.
+        /// </summary>
+        internal static string popup_addproduct_title {
+            get {
+                return ResourceManager.GetString("popup_addproduct_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Annuler.
+        /// </summary>
+        internal static string popup_category_cancel {
+            get {
+                return ResourceManager.GetString("popup_category_cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Créer.
+        /// </summary>
+        internal static string popup_category_create {
+            get {
+                return ResourceManager.GetString("popup_category_create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Supprimer la catégorie.
+        /// </summary>
+        internal static string popup_category_suppress {
+            get {
+                return ResourceManager.GetString("popup_category_suppress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Nom de la catégorie :.
+        /// </summary>
+        internal static string popup_category_text {
+            get {
+                return ResourceManager.GetString("popup_category_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Nouvelle catégorie.
+        /// </summary>
+        internal static string popup_category_title {
+            get {
+                return ResourceManager.GetString("popup_category_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cette catégorie existe déjà..
+        /// </summary>
+        internal static string popup_category_warn_title {
+            get {
+                return ResourceManager.GetString("popup_category_warn_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Nouveau nom:.
+        /// </summary>
+        internal static string popup_change_recipename_text {
+            get {
+                return ResourceManager.GetString("popup_change_recipename_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Changer le nom de la recette.
+        /// </summary>
+        internal static string popup_change_recipename_title {
+            get {
+                return ResourceManager.GetString("popup_change_recipename_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Confirmer.
+        /// </summary>
+        internal static string popup_confirm {
+            get {
+                return ResourceManager.GetString("popup_confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Supprimer .
+        /// </summary>
+        internal static string popup_del_confirm_1 {
+            get {
+                return ResourceManager.GetString("popup_del_confirm_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à  ?.
+        /// </summary>
+        internal static string popup_del_confirm_2 {
+            get {
+                return ResourceManager.GetString("popup_del_confirm_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Erreur.
+        /// </summary>
+        internal static string popup_error {
+            get {
+                return ResourceManager.GetString("popup_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Non.
+        /// </summary>
+        internal static string popup_no {
+            get {
+                return ResourceManager.GetString("popup_no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Renommer un ingrédient.
+        /// </summary>
+        internal static string popup_rename {
+            get {
+                return ResourceManager.GetString("popup_rename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cette ingredient est déjà dans la liste..
+        /// </summary>
+        internal static string popup_text {
+            get {
+                return ResourceManager.GetString("popup_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Sélectionner...
+        /// </summary>
+        internal static string popup_type_select_placeholder {
+            get {
+                return ResourceManager.GetString("popup_type_select_placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Sélectionné : .
+        /// </summary>
+        internal static string popup_type_select_title {
+            get {
+                return ResourceManager.GetString("popup_type_select_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Choisis ou taper le produit à ajouter.
+        /// </summary>
+        internal static string popup_type_title {
+            get {
+                return ResourceManager.GetString("popup_type_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Doublon.
+        /// </summary>
+        internal static string popup_warn_title {
+            get {
+                return ResourceManager.GetString("popup_warn_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Oui.
+        /// </summary>
+        internal static string popup_yes {
+            get {
+                return ResourceManager.GetString("popup_yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Recette.
         /// </summary>
         internal static string Recette {
             get {
                 return ResourceManager.GetString("Recette", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à ingrédients pour :.
+        /// </summary>
+        internal static string recipe_ingrediant {
+            get {
+                return ResourceManager.GetString("recipe_ingrediant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Test1.
+        /// </summary>
+        internal static string test {
+            get {
+                return ResourceManager.GetString("test", resourceCulture);
             }
         }
     }

@@ -120,10 +120,100 @@
   <data name="Categorie" xml:space="preserve">
     <value>Catégorie</value>
   </data>
+  <data name="category_title" xml:space="preserve">
+    <value>Catégories</value>
+  </data>
+  <data name="Main_cachez" xml:space="preserve">
+    <value>Cachez</value>
+  </data>
+  <data name="main_revelez" xml:space="preserve">
+    <value>Révélez tout</value>
+  </data>
+  <data name="popup_add" xml:space="preserve">
+    <value>Ajouter un ingrédient</value>
+  </data>
+  <data name="popup_category_title" xml:space="preserve">
+    <value>Nouvelle catégorie</value>
+  </data>
+  <data name="popup_category_warn_title" xml:space="preserve">
+    <value>Cette catégorie existe déjà.</value>
+  </data>
+  <data name="popup_change_recipename_text" xml:space="preserve">
+    <value>Nouveau nom:</value>
+  </data>
+  <data name="popup_change_recipename_title" xml:space="preserve">
+    <value>Changer le nom de la recette</value>
+  </data>
+  <data name="popup_confirm" xml:space="preserve">
+    <value>Confirmer</value>
+  </data>
+  <data name="popup_del_confirm_1" xml:space="preserve">
+    <value>Supprimer </value>
+  </data>
+  <data name="popup_del_confirm_2" xml:space="preserve">
+    <value> ?</value>
+  </data>
+  <data name="popup_no" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="popup_rename" xml:space="preserve">
+    <value>Renommer un ingrédient</value>
+  </data>
+  <data name="popup_text" xml:space="preserve">
+    <value>Cette ingredient est déjà dans la liste.</value>
+  </data>
+  <data name="popup_warn_title" xml:space="preserve">
+    <value>Doublon</value>
+  </data>
+  <data name="popup_yes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="popup_category_text" xml:space="preserve">
+    <value>Nom de la catégorie :</value>
+  </data>
   <data name="Recette" xml:space="preserve">
     <value>Recette</value>
   </data>
+  <data name="recipe_ingrediant" xml:space="preserve">
+    <value>ingrédients pour :</value>
+  </data>
   <data name="test" xml:space="preserve">
     <value>Test1</value>
+  </data>
+  <data name="popup_category_create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+  <data name="popup_category_cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="popup_category_suppress" xml:space="preserve">
+    <value>Supprimer la catégorie</value>
+  </data>
+  <data name="popup_error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="category_detail_title" xml:space="preserve">
+    <value>Détails catégorie</value>
+  </data>
+  <data name="pick_popup_title" xml:space="preserve">
+    <value>Saisir un nom du produit</value>
+  </data>
+  <data name="pick_popup_valid" xml:space="preserve">
+    <value>Valider</value>
+  </data>
+  <data name="popup_addproduct_title" xml:space="preserve">
+    <value>Saisir un nom du produit</value>
+  </data>
+  <data name="popup_addproduct_placeholder" xml:space="preserve">
+    <value>Entrez le nom...</value>
+  </data>
+  <data name="popup_type_title" xml:space="preserve">
+    <value>Choisis ou taper le produit à ajouter</value>
+  </data>
+  <data name="popup_type_select_title" xml:space="preserve">
+    <value>Sélectionné : </value>
+  </data>
+  <data name="popup_type_select_placeholder" xml:space="preserve">
+    <value>Sélectionner..</value>
   </data>
 </root>
