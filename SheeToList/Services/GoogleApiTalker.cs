@@ -75,7 +75,6 @@ namespace SheeToList.Services
         //Get data from the Google Sheet
         public static async Task<ObservableCollection<ProductToBuy>> GetData()
         {
-            //var spreadsheetId = "1ChvD0OKtSh_LGO_F7zq2225cklbK4br0WFkkcirF7RM";
             var spreadsheetId = Redacted.Sheet_ID;
             var range = $"{Redacted.Sheet_name} {Redacted.Sheet_select}";
             var request = Service.Spreadsheets.Values.Get(spreadsheetId, range);
