@@ -108,12 +108,21 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppString.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Resources\String\Redacted.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Redacted.resx</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <EmbeddedResource Update="Resources\String\AppString.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>AppString.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources\String\Redacted.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Redacted.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
 

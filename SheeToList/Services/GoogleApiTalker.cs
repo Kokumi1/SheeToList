@@ -4,6 +4,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using SheeToList.Model;
+using SheeToList.Resources.String;
 
 namespace SheeToList.Services
 {
@@ -30,8 +31,6 @@ namespace SheeToList.Services
             //var credentialTask = Task.Run(async () => await GetCredentialPathAsync(filename));
             //filepath = credentialTask.Result;
             var file = File.ReadAllText(filepath);
-            Debug.WriteLine($"-------------------Credential file path: {filepath} ------------------------------------------");
-            Debug.WriteLine($"Credential file content: {file}");
             return filepath;
 #else
             return Path.Combine(AppContext.BaseDirectory, filename);
@@ -76,8 +75,9 @@ namespace SheeToList.Services
         //Get data from the Google Sheet
         public static async Task<ObservableCollection<ProductToBuy>> GetData()
         {
-            var spreadsheetId = "1ChvD0OKtSh_LGO_F7zq2225cklbK4br0WFkkcirF7RM";
-            var range = "menu semaine !C4:D25";
+            //var spreadsheetId = "1ChvD0OKtSh_LGO_F7zq2225cklbK4br0WFkkcirF7RM";
+            var spreadsheetId = Redacted.Sheet_ID;
+            var range = $"{Redacted.Sheet_name} {Redacted.Sheet_select}";
             var request = Service.Spreadsheets.Values.Get(spreadsheetId, range);
             var response = await Task.Run(() => request.Execute());
             var values = response.Values;

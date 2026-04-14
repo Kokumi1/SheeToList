@@ -367,3 +367,5 @@ FodyWeavers.xsd
 *.keystore
 /SheeToList/Resources/Raw/credential.json
 /SheeToList/Resources/Raw/ncredential.json
+/SheeToList/Resources/String/Redacted.resx
+/SheeToList/Resources/String/Redacted.Designer.cs
