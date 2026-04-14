@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Categorie" xml:space="preserve">
+  <data name="Main_category" xml:space="preserve">
     <value>Catégorie</value>
   </data>
-  <data name="category_title" xml:space="preserve">
+  <data name="Category_title" xml:space="preserve">
     <value>Catégories</value>
   </data>
   <data name="Main_cachez" xml:space="preserve">
@@ -171,7 +171,7 @@
   <data name="popup_category_text" xml:space="preserve">
     <value>Nom de la catégorie :</value>
   </data>
-  <data name="Recette" xml:space="preserve">
+  <data name="Main_recipe" xml:space="preserve">
     <value>Recette</value>
   </data>
   <data name="recipe_ingrediant" xml:space="preserve">
@@ -214,6 +214,54 @@
     <value>Sélectionné : </value>
   </data>
   <data name="popup_type_select_placeholder" xml:space="preserve">
-    <value>Sélectionner..</value>
+    <value>Sélectionner...</value>
+  </data>
+  <data name="Category_add_title" xml:space="preserve">
+    <value>Ajouter mot-clé</value>
+  </data>
+  <data name="Category_Keyword" xml:space="preserve">
+    <value>Mot-clé :</value>
+  </data>
+  <data name="Category_popup_dublicate" xml:space="preserve">
+    <value>Ce mot-clé existe déjà</value>
+  </data>
+  <data name="General_ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Category_edit_keyword" xml:space="preserve">
+    <value>Éditer mot-clé</value>
+  </data>
+  <data name="Category_edit_text" xml:space="preserve">
+    <value>Nouveau mot-clé :</value>
+  </data>
+  <data name="Recipe_list_title" xml:space="preserve">
+    <value>Liste des recettes</value>
+  </data>
+  <data name="Popup_Recipe_Add_Title" xml:space="preserve">
+    <value>Entrer le nom</value>
+  </data>
+  <data name="Popup_Recipe_Add_Text" xml:space="preserve">
+    <value>Entrer le nom de l'objet à ajouté</value>
+  </data>
+  <data name="Popup_Recipe_Warn" xml:space="preserve">
+    <value>Cette recette est déjà dans la liste</value>
+  </data>
+  <data name="Popup_Recipe_Warn_Product" xml:space="preserve">
+    <value>Cette ingrédient est déjà dans la liste</value>
+  </data>
+  <data name="Popup_typeOnly_Title" xml:space="preserve">
+    <value>Tape le produit à ajouter</value>
+  </data>
+  <data name="Popup_Main_Warn" xml:space="preserve">
+    <value>Ce produit est déjà dans la liste</value>
+  </data>
+  <data name="popup_rename_product" xml:space="preserve">
+    <value>Entrer le nouveau nom</value>
+  </data>
+  <data name="Popup_main_delete_all" xml:space="preserve">
+    <value>Supprimer tous les produits ?</value>
+  </data>
+  <data name="Popup_main_import" xml:space="preserve">
+    <value>Cela supprimera toute la liste</value>
   </data>
 </root>

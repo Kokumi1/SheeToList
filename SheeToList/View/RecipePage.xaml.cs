@@ -1,10 +1,11 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using CommunityToolkit.Maui.Extensions;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Extensions;
 using SheeToList.Model;
+using SheeToList.Resources.String;
 using SheeToList.Services;
 
 namespace SheeToList.View;
@@ -18,7 +19,7 @@ public partial class RecipePage : ContentPage
     }
 	public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "", string accept = "Valider", string cancel = "Annuler")
 	{
-		return await DisplayPromptAsync(title, message, accept: accept, cancel: cancel, initialValue: initialValue);
+		return await DisplayPromptAsync(title, message, accept: AppString.pick_popup_valid, cancel: AppString.popup_category_cancel, initialValue: initialValue);
 	}
 
 	public async Task<(string? name, string? category)> ItemNameOnlyPopupAskerAsync(string title, string initialValue = "")
@@ -50,7 +51,7 @@ public class RecipeViewModel : INotifyPropertyChanged
 
 	public string RecetteTitle
 	{
-		get => $"ingrédients pour : { _recipe.Name}";
+		get => $"{AppString.recipe_ingrediant} { _recipe.Name}";
 		set
 		{
 			_recipe.Name = value;
@@ -65,11 +66,11 @@ public class RecipeViewModel : INotifyPropertyChanged
 
 	private async void AddIngredient()
 	{
-		var (name, category) = await _page.ItemNameOnlyPopupAskerAsync("Ajouter un ingrédient");
+		var (name, category) = await _page.ItemNameOnlyPopupAskerAsync(AppString.popup_add);
 		if (string.IsNullOrWhiteSpace(name)) return;
 		if (RecipeIngredientList.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
 		{
-			await _page.DisplayAlertAsync("Doublon", "Cette ingredient est déjà dans la liste.", "OK");
+			await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Recipe_Warn_Product, AppString.General_ok);
 			return;
 		}
 
@@ -88,11 +89,11 @@ public class RecipeViewModel : INotifyPropertyChanged
 
 	private async void EditIngredient(ProductToBuy ingredient)
 	{
-		var (newName, newCategory) = await _page.ItemNameOnlyPopupAskerAsync("Renommer un ingrédient", ingredient.Name);
+		var (newName, newCategory) = await _page.ItemNameOnlyPopupAskerAsync(AppString.popup_rename, ingredient.Name);
 		if (string.IsNullOrWhiteSpace(newName)) return;
 		if (RecipeIngredientList.Any(p => p.Name.Equals(newName, StringComparison.OrdinalIgnoreCase) && p != ingredient))      //Check for duplicates
 		{
-			await _page.DisplayAlertAsync("Doublon", "Ce produit est déjà dans la liste.", "OK");
+			await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Recipe_Warn_Product, AppString.General_ok);
 			return;
 		}
 
@@ -109,7 +110,9 @@ public class RecipeViewModel : INotifyPropertyChanged
 	private async void DeleteIngredient(ProductToBuy ingredient)
 	{
 		// Confirm deletion
-		bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer {ingredient.Name} ?", "Oui", "Non");
+		bool confirm = await _page.DisplayAlertAsync(AppString.pick_popup_valid,
+			$"{AppString.popup_del_confirm_1} {ingredient.Name} {AppString.popup_del_confirm_2}",
+			AppString.popup_yes, AppString.popup_no);
 		if (!confirm) return;
 
 		RecipeIngredientList?.Remove(ingredient);
@@ -120,7 +123,7 @@ public class RecipeViewModel : INotifyPropertyChanged
     private async void EditRecipeName()
     {
         Debug.WriteLine("Editing recipe name...");
-        string? newName = await _page.ItemNameAskerAsync("Changer le nom de la recette", "Nouveau nom:");
+        string? newName = await _page.ItemNameAskerAsync(AppString.popup_change_recipename_title, AppString.popup_change_recipename_text);
         if (string.IsNullOrWhiteSpace(newName)) return;
         _recipe.Name = newName.Trim();
         SaveRecipeChanges();

@@ -26,12 +26,12 @@ namespace SheeToList
 
         public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "",string accept="Valider", string cancel="Annuler")
         {
-            return  await DisplayPromptAsync(title, message, accept:accept, cancel:cancel, initialValue: initialValue);
+            return  await DisplayPromptAsync(title, message, accept: AppString.pick_popup_valid, cancel: AppString.popup_category_cancel, initialValue: initialValue);
         }
     
-        public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync(string title,/* IEnumerable<string> choices, */string initialValue = "")
+        public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync(string initialValue = "")
         {
-            var popup = new PickOrTypePopup(/*choices,*/ initialValue);
+            var popup = new PickOrTypePopup( initialValue);
             // Si vous voulez afficher un titre: vous pouvez envelopper popup avec un layout contenant un Label
             // Affiche le popup et attend le résultat
             this.ShowPopup(popup);
@@ -59,8 +59,8 @@ namespace SheeToList
     public class MainViewModel : INotifyPropertyChanged
     {
         #region strings ressources
-        public string recipeTitle => AppString.Recette;
-        public string categoryTitle => AppString.Categorie;
+        public  string RecipeTitle => AppString.Main_recipe;
+        public  string CategoryTitle => AppString.Main_category;
         private string _filterShowButtonText => IsBuyedProductVisible ? AppString.Main_cachez : AppString.main_revelez;
         #endregion
 
@@ -166,7 +166,7 @@ namespace SheeToList
         #region Data Import
         public async Task ImportData()
         {
-            bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Cela supprimeras toute la liste. Continuer?", "Oui", "Non");
+            bool confirm = await _page.DisplayAlertAsync(AppString.popup_confirm, AppString.Popup_main_import, AppString.popup_yes, AppString.popup_no);
             if (IsLoading || !confirm) return;
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
@@ -184,7 +184,7 @@ namespace SheeToList
             {
                 Console.WriteLine(ex.StackTrace);
                 var sorted = new List<ProductToBuy>();
-                await _page.DisplayAlertAsync("Erreur", ex.Message, "OK");
+                await _page.DisplayAlertAsync(AppString.popup_error, ex.Message, AppString.General_ok);
             }
             finally
             {
@@ -228,7 +228,7 @@ namespace SheeToList
             if (string.IsNullOrWhiteSpace(name)) return;
             if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
             {
-                await _page.DisplayAlertAsync("Doublon", "Ce produit est déjà dans la liste.", "OK");
+                await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Main_Warn, AppString.General_ok);
                 return;
             }
             ProductToBuy products = new() { Name = name, IsChecked = false };
@@ -254,7 +254,7 @@ namespace SheeToList
 
         private async void EditProduct(ProductToBuy Product)
         {
-            string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nouveau nom",
+            string? text = await _page.ItemNameAskerAsync(AppString.Popup_Recipe_Add_Title, AppString.popup_rename_product,
                 Product.Name);
             if (string.IsNullOrWhiteSpace(text) || Product == null) return;
             Product.Name = text;
@@ -268,7 +268,9 @@ namespace SheeToList
         private async void DeleteProduct(ProductToBuy Product)
         {
             // Confirm deletion
-            bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer {Product.Name} ?", "Oui", "Non");
+            bool confirm = await _page.DisplayAlertAsync(AppString.popup_confirm, 
+                $"{AppString.popup_del_confirm_1} {Product.Name} {AppString.popup_del_confirm_2}"
+                , AppString.popup_yes, AppString.popup_no);
             if (!confirm) return;
 
             Products.Remove(Product);
@@ -282,7 +284,8 @@ namespace SheeToList
         private async void DeleteAllProducts()
         {
             // Confirm deletion
-            bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer tous les produits ?", "Oui", "Non");
+            bool confirm = await _page.DisplayAlertAsync(AppString.popup_confirm, AppString.Popup_main_delete_all,
+                AppString.popup_yes, AppString.popup_no);
             if (!confirm) return;
             Products.Clear();
             _filteredProducts = null;
@@ -350,7 +353,7 @@ namespace SheeToList
             {
                 Console.WriteLine(ex.StackTrace);
                 var sorted = new List<ProductToBuy>();
-                await _page.DisplayAlertAsync("Erreur", ex.Message, "OK");
+                await _page.DisplayAlertAsync(AppString.popup_error, ex.Message, AppString.General_ok);
             }
         }
 

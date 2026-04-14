@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
+using SheeToList.Resources.String;
 using SheeToList.Services;
 
 namespace SheeToList.View;
@@ -27,6 +28,7 @@ public partial class RecipeList : ContentPage
 
 public class RecipeListViewModel: INotifyPropertyChanged
 {
+    public string PageTitle => AppString.Recipe_list_title;
     private bool _isLoading;
 	private readonly RecipeList _page;
 
@@ -57,12 +59,12 @@ public class RecipeListViewModel: INotifyPropertyChanged
 
 	private async void AddRecipe()
 	{
-        string? text = await _page.ItemNameAskerAsync("Entrer le nom", "Entrer le nom de l'objet à ajoutée");
+        string? text = await _page.ItemNameAskerAsync(AppString.Popup_Recipe_Add_Title, AppString.Popup_Recipe_Add_Text);
 
 		if (string.IsNullOrWhiteSpace(text)) return;
         if (Recipes.Any(p => p.Name.Equals(text, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
         {
-            await _page.DisplayAlertAsync("Doublon", "Cette recette est déjà dans la liste.", "OK");
+            await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Recipe_Warn, AppString.General_ok);
             return;
         }
 
@@ -76,7 +78,9 @@ public class RecipeListViewModel: INotifyPropertyChanged
 	private async void DeleteRecipe(Recipe recipe)
 	{
         // Confirm deletion
-        bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer {recipe.Name} ?", "Oui", "Non");
+        bool confirm = await _page.DisplayAlertAsync(AppString.popup_confirm,
+            $"{AppString.popup_del_confirm_1} {recipe.Name} {AppString.popup_del_confirm_2}",
+            AppString.popup_yes, AppString.popup_no);
         if (!confirm) return;
 
 		Recipes?.Remove(recipe);

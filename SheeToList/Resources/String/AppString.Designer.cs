@@ -61,11 +61,11 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Catégorie.
+        ///   Recherche une chaîne localisée semblable à Ajouter mot-clé.
         /// </summary>
-        internal static string Categorie {
+        internal static string Category_add_title {
             get {
-                return ResourceManager.GetString("Categorie", resourceCulture);
+                return ResourceManager.GetString("Category_add_title", resourceCulture);
             }
         }
         
@@ -79,11 +79,56 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Éditer mot-clé.
+        /// </summary>
+        internal static string Category_edit_keyword {
+            get {
+                return ResourceManager.GetString("Category_edit_keyword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Nouveau mot-clé :.
+        /// </summary>
+        internal static string Category_edit_text {
+            get {
+                return ResourceManager.GetString("Category_edit_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Mot-clé :.
+        /// </summary>
+        internal static string Category_Keyword {
+            get {
+                return ResourceManager.GetString("Category_Keyword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ce mot-clé existe déjà.
+        /// </summary>
+        internal static string Category_popup_dublicate {
+            get {
+                return ResourceManager.GetString("Category_popup_dublicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Catégories.
         /// </summary>
-        internal static string category_title {
+        internal static string Category_title {
             get {
-                return ResourceManager.GetString("category_title", resourceCulture);
+                return ResourceManager.GetString("Category_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à OK.
+        /// </summary>
+        internal static string General_ok {
+            get {
+                return ResourceManager.GetString("General_ok", resourceCulture);
             }
         }
         
@@ -93,6 +138,24 @@ namespace SheeToList.Resources.String {
         internal static string Main_cachez {
             get {
                 return ResourceManager.GetString("Main_cachez", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Catégorie.
+        /// </summary>
+        internal static string Main_category {
+            get {
+                return ResourceManager.GetString("Main_category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Recette.
+        /// </summary>
+        internal static string Main_recipe {
+            get {
+                return ResourceManager.GetString("Main_recipe", resourceCulture);
             }
         }
         
@@ -259,11 +322,74 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Supprimer tous les produits ?.
+        /// </summary>
+        internal static string Popup_main_delete_all {
+            get {
+                return ResourceManager.GetString("Popup_main_delete_all", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cela supprimera toute la liste.
+        /// </summary>
+        internal static string Popup_main_import {
+            get {
+                return ResourceManager.GetString("Popup_main_import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Ce produit est déjà dans la liste.
+        /// </summary>
+        internal static string Popup_Main_Warn {
+            get {
+                return ResourceManager.GetString("Popup_Main_Warn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Non.
         /// </summary>
         internal static string popup_no {
             get {
                 return ResourceManager.GetString("popup_no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Entrer le nom de l&apos;objet à ajouté.
+        /// </summary>
+        internal static string Popup_Recipe_Add_Text {
+            get {
+                return ResourceManager.GetString("Popup_Recipe_Add_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Entrer le nom.
+        /// </summary>
+        internal static string Popup_Recipe_Add_Title {
+            get {
+                return ResourceManager.GetString("Popup_Recipe_Add_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cette recette est déjà dans la liste.
+        /// </summary>
+        internal static string Popup_Recipe_Warn {
+            get {
+                return ResourceManager.GetString("Popup_Recipe_Warn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Cette ingrédient est déjà dans la liste.
+        /// </summary>
+        internal static string Popup_Recipe_Warn_Product {
+            get {
+                return ResourceManager.GetString("Popup_Recipe_Warn_Product", resourceCulture);
             }
         }
         
@@ -277,6 +403,15 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Entrer le nouveau nom.
+        /// </summary>
+        internal static string popup_rename_product {
+            get {
+                return ResourceManager.GetString("popup_rename_product", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Cette ingredient est déjà dans la liste..
         /// </summary>
         internal static string popup_text {
@@ -286,7 +421,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Sélectionner...
+        ///   Recherche une chaîne localisée semblable à Sélectionner....
         /// </summary>
         internal static string popup_type_select_placeholder {
             get {
@@ -313,6 +448,15 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Tape le produit à ajouter.
+        /// </summary>
+        internal static string Popup_typeOnly_Title {
+            get {
+                return ResourceManager.GetString("Popup_typeOnly_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Doublon.
         /// </summary>
         internal static string popup_warn_title {
@@ -331,20 +475,20 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Recette.
-        /// </summary>
-        internal static string Recette {
-            get {
-                return ResourceManager.GetString("Recette", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à ingrédients pour :.
         /// </summary>
         internal static string recipe_ingrediant {
             get {
                 return ResourceManager.GetString("recipe_ingrediant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Liste des recettes.
+        /// </summary>
+        internal static string Recipe_list_title {
+            get {
+                return ResourceManager.GetString("Recipe_list_title", resourceCulture);
             }
         }
         

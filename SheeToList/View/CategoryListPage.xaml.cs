@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
+using SheeToList.Resources.String;
 using SheeToList.Services;
 
 namespace SheeToList.View;
@@ -19,6 +20,7 @@ public partial class CategoryListPage : ContentPage
 
 public class CategoryListViewModel : INotifyPropertyChanged
 {
+    public string PageTitle => AppString.Main_category;
     private readonly Page _page;
     private CategoryDefinition? _selectedCategory;
     private bool _isLoading;
@@ -61,12 +63,13 @@ public class CategoryListViewModel : INotifyPropertyChanged
 
     private async void AddCategory()
     {
-        string? name = await _page.DisplayPromptAsync("Nouvelle catégorie", "Nom de la catégorie :", accept: "Créer", cancel: "Annuler");
+        string? name = await _page.DisplayPromptAsync(AppString.popup_category_title, AppString.popup_category_text,
+            accept: AppString.popup_category_create, cancel: AppString.popup_category_cancel);
         if (string.IsNullOrWhiteSpace(name)) return;
 
         if (Categories.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
         {
-            await _page.DisplayAlertAsync("Doublon", "Cette catégorie existe déjà.", "OK");
+            await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.popup_category_warn_title, AppString.General_ok);
             return;
         }
 
@@ -87,7 +90,9 @@ public class CategoryListViewModel : INotifyPropertyChanged
     private async void DeleteSelectedCategory()
     {
         if (SelectedCategory == null) return;
-        bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer la catégorie {SelectedCategory.Name} ?", "Oui", "Non");
+        bool confirm = await _page.DisplayAlertAsync(AppString.popup_confirm, 
+            $"{AppString.popup_del_confirm_1} {SelectedCategory.Name} {AppString.popup_del_confirm_2}",
+            AppString.popup_yes, AppString.popup_no);
         if (!confirm) return;
         Categories.Remove(SelectedCategory);
         SelectedCategory = null;
@@ -113,7 +118,7 @@ public class CategoryListViewModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await _page.DisplayAlertAsync("Erreur", ex.Message, "OK");
+            await _page.DisplayAlertAsync(AppString.popup_error , ex.Message, AppString.General_ok);
         }
     }
 

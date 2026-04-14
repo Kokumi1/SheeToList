@@ -1,5 +1,5 @@
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CommunityToolkit.Maui.Views;
 using SheeToList.Model;
+using SheeToList.Resources.String;
 using SheeToList.Services;
 using SheeToList.Utils;
 
@@ -17,7 +18,7 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
     public IReadOnlyList<SuggestionItem> CategoriesProducts { get; set; }
-    public string TitleText { get; set; } = "Choisis ou taper le produit à ajouter";
+    public string TitleText { get; set; } = AppString.Popup_typeOnly_Title;
     private ObservableCollection<SuggestionItem> Suggestion = [];
     public ObservableCollection<SuggestionItem> Suggestions
     {
@@ -162,11 +163,11 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
         {
             var chosen = PickerCategoryList.Items[PickerCategoryList.SelectedIndex];
             // titre dynamique : affiche le choix de l'utilisateur
-            PickerCategoryList.Title = $"Sélectionné : {chosen}";
+            PickerCategoryList.Title = $"{AppString.popup_type_select_title} {chosen}";
         }
         else
         {
-            PickerCategoryList.Title = "Sélectionner...";
+            PickerCategoryList.Title = AppString.popup_type_select_placeholder;
         }
     }
     #endregion

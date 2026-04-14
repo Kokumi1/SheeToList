@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using SheeToList.Model;
+using SheeToList.Resources.String;
 using SheeToList.Services;
 
 namespace SheeToList.View;
@@ -18,6 +19,7 @@ public partial class CategoryDetailPage : ContentPage
 
 public class CategoryDetailViewModel : INotifyPropertyChanged
 {
+    public  string PageTitle => AppString.category_detail_title;
     private readonly Page _page;
     public CategoryDefinition Category { get; private set; }
     private string? _selectedKeyword;
@@ -44,11 +46,12 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
 
     private async void AddKeyword()
     {
-        string? text = await _page.DisplayPromptAsync("Ajouter mot-clé", "Mot-clé :");
+        string? text = await _page.DisplayPromptAsync(AppString.Category_add_title, AppString.Category_Keyword);
         if (string.IsNullOrWhiteSpace(text)) return;
         if (Category.Keywords.Any(k => k.Equals(text, StringComparison.OrdinalIgnoreCase)))
         {
-            await _page.DisplayAlertAsync("Doublon", "Ce mot-clé existe déjà.", "OK");
+            await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Category_popup_dublicate,
+                AppString.General_ok);
             return;
         }
         Category.Keywords.Add(text.Trim());
@@ -58,7 +61,8 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
     private async void EditKeyword(string keyword)
     {
         if (keyword == null) return;
-        string? newVal = await _page.DisplayPromptAsync("Éditer mot-clé", "Nouveau mot-clé :", initialValue: keyword);
+        string? newVal = await _page.DisplayPromptAsync(AppString.Category_edit_keyword, AppString.Category_edit_text,
+            initialValue: keyword);
         if (string.IsNullOrWhiteSpace(newVal)) return;
         if (Category.Keywords.Any(k => k.Equals(newVal, StringComparison.OrdinalIgnoreCase))) { await _page.DisplayAlertAsync("Doublon", "Ce mot-clé existe déjà.", "OK"); return; }
         int idx = Category.Keywords.IndexOf(keyword);
@@ -72,7 +76,9 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
     private async void DeleteKeyword(string keyword)
     {
         if (keyword == null) return;
-        bool confirm = await _page.DisplayAlertAsync("Confirmer", $"Supprimer '{keyword}' ?", "Oui", "Non");
+        bool confirm = await _page.DisplayAlertAsync(AppString.popup_confirm,
+            AppString.popup_del_confirm_1 + keyword + AppString.popup_del_confirm_2,
+            AppString.popup_yes, AppString.popup_no);
         if (!confirm) return;
         Category.Keywords.Remove(keyword);
         await SaveCategoryAsync();
@@ -92,7 +98,7 @@ public class CategoryDetailViewModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await _page.DisplayAlertAsync("Erreur", ex.Message, "OK");
+            await _page.DisplayAlertAsync(AppString.popup_error, ex.Message, AppString.General_ok);
         }
     }
 

@@ -1,5 +1,5 @@
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CommunityToolkit.Maui.Views;
 using SheeToList.Model;
+using SheeToList.Resources.String;
 using SheeToList.Services;
 using SheeToList.Utils;
 
@@ -20,10 +21,11 @@ public record ProductSelection(string Name, string? Category);
 
 public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
 {
+    public string PopupTitle => AppString.popup_type_select_placeholder;
+    public string TitleText => AppString.popup_type_title;
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
     public IReadOnlyList<SuggestionItem> CategoriesProducts { get; set; }
-    public string TitleText { get; set; } = "Choisis ou taper le produit à ajouter";
     private ObservableCollection<SuggestionItem> Suggestion = [];
     public ObservableCollection<SuggestionItem> Suggestions
     {
@@ -49,7 +51,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
 
     //----------------------------------
     #region Setup
-    public PickOrTypePopup(/*IEnumerable<string> items,*/ string initialValue="")
+    public PickOrTypePopup(string initialValue="")
 	{
         InitializeComponent();
         BindingContext = this;
@@ -166,11 +168,11 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         {
             var chosen = PickerList.Items[PickerList.SelectedIndex];
             // titre dynamique : affiche le choix de l'utilisateur
-            PickerList.Title = $"Sélectionné : {chosen}";
+            PickerList.Title = $"{AppString.popup_type_select_title} {chosen}";
         }
         else
         {
-            PickerList.Title = "Sélectionner...";
+            PickerList.Title = AppString.popup_type_select_placeholder;
         }
     }
 

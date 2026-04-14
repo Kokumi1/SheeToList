@@ -24,14 +24,14 @@
 
             <Button
                     Clicked="Recipe_Button_Clicked"
-                    Text="{Binding recipeTitle}"
+                    Text="{Binding RecipeTitle}"
                     Grid.Column="0"
                     HorizontalOptions="Start"
                     VerticalOptions="Center" />
 
             <Button
                     Clicked="Category_Button_Clicked"
-                    Text="{Binding categoryTitle}"
+                    Text="{Binding CategoryTitle}"
                     Grid.Column="0"
                     HorizontalOptions="Start"
                     VerticalOptions="Center" 

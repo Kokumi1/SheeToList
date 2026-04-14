@@ -59,7 +59,7 @@
 
         <StackLayout x:Name="PickPanel" IsVisible="False" Style="{StaticResource StackLayoutBackground}">
             <Label Text="Choisir dans la liste" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
-            <Picker x:Name="PickerList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" 
+            <Picker x:Name="PickerList" Title="{Binding PopupTitle}" SelectedIndexChanged="PickerList_SelectedIndexChanged" 
                     BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
         </StackLayout>
 
