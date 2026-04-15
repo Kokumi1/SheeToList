@@ -176,7 +176,7 @@ namespace SheeToList
             {
                 var unSortedProducts = await GoogleApiTalker.GetData();
                 Products = new ObservableCollection<ProductToBuy>(unSortedProducts);
-                CategoryDefiner.AssignCategories(Products, overwriteExisting: true);
+                CategoryDefiner.AssignCategories(Products, overwriteExisting: false);
                 BuildGroups();
                 await SaveData();
             }

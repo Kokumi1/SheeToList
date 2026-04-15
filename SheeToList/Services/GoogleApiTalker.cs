@@ -61,8 +61,6 @@ namespace SheeToList.Services
             get
             {
                 credential = CredentialFactory.FromFile<ServiceAccountCredential>(GetCredentialPath()).ToGoogleCredential()
-                //credential = GoogleCredential.FromFile(GetCredentialPath())
-                // credential = GoogleCredential.FromFile("credential.json")
                 .CreateScoped(SheetsService.Scope.Spreadsheets);
                 return new SheetsService(new BaseClientService.Initializer()
                 {
