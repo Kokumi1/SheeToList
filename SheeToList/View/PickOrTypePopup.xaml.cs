@@ -23,6 +23,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
 {
     public string PopupTitle => AppString.popup_type_select_placeholder;
     public string TitleText => AppString.popup_type_title;
+    public string TypePlaceholder => AppString.popup_addproduct_placeholder;
     public string typeLabel => AppString.popup_addproduct_title;
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }

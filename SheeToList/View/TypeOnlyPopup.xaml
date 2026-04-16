@@ -26,8 +26,8 @@
 
         <!-- Panels -->
         <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}" HeightRequest="500">
-            <Label Text="Saisir un nom du produit" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
-            <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="{StaticResource WhiteText}" BackgroundColor="{StaticResource BackgroundPrimary}" TextChanged="EntryName_TextChanged"/>
+            <Label Text="{Binding EntryNameTitle}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
+            <Entry x:Name="EntryName" Placeholder="{Binding EntryNamePlaceholder}" TextColor="{StaticResource WhiteText}" BackgroundColor="{StaticResource BackgroundPrimary}" TextChanged="EntryName_TextChanged"/>
             <CollectionView
                 x:Name="SuggestionsList"
                 IsVisible="false"

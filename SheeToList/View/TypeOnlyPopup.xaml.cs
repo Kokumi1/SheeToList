@@ -15,6 +15,9 @@ namespace SheeToList.View;
 
 public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
 {
+    public string EntryNamePlaceholder => AppString.popup_addproduct_placeholder;
+    public string EntryNameTitle => AppString.popup_addproduct_title;
+
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
     public IReadOnlyList<SuggestionItem> CategoriesProducts { get; set; }

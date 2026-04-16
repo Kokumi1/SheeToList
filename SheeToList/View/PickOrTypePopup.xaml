@@ -35,7 +35,7 @@
         <!-- Panels -->
         <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}" HeightRequest="500">
             <Label Text="{Binding typeLabel}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
-            <Entry x:Name="EntryName" TextColor="{StaticResource WhiteText}" 
+            <Entry x:Name="EntryName" Placeholder="{Binding TypePlaceholder}" TextColor="{StaticResource WhiteText}" 
                    BackgroundColor="{StaticResource BackgroundSecondary}" TextChanged="EntryName_TextChanged"/>
             <CollectionView
                 x:Name="SuggestionsList"
