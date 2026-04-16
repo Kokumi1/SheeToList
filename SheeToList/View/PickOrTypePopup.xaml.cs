@@ -23,6 +23,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
 {
     public string PopupTitle => AppString.popup_type_select_placeholder;
     public string TitleText => AppString.popup_type_title;
+    public string typeLabel => AppString.popup_addproduct_title;
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
     public IReadOnlyList<SuggestionItem> CategoriesProducts { get; set; }
@@ -63,6 +64,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
 
         PopulatePicker();
         PopulateCategoriesProducts();
+        PopulateCategoryPicker();
         UpdateTabVisual();
     }
 
@@ -95,6 +97,17 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
                     PickerList.SelectedIndex = PickerList.Items.IndexOf(initialValue);
             }
         });
+    }
+    private void PopulateCategoryPicker()
+    {
+        var categories = Enum.GetNames<Category>()
+            .OrderBy(c => c)
+            .ToList();
+
+        foreach (var category in categories)
+        {
+            PickerCategoryList.Items.Add(category);
+        }
     }
     #endregion
 
@@ -138,6 +151,13 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             {
                 EntryName.Text = chosen.Name;
                 SearchText = chosen.Name;
+                if (!string.IsNullOrWhiteSpace(chosen?.Category))
+                {
+                    var categoryName = chosen.Category.Trim('[', ']');
+                    int categoryIndex = PickerCategoryList.Items.IndexOf(categoryName);
+                    if (categoryIndex >= 0)
+                        PickerCategoryList.SelectedIndex = categoryIndex;
+                }
             }
         }
         // hide suggestions after selection
@@ -214,7 +234,8 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             // Chercher la catégorie du produit dans les suggestions
             var suggestion = CategoriesProducts?.FirstOrDefault(p => p.Name.Equals(productName, StringComparison.OrdinalIgnoreCase));
             var category = suggestion?.Category.Trim('[', ']');
-            
+            category = PickerCategoryList.SelectedIndex >= 0 ? PickerCategoryList.Items[PickerCategoryList.SelectedIndex] : category?.Trim('[', ']');
+
             if (!string.IsNullOrWhiteSpace(productName))
                 result = new ProductSelection(productName, category);
         }
@@ -234,6 +255,20 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
     {
         _tcs.TrySetResult(null);
         CloseAsync();
+    }
+
+    void PickerCategoryList_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (PickerCategoryList.SelectedIndex >= 0 && PickerCategoryList.SelectedIndex < PickerCategoryList.Items.Count)
+        {
+            var chosen = PickerCategoryList.Items[PickerCategoryList.SelectedIndex];
+            // titre dynamique : affiche le choix de l'utilisateur
+            PickerCategoryList.Title = $"{AppString.popup_type_select_title} {chosen}";
+        }
+        else
+        {
+            PickerCategoryList.Title = AppString.popup_type_select_placeholder;
+        }
     }
     #endregion
 

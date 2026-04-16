@@ -34,8 +34,8 @@
 
         <!-- Panels -->
         <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}" HeightRequest="500">
-            <Label Text="Saisir un nom du produit" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
-            <Entry x:Name="EntryName" Placeholder="Entrez le nom..." TextColor="{StaticResource WhiteText}" 
+            <Label Text="{Binding typeLabel}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
+            <Entry x:Name="EntryName" TextColor="{StaticResource WhiteText}" 
                    BackgroundColor="{StaticResource BackgroundSecondary}" TextChanged="EntryName_TextChanged"/>
             <CollectionView
                 x:Name="SuggestionsList"
@@ -55,6 +55,9 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+            <Label Text="Catégories" FontAttributes="Bold" TextColor="{StaticResource WhiteText}" Margin="0,10,0,0"/>
+            <Picker x:Name="PickerCategoryList" Title="Sélectionner..." SelectedIndexChanged="PickerCategoryList_SelectedIndexChanged" BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
         </StackLayout>
 
         <StackLayout x:Name="PickPanel" IsVisible="False" Style="{StaticResource StackLayoutBackground}">

@@ -24,14 +24,19 @@ namespace SheeToList
 
         }
 
-        public async Task<String?> ItemNameAskerAsync(string title, string message, string initialValue = "",string accept="Valider", string cancel="Annuler")
+        public async Task<(String? name, string? category)> ItemNameAskerAsync( string initialValue = "")
         {
-            return  await DisplayPromptAsync(title, message, accept: AppString.pick_popup_valid, cancel: AppString.popup_category_cancel, initialValue: initialValue);
+            var popup = new TypeOnlyPopup(initialValue);
+            this.ShowPopup(popup);
+            var result = await popup.WaitForResultAsync();
+            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category);
+            return (result?.Name, result?.Category);
+            //return  await DisplayPromptAsync(title, message, accept: AppString.pick_popup_valid, cancel: AppString.popup_category_cancel, initialValue: initialValue);
         }
     
-        public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync(string initialValue = "")
+        public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync()
         {
-            var popup = new PickOrTypePopup( initialValue);
+            var popup = new PickOrTypePopup( );
             // Si vous voulez afficher un titre: vous pouvez envelopper popup avec un layout contenant un Label
             // Affiche le popup et attend le résultat
             this.ShowPopup(popup);
@@ -222,7 +227,7 @@ namespace SheeToList
         #region Data Management
         public async void AddProduct()
         {
-            var (name, category) = await _page.ItemNameOrPickAskerAsync("Entrer le nom");
+            var (name, category) = await _page.ItemNameOrPickAskerAsync();
             Debug.WriteLine($"AddProduct called with name: {name}, category: {category}");
 
             if (string.IsNullOrWhiteSpace(name)) return;
@@ -254,10 +259,13 @@ namespace SheeToList
 
         private async void EditProduct(ProductToBuy Product)
         {
-            string? text = await _page.ItemNameAskerAsync(AppString.Popup_Recipe_Add_Title, AppString.popup_rename_product,
-                Product.Name);
-            if (string.IsNullOrWhiteSpace(text) || Product == null) return;
-            Product.Name = text;
+            var (name, category) = await _page.ItemNameAskerAsync(Product.Name);
+            if (string.IsNullOrWhiteSpace(name) || Product == null) return;
+            Product.Name = name;
+            if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
+            {
+                Product.Categorie = parsedCategory;
+            }
             _filteredProducts = null;
 
             SortProducts();
