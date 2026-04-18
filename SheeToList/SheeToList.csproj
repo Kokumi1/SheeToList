@@ -21,13 +21,13 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>SheeToList</ApplicationTitle>
+		<ApplicationTitle>SheeToList APIless</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.myself.sheetolist</ApplicationId>
+		<ApplicationId>com.myself.sheetolist.APIless</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.1.2.7</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.1.2.8</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
