@@ -139,7 +139,7 @@ namespace SheeToList
 
             //initialize commands
             AddItemCommand = new Command(AddProduct);
-            ImportDataCommand = new Command(async () => await ImportData());
+            //ImportDataCommand = new Command(async () => await ImportData());
             EditItemCommand = new Command<ProductToBuy>(EditProduct);
             DeleteItemCommand = new Command<ProductToBuy>(DeleteProduct);
             FilterShowCommand = new Command(() =>
@@ -169,7 +169,7 @@ namespace SheeToList
         //----------------------
         //Data Import
         #region Data Import
-        public async Task ImportData()
+        /*public async Task ImportData()
         {
             bool confirm = await _page.DisplayAlertAsync(AppString.popup_confirm, AppString.Popup_main_import, AppString.popup_yes, AppString.popup_no);
             if (IsLoading || !confirm) return;
@@ -196,7 +196,7 @@ namespace SheeToList
                 IsLoading = false;
             }
             OnPropertyChanged(nameof(ToBuyProducts));
-        }
+        }*/
         #endregion
 
 
@@ -209,7 +209,7 @@ namespace SheeToList
         #region Command Region
         public ICommand AddItemCommand { get; }
         public ICommand FilterShowCommand { get; }
-        public ICommand ImportDataCommand { get; }
+       // public ICommand ImportDataCommand { get; }
         public ICommand EditItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public string FilterShowButtonText => _filterShowButtonText;

@@ -36,13 +36,6 @@
                     HorizontalOptions="Start"
                     VerticalOptions="Center" 
                     Margin="100,0,0,0"/>
-
-            <Button
-                    Command="{Binding ImportDataCommand}"
-                    Text="Importer"
-                    Grid.Column="1"
-                    HorizontalOptions="End"
-                    VerticalOptions="Center" />
         </Grid>
 
         

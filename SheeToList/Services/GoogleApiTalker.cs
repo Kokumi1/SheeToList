@@ -12,82 +12,16 @@ namespace SheeToList.Services
     {
         private static GoogleCredential credential;
 
-
-        private static string GetCredentialPath()
-        {
-            var filename = "ncredential.json";
-
-#if ANDROID
-            var filepath = Path.Combine(FileSystem.AppDataDirectory, filename);
-            
-            if (!File.Exists(filepath))
-            {
-                using var stream = FileSystem.OpenAppPackageFileAsync(filename);
-                using var fileStream = File.Create(filepath);
-                Task.Run(async () => await (await stream).CopyToAsync(fileStream)).Wait();
-            }
-            
-
-            //var credentialTask = Task.Run(async () => await GetCredentialPathAsync(filename));
-            //filepath = credentialTask.Result;
-            var file = File.ReadAllText(filepath);
-            return filepath;
-#else
-            return Path.Combine(AppContext.BaseDirectory, filename);
-#endif
-        }
-
-        private async static Task<string> GetCredentialPathAsync(string filename)
-        {
-            
-            var filepath = Path.Combine(FileSystem.AppDataDirectory, filename);
-            var storedCredential = await SecureStorage.GetAsync("credential_path");
-            if (string.IsNullOrEmpty(storedCredential))
-            {
-                // Copier depuis les ressources et stocker de manière sécurisée
-                using var stream = await FileSystem.OpenAppPackageFileAsync(filename);
-                using var reader = new StreamReader(stream);
-                var credentialContent = await reader.ReadToEndAsync();
-
-                // Stocker dans le secure storage (chiffré par le système)
-                await SecureStorage.SetAsync("google_credential", credentialContent);
-            }
-
-            return filepath;
-        }
-
-        private static SheetsService Service
-        {
-            get
-            {
-                credential = CredentialFactory.FromFile<ServiceAccountCredential>(GetCredentialPath()).ToGoogleCredential()
-                .CreateScoped(SheetsService.Scope.Spreadsheets);
-                return new SheetsService(new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = "SheeToList",
-                });
-            }
-        }
-
         //Get data from the Google Sheet
         public static async Task<ObservableCollection<ProductToBuy>> GetData()
         {
-            var spreadsheetId = Redacted.Sheet_ID;
-            var range = $"{Redacted.Sheet_name} {Redacted.Sheet_select}";
-            var request = Service.Spreadsheets.Values.Get(spreadsheetId, range);
-            var response = await Task.Run(() => request.Execute());
-            var values = response.Values;
+            //You have the apiless version of the application.
+            // So we return an empty list of products to buy instead.
 
-            if (values == null || values.Count == 0)
+            return await Task.Run(static () =>
             {
-                Console.WriteLine("No data found.");
-                return [];
-            }
-            else
-            {
-                return GoogleApiTalker.TuneData(values);
-            }
+               return TuneData(new List<IList<Object>>());
+            });
         }
 
         //Tune data to split items separated by commas and remove empty entries
