@@ -2,7 +2,7 @@
 
 
 
-Cette application vous permettras de gérer votre liste de course plus facilement.
+Cette application Android vous permettras de gérer votre liste de course plus facilement.
 
 Vous pouvez ajouter tout les ingrédients d'une recette pré-enregistré en 2 taps ou laissez l'application vous faciliter l'ajout d'un produit dans la liste le tout dans une liste trier par rayon.
 
