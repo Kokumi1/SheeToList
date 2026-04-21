@@ -2,13 +2,13 @@
 
 
 
-Cette application Android vous permettras de gérer votre liste de course plus facilement.
+Cette application Android vous permettra de gérer votre liste de courses plus facilement.
 
-Vous pouvez ajouter tout les ingrédients d'une recette pré-enregistré en 2 taps ou laissez l'application vous faciliter l'ajout d'un produit dans la liste le tout dans une liste trier par rayon.
+Vous pouvez ajouter tous les ingrédients d'une recette pré-enregistrée en 2 taps ou laisser l'application vous faciliter l'ajout d'un produit dans la liste, le tout dans une liste triée par rayon.
 
 
 
-Une fois en magasins vous pouvez masquer les produits que vous avez acheter et ne voir que ce qui reste à acheter.
+Une fois en magasin, vous pouvez masquer les produits que vous avez achetés et ne voir que ce qui reste à acheter.
 
 
 
@@ -20,11 +20,11 @@ Une fois en magasins vous pouvez masquer les produits que vous avez acheter et n
 
 
 
-* Liste de course trié par catégorie.
-* Ajout manuelle d'un produit avec liste des suggestion pour préremplir le nom et la catégorie.
-* Gestion des recettes avec ajout et suppressions d'ingrédients
-* Ajout de l'ensemble des ingrédient d'une recette par le biais d'une liste déroulantes
-* personnalisation des mots-clés des catégories utiliser pour la suggéré des produits lors de l'ajout manuel.
+* Liste de courses triée par catégorie.
+* Ajout manuel d'un produit avec liste des suggestions pour préremplir le nom et la catégorie.
+* Gestion des recettes avec ajout et suppression d'ingrédients.
+* Ajout de l'ensemble des ingrédients d'une recette par le biais d'une liste déroulante.
+* Personnalisation des mots-clés des catégories utilisées pour la suggestion des produits lors de l'ajout manuel.
 * Masquer, révélez des produits de la liste.
-* Auto-assignation d'une catégorie si cela n'a pas été remplis.
+* Auto-assignation d'une catégorie si cela n'a pas été rempli.
 
