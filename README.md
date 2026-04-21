@@ -16,7 +16,7 @@ Une fois en magasins vous pouvez masquer les produits que vous avez acheter et n
 
 
 
-### Fonctionnalités:
+## Fonctionnalités:
 
 
 
