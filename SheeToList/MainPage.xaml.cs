@@ -235,10 +235,8 @@ namespace SheeToList
             {
                 var p = Products.First(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 p.Quantity++;
-                BuildGroups();
 
                 await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Main_Warn, AppString.General_ok);
-                return;
             }
             else
             {
