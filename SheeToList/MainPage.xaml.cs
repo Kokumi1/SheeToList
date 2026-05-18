@@ -233,22 +233,17 @@ namespace SheeToList
             if (string.IsNullOrWhiteSpace(name)) return;
             if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
             {
+                var p = Products.First(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                p.Quantity++;
+                BuildGroups();
+
                 await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Main_Warn, AppString.General_ok);
                 return;
             }
-            ProductToBuy products = new() { Name = name, IsChecked = false };
-            // Si une catégorie a été détectée via les suggestions, l'assigner directement
-            if (!string.IsNullOrWhiteSpace(category) && 
-                Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
+            else
             {
-                    products.Categorie = parsedCategory;
+                AddNewItem(name, category);
             }
-
-            var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
-            Debug.WriteLine($"Recipe check found {recipeCheck.Count} related products");
-            Debug.WriteLine("Related products: " + string.Join(", ", recipeCheck.Select(p => p.Name+ " categorie "+ p.Categorie)));
-
-            Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));
             _filteredProducts = null;
 
             CategoryDefiner.AssignCategories(Products, overwriteExisting: false);
@@ -256,6 +251,24 @@ namespace SheeToList
 
             await SaveData();
         }
+
+        private void AddNewItem(string name, string? category)
+        {
+            ProductToBuy products = new() { Name = name, IsChecked = false };
+            // Si une catégorie a été détectée via les suggestions, l'assigner directement
+            if (!string.IsNullOrWhiteSpace(category) &&
+                Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
+            {
+                products.Categorie = parsedCategory;
+            }
+
+            var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
+            Debug.WriteLine($"Recipe check found {recipeCheck.Count} related products");
+            Debug.WriteLine("Related products: " + string.Join(", ", recipeCheck.Select(p => p.Name + " categorie " + p.Categorie)));
+
+            Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));
+        }
+
 
         private async void EditProduct(ProductToBuy Product)
         {

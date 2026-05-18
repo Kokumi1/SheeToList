@@ -277,7 +277,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Changer le nom de la recette.
+        ///   Recherche une chaîne localisée semblable à Changer le nom de la recette..
         /// </summary>
         internal static string popup_change_recipename_title {
             get {
@@ -331,7 +331,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Cela supprimera toute la liste.
+        ///   Recherche une chaîne localisée semblable à Cela supprimera toute la liste..
         /// </summary>
         internal static string Popup_main_import {
             get {
@@ -340,7 +340,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Ce produit est déjà dans la liste.
+        ///   Recherche une chaîne localisée semblable à Ce produit est déjà dans la liste.   Sa quantité est augmenté d&apos;un..
         /// </summary>
         internal static string Popup_Main_Warn {
             get {
@@ -376,7 +376,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Cette recette est déjà dans la liste.
+        ///   Recherche une chaîne localisée semblable à Cette recette est déjà dans la liste..
         /// </summary>
         internal static string Popup_Recipe_Warn {
             get {
@@ -385,7 +385,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Cette ingrédient est déjà dans la liste.
+        ///   Recherche une chaîne localisée semblable à Cette ingrédient est déjà dans la liste..
         /// </summary>
         internal static string Popup_Recipe_Warn_Product {
             get {
@@ -394,7 +394,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Renommer un ingrédient.
+        ///   Recherche une chaîne localisée semblable à Renommer un ingrédient..
         /// </summary>
         internal static string popup_rename {
             get {
@@ -403,7 +403,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Entrer le nouveau nom.
+        ///   Recherche une chaîne localisée semblable à Entrer le nouveau nom..
         /// </summary>
         internal static string popup_rename_product {
             get {
@@ -439,7 +439,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Choisis ou taper le produit à ajouter.
+        ///   Recherche une chaîne localisée semblable à Choisis ou taper le produit à ajouter..
         /// </summary>
         internal static string popup_type_title {
             get {
@@ -448,7 +448,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Tape le produit à ajouter.
+        ///   Recherche une chaîne localisée semblable à Tape le produit à ajouter..
         /// </summary>
         internal static string Popup_typeOnly_Title {
             get {

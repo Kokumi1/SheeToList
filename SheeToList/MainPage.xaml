@@ -71,7 +71,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Padding="10" ColumnDefinitions="70*,20*,2*,10*" MaximumHeightRequest="70">
-                                <Label Text="{Binding Name}" VerticalOptions="Center">
+                                <Label Text="{Binding Data}" VerticalOptions="Center">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer 
                                             Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
