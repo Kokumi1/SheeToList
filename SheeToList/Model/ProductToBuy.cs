@@ -7,6 +7,7 @@ namespace SheeToList.Model
     {
         string name ="";
         int quantity = 1;
+        QuantityUnit quantityUnit = QuantityUnit.unit;
         Category categorie = Category.Autre;
         bool isChecked;
 
@@ -17,7 +18,7 @@ namespace SheeToList.Model
     }
         public int Quantity { get => quantity;  set  { quantity = value; OnPropertyChanged(); } }
 
-        public string Data { get => $"{Name} *{Quantity}"; }
+        public string Data { get => $"{Name}    {Quantity} {quantityUnit}"; }
 
         public bool IsChecked
     {
