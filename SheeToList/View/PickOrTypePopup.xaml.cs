@@ -25,7 +25,9 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
     public string TitleText => AppString.popup_type_title;
     public string TypePlaceholder => AppString.popup_addproduct_placeholder;
     public string typeLabel => AppString.popup_addproduct_title;
-    public string QuantityLabel = "quantity: ";
+    public string QuantityLabel => AppString.popup_quantity;
+
+
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
     public IReadOnlyList<SuggestionItem> CategoriesProducts { get; set; }
@@ -91,6 +93,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         PopulatePicker();
         PopulateCategoriesProducts();
         PopulateCategoryPicker();
+        PopulateUnitPicker();
         UpdateTabVisual();
     }
 
@@ -124,6 +127,18 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             }
         });
     }
+
+    private void PopulateUnitPicker()
+    {
+        var units = Enum.GetNames<QuantityUnit>()
+            .OrderBy(u => u)
+            .ToList();
+        foreach (var unit in units)
+        {
+            PickerUnit.Items.Add(unit);
+        }
+    }   
+
     private void PopulateCategoryPicker()
     {
         var categories = Enum.GetNames<Category>()
@@ -219,6 +234,19 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         else
         {
             PickerList.Title = AppString.popup_type_select_placeholder;
+        }
+    }
+
+    void PickerUnit_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (PickerUnit.SelectedIndex >= 0 && PickerUnit.SelectedIndex < PickerUnit.Items.Count)
+        {
+            var chosen = PickerUnit.Items[PickerUnit.SelectedIndex];
+            Unit = Enum.Parse<QuantityUnit>(chosen);
+        }
+        else
+        {
+            Unit = null;
         }
     }
 

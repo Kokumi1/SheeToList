@@ -358,6 +358,15 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Quantité: .
+        /// </summary>
+        internal static string popup_quantity {
+            get {
+                return ResourceManager.GetString("popup_quantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Entrer le nom de l&apos;objet à ajouté.
         /// </summary>
         internal static string Popup_Recipe_Add_Text {

@@ -264,4 +264,7 @@
   <data name="Popup_main_import" xml:space="preserve">
     <value>Cela supprimera toute la liste.</value>
   </data>
+  <data name="popup_quantity" xml:space="preserve">
+    <value>Quantité: </value>
+  </data>
 </root>

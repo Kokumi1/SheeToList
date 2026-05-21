@@ -37,13 +37,17 @@
             <Label Text="{Binding typeLabel}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
             <Entry x:Name="EntryName" Placeholder="{Binding TypePlaceholder}" TextColor="{StaticResource WhiteText}" 
                    BackgroundColor="{StaticResource BackgroundSecondary}" TextChanged="EntryName_TextChanged"/>
+
+            <!-- quantity -->
             <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                <Label Text="{Binding QuantityLabel}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
+                <Label Text="{Binding QuantityLabel}" FontAttributes="Bold" 
+                       VerticalTextAlignment="Center" TextColor="{StaticResource WhiteText}" Padding="10"/>
                 <Entry Text="{Binding Quantity}" TextColor="{StaticResource WhiteText}" />
-                <Entry Text="{Binding Unit}" TextColor="{StaticResource WhiteText}" />
+                <Picker x:Name="PickerUnit" Title="{Binding UnitPlaceholder}" SelectedIndexChanged="PickerUnit_SelectedIndexChanged" 
+                        BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
             </HorizontalStackLayout>
-            
-            
+
+            <!-- Suggestion-->
             <CollectionView
                 x:Name="SuggestionsList"
                 IsVisible="True"
@@ -67,6 +71,7 @@
             <Picker x:Name="PickerCategoryList" Title="Sélectionner..." SelectedIndexChanged="PickerCategoryList_SelectedIndexChanged" BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
         </StackLayout>
 
+        <!-- pick panel -->
         <StackLayout x:Name="PickPanel" IsVisible="False" Style="{StaticResource StackLayoutBackground}">
             <Label Text="Choisir dans la liste" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
             <Picker x:Name="PickerList" Title="{Binding PopupTitle}" SelectedIndexChanged="PickerList_SelectedIndexChanged" 
