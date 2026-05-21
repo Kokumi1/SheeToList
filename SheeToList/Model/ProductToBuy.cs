@@ -17,6 +17,7 @@ namespace SheeToList.Model
         set { name = value; OnPropertyChanged(); }
     }
         public int Quantity { get => quantity;  set  { quantity = value; OnPropertyChanged(); } }
+        public QuantityUnit QuantityUnit { get => quantityUnit; set { quantityUnit = value; OnPropertyChanged(); } }
 
         public string Data { get => $"{Name}    {Quantity} {quantityUnit}"; }
 

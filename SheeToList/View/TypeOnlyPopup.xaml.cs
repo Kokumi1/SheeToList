@@ -17,6 +17,7 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
 {
     public string EntryNamePlaceholder => AppString.popup_addproduct_placeholder;
     public string EntryNameTitle => AppString.popup_addproduct_title;
+    public string QuantityLabel = "quantity";
 
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
@@ -146,9 +147,9 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
             : null;
 
         if (!string.IsNullOrWhiteSpace(productName))
-            result = new ProductSelection(productName, category);
+            result = new ProductSelection(productName, category, 1, QuantityUnit.g);
 
-        Debug.WriteLine($"TypeOnlyPopup result: Name={result?.Name}, Category={result?.Category}");
+        Debug.WriteLine($"TypeOnlyPopup result: Name={result?.Name}, Category={result?.Category}, quantity={result?.Quantity}, unit={result?.Unit}");
 
         _tcs.TrySetResult(result);
         _ = CloseAsync();

@@ -16,7 +16,7 @@ namespace SheeToList.View;
 /// <summary>
 /// Représente un produit sélectionné avec son nom et sa catégorie
 /// </summary>
-public record ProductSelection(string Name, string? Category);
+public record ProductSelection(string Name, string? Category, int? Quantity, QuantityUnit? Unit);
 
 
 public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
@@ -25,6 +25,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
     public string TitleText => AppString.popup_type_title;
     public string TypePlaceholder => AppString.popup_addproduct_placeholder;
     public string typeLabel => AppString.popup_addproduct_title;
+    public string QuantityLabel = "quantity: ";
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
     public IReadOnlyList<SuggestionItem> CategoriesProducts { get; set; }
@@ -48,6 +49,30 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             _searchText = value;
             OnPropertyChanged();
             UpdateSuggestions(_searchText);
+        }
+    }
+
+    public int? _quantity;
+    public int? Quantity
+    {
+        get => _quantity;
+        set
+        {
+            if (_quantity == value) return;
+            _quantity = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public QuantityUnit? _unit;
+    public QuantityUnit? Unit
+    {
+        get => _unit;
+        set
+        {
+            if (_unit == value) return;
+            _unit = value;
+            OnPropertyChanged();
         }
     }
 
@@ -238,15 +263,15 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             category = PickerCategoryList.SelectedIndex >= 0 ? PickerCategoryList.Items[PickerCategoryList.SelectedIndex] : category?.Trim('[', ']');
 
             if (!string.IsNullOrWhiteSpace(productName))
-                result = new ProductSelection(productName, category);
+                result = new ProductSelection(productName, category, Quantity, Unit);
         }
         else if (PickPanel.IsVisible && PickerList.SelectedIndex >= 0)
         {
             var productName = PickerList.Items[PickerList.SelectedIndex];
-            result = new ProductSelection(productName, null); // Pas de catégorie pour les recettes
+            result = new ProductSelection(productName, null, Quantity, Unit); // Pas de catégorie pour les recettes
         }
         
-        Debug.WriteLine($"PickOrTypePopup result: Name={result?.Name}, Category={result?.Category}");
+        Debug.WriteLine($"PickOrTypePopup result: Name={result?.Name}, Category={result?.Category} , quantity={result?.Quantity}, unit={result?.Unit}");
 
         _tcs.TrySetResult(result);
         _ = CloseAsync();

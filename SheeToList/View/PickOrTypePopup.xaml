@@ -37,6 +37,13 @@
             <Label Text="{Binding typeLabel}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
             <Entry x:Name="EntryName" Placeholder="{Binding TypePlaceholder}" TextColor="{StaticResource WhiteText}" 
                    BackgroundColor="{StaticResource BackgroundSecondary}" TextChanged="EntryName_TextChanged"/>
+            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="{Binding QuantityLabel}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
+                <Entry Text="{Binding Quantity}" TextColor="{StaticResource WhiteText}" />
+                <Entry Text="{Binding Unit}" TextColor="{StaticResource WhiteText}" />
+            </HorizontalStackLayout>
+            
+            
             <CollectionView
                 x:Name="SuggestionsList"
                 IsVisible="True"

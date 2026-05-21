@@ -34,15 +34,15 @@ namespace SheeToList
             //return  await DisplayPromptAsync(title, message, accept: AppString.pick_popup_valid, cancel: AppString.popup_category_cancel, initialValue: initialValue);
         }
     
-        public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync()
+        public async Task<(string? name, string? category, int? quantity, QuantityUnit? unit)> ItemNameOrPickAskerAsync()
         {
             var popup = new PickOrTypePopup( );
             // Si vous voulez afficher un titre: vous pouvez envelopper popup avec un layout contenant un Label
             // Affiche le popup et attend le résultat
             this.ShowPopup(popup);
             var result = await popup.WaitForResultAsync();
-            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category );
-            return (result?.Name, result?.Category);
+            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category + ", quantity: " + result?.Quantity + ", unit: " + result?.Unit   );
+            return (result?.Name, result?.Category, result?.Quantity, result?.Unit);
         }
 
         private async void Recipe_Button_Clicked(object sender, EventArgs e)
@@ -227,8 +227,8 @@ namespace SheeToList
         #region Data Management
         public async void AddProduct()
         {
-            var (name, category) = await _page.ItemNameOrPickAskerAsync();
-            Debug.WriteLine($"AddProduct called with name: {name}, category: {category}");
+            var (name, category, quantity, unit) = await _page.ItemNameOrPickAskerAsync();
+            Debug.WriteLine($"AddProduct called with name: {name}, category: {category}, quantity: {quantity}, unit: {unit}");
 
             if (string.IsNullOrWhiteSpace(name)) return;
             if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
@@ -240,7 +240,7 @@ namespace SheeToList
             }
             else
             {
-                AddNewItem(name, category);
+                AddNewItem(name, category, quantity, unit);
             }
             _filteredProducts = null;
 
@@ -250,7 +250,7 @@ namespace SheeToList
             await SaveData();
         }
 
-        private void AddNewItem(string name, string? category)
+        private void AddNewItem(string name, string? category, int? quantity, QuantityUnit? unit)
         {
             ProductToBuy products = new() { Name = name, IsChecked = false };
             // Si une catégorie a été détectée via les suggestions, l'assigner directement
@@ -258,7 +258,9 @@ namespace SheeToList
                 Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
             {
                 products.Categorie = parsedCategory;
-            }
+            }   
+            if(quantity != null) products.Quantity = quantity.Value;
+            if(unit != null) products.QuantityUnit = unit.Value;
 
             var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
             Debug.WriteLine($"Recipe check found {recipeCheck.Count} related products");
