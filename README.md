@@ -29,4 +29,4 @@ Une fois en magasin, vous pouvez masquer les produits que vous avez achetés et 
 * Auto-assignation d'une catégorie si cela n'a pas été rempli.
 
 
-[screenshot1](Capture d'écran 2026-04-21 172136.png)
+[screenshot1](Screenshot1.png)     [screenshot2](Screenshot2.png)
