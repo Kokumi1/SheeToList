@@ -15,9 +15,11 @@ namespace SheeToList.View;
 
 public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
 {
+    #region UI Texts
     public string EntryNamePlaceholder => AppString.popup_addproduct_placeholder;
     public string EntryNameTitle => AppString.popup_addproduct_title;
-    public string QuantityLabel = "quantity";
+    public string QuantityLabel => AppString.popup_quantity;
+    #endregion
 
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
@@ -46,8 +48,32 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
         }
     }
 
+    public int? _quantity;
+    public int? Quantity
+    {
+        get => _quantity;
+        set
+        {
+            if (_quantity == value) return;
+            _quantity = value;
+            OnPropertyChanged();
+        }
+    }
 
-	public TypeOnlyPopup(string initialValue = "")
+    public QuantityUnit? _unit;
+    public QuantityUnit? Unit
+    {
+        get => _unit;
+        set
+        {
+            if (_unit == value) return;
+            _unit = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+    public TypeOnlyPopup(string initialValue = "")
 	{
 		InitializeComponent();
 		BindingContext = this;
@@ -59,27 +85,42 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
 
 		PopulateCategoriesProducts();
 		PopulateCategoryPicker();
-	}
+        PopulateUnitPicker();
+    }
 
-	private void PopulateCategoryPicker()
-	{
-		var categories = Enum.GetNames<Category>()
+    // Populate the CategoriesProducts list with all products
+    private async void PopulateCategoriesProducts()
+    {
+        var products = KeywordFlattener.KeywordFlattening();
+        CategoriesProducts = products
+            .Select(p => new SuggestionItem(p.keyNormalized, p.cat.ToString()))
+            .ToList();
+    }
+    
+    //Populate the unit picker with all QuantityUnit values
+    private void PopulateUnitPicker()
+    {
+        var units = Enum.GetNames<QuantityUnit>()
+            .OrderBy(u => u)
+            .ToList();
+        foreach (var unit in units)
+        {
+            PickerUnit.Items.Add(unit);
+        }
+    }
+    // Populate the category picker with all Category values
+    private void PopulateCategoryPicker()
+    {
+        var categories = Enum.GetNames<Category>()
             .OrderBy(c => c)
-			.ToList();
+            .ToList();
 
-		foreach (var category in categories)
-		{
-			PickerCategoryList.Items.Add(category);
-		}
-	}
+        foreach (var category in categories)
+        {
+            PickerCategoryList.Items.Add(category);
+        }
+    }
 
-	private async void PopulateCategoriesProducts()
-	{
-		var products = KeywordFlattener.KeywordFlattening();
-		CategoriesProducts = products
-			.Select(p => new SuggestionItem(p.keyNormalized, p.cat.ToString()))
-			.ToList();
-	}
 
     //----------------------------------
     #region Suggestions logic
@@ -147,7 +188,7 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
             : null;
 
         if (!string.IsNullOrWhiteSpace(productName))
-            result = new ProductSelection(productName, category, 1, QuantityUnit.g);
+            result = new ProductSelection(productName, category, Quantity, Unit);
 
         Debug.WriteLine($"TypeOnlyPopup result: Name={result?.Name}, Category={result?.Category}, quantity={result?.Quantity}, unit={result?.Unit}");
 
@@ -172,6 +213,19 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
         else
         {
             PickerCategoryList.Title = AppString.popup_type_select_placeholder;
+        }
+    }
+
+    void PickerUnit_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (PickerUnit.SelectedIndex >= 0 && PickerUnit.SelectedIndex < PickerUnit.Items.Count)
+        {
+            var chosen = PickerUnit.Items[PickerUnit.SelectedIndex];
+            Unit = Enum.Parse<QuantityUnit>(chosen);
+        }
+        else
+        {
+            Unit = null;
         }
     }
     #endregion

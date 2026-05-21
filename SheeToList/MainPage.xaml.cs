@@ -24,13 +24,13 @@ namespace SheeToList
 
         }
 
-        public async Task<(String? name, string? category)> ItemNameAskerAsync( string initialValue = "")
+        public async Task<(String? name, string? category, int? quantity, QuantityUnit? unit)> ItemNameAskerAsync( string initialValue = "")
         {
             var popup = new TypeOnlyPopup(initialValue);
             this.ShowPopup(popup);
             var result = await popup.WaitForResultAsync();
-            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category);
-            return (result?.Name, result?.Category);
+            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category + ", quantity: " + result?.Quantity + ", unit: " + result?.Unit);
+            return (result?.Name, result?.Category, result?.Quantity, result?.Unit);
             //return  await DisplayPromptAsync(title, message, accept: AppString.pick_popup_valid, cancel: AppString.popup_category_cancel, initialValue: initialValue);
         }
     
@@ -272,13 +272,15 @@ namespace SheeToList
 
         private async void EditProduct(ProductToBuy Product)
         {
-            var (name, category) = await _page.ItemNameAskerAsync(Product.Name);
+            var (name, category, quantity, unit) = await _page.ItemNameAskerAsync(Product.Name);
             if (string.IsNullOrWhiteSpace(name) || Product == null) return;
             Product.Name = name;
             if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
             {
                 Product.Categorie = parsedCategory;
             }
+            if (quantity != null) Product.Quantity = quantity.Value;
+            if (unit != null) Product.QuantityUnit = unit.Value;
             _filteredProducts = null;
 
             SortProducts();
