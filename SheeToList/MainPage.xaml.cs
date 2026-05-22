@@ -9,7 +9,6 @@ using SheeToList.Model;
 using SheeToList.Services;
 using SheeToList.View;
 using SheeToList.Utils;
-using System.Threading.Tasks;
 using SheeToList.Resources.String;
 
 namespace SheeToList
@@ -54,7 +53,6 @@ namespace SheeToList
             await Navigation.PushAsync(new CategoryListPage());
         }
         #endregion
-
 
     }
 
@@ -225,16 +223,18 @@ namespace SheeToList
         //----------------------
         //Data manament
         #region Data Management
+        // Ajoute un produit: affiche un popup pour entrer le nom du produit, puis l'ajoute à la liste ou incrémente la quantité si déjà présent
         public async void AddProduct()
         {
             var (name, category, quantity, unit) = await _page.ItemNameOrPickAskerAsync();
             Debug.WriteLine($"AddProduct called with name: {name}, category: {category}, quantity: {quantity}, unit: {unit}");
 
             if (string.IsNullOrWhiteSpace(name)) return;
-            if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
+            //Check for duplicates
+            if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) 
             {
                 var p = Products.First(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                p.Quantity++;
+                p.Quantity += quantity ?? 0;
 
                 await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Main_Warn, AppString.General_ok);
             }
@@ -269,7 +269,7 @@ namespace SheeToList
             Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));
         }
 
-
+        //Edite un produit: affiche un popup pré-rempli avec les infos du produit, et update le produit avec les nouvelles infos
         private async void EditProduct(ProductToBuy Product)
         {
             var (name, category, quantity, unit) = await _page.ItemNameAskerAsync(Product.Name);

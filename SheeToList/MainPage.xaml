@@ -20,6 +20,7 @@
 
     <Grid RowDefinitions="50,*,Auto,50" Padding="30,0">
 
+        <!-- Top bar -->
         <Grid  Grid.Row="0" ColumnDefinitions="*,Auto" Padding="0.10">
 
             <Button
@@ -45,7 +46,7 @@
                     VerticalOptions="Center" />
         </Grid>
 
-        
+        <!-- List content -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout
                 Spacing="25">
@@ -100,7 +101,7 @@
         </ScrollView>
 
 
-
+        <!-- Bottom bar -->
         <Grid Grid.Row="2" Padding="0.10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

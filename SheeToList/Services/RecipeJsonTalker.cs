@@ -55,6 +55,7 @@ namespace SheeToList.Services
         {
             Debug.WriteLine("Loading recipes from JSON.");
             var filePath = GetFilePath("saveRecipes.json");
+            Debug.WriteLine($"Looking for file at: {filePath}");
             var recipes = new ObservableCollection<Recipe>();
 
             if (File.Exists(filePath))
@@ -72,9 +73,9 @@ namespace SheeToList.Services
                     Name = "Hamburger",
                     Ingredients =
                     [
-                        new() { Name = "Steak haché", IsChecked = false },
-                        new () { Name = "Pain hamburger", IsChecked = false },
-                        new () { Name = "fromage", IsChecked = false }
+                        new() { Name = "Steak haché", IsChecked = false, Quantity = 100, QuantityUnit = QuantityUnit.g },
+                        new () { Name = "Pain hamburger", IsChecked = false, Quantity = 1, QuantityUnit = QuantityUnit.unit },
+                        new () { Name = "fromage", IsChecked = false, Quantity = 1, QuantityUnit = QuantityUnit.unit }
                     ]
                 });
                 SaveAsync(recipes.ToList()).Wait();
