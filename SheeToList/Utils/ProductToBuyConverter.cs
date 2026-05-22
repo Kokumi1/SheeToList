@@ -24,7 +24,10 @@ namespace SheeToList.Utils
                 {
                     Name = element.GetProperty("Name").GetString() ?? "",
                     IsChecked = element.TryGetProperty("IsChecked", out var checkedProp) ? checkedProp.GetBoolean() : false,
+                    Quantity = element.TryGetProperty("Quantity", out var quantityProp) ? quantityProp.GetInt32() : 1,
+                    QuantityUnit = element.TryGetProperty("QuantityUnit", out var unitProp) ? (QuantityUnit)unitProp.GetInt32() : QuantityUnit.unit,
                     Categorie = element.TryGetProperty("Categorie", out var catProp) ? (Category)catProp.GetInt32() : Category.Autre
+                   
                 };
             }
 
@@ -36,6 +39,8 @@ namespace SheeToList.Utils
             writer.WriteStartObject();
             writer.WriteString("Name", value.Name);
             writer.WriteBoolean("IsChecked", value.IsChecked);
+            writer.WriteNumber("Quantity", value.Quantity);
+            writer.WriteNumber("QuantityUnit", (int)value.QuantityUnit);
             writer.WriteNumber("Categorie", (int)value.Categorie);
             writer.WriteEndObject();
         }

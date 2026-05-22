@@ -23,11 +23,20 @@
     <VerticalStackLayout WidthRequest="320" Style="{StaticResource VerticalLayoutBackground}">
         <Label x:Name="MessageText" VerticalOptions="Center" TextColor="{StaticResource WhiteText}"/>
 
-
-        <!-- Panels -->
+        
         <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}" HeightRequest="500">
             <Label Text="{Binding EntryNameTitle}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
             <Entry x:Name="EntryName" Placeholder="{Binding EntryNamePlaceholder}" TextColor="{StaticResource WhiteText}" BackgroundColor="{StaticResource BackgroundPrimary}" TextChanged="EntryName_TextChanged"/>
+            <!-- quantity -->
+            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="{Binding QuantityLabel}" FontAttributes="Bold" 
+           VerticalTextAlignment="Center" TextColor="{StaticResource WhiteText}" Padding="10"/>
+                <Entry Text="{Binding Quantity}" TextColor="{StaticResource WhiteText}" />
+                <Picker x:Name="PickerUnit" SelectedIndexChanged="PickerUnit_SelectedIndexChanged" 
+            BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
+            </HorizontalStackLayout>
+
+            <!-- Suggestion-->
             <CollectionView
                 x:Name="SuggestionsList"
                 IsVisible="false"
@@ -45,6 +54,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
+            <!-- Category -->
             <Label Text="Catégories" FontAttributes="Bold" TextColor="{StaticResource WhiteText}" Margin="0,10,0,0"/>
             <Picker x:Name="PickerCategoryList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
         </StackLayout>

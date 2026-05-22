@@ -20,6 +20,7 @@
 
     <Grid RowDefinitions="50,*,Auto,50" Padding="30,0">
 
+        <!-- Top bar -->
         <Grid  Grid.Row="0" ColumnDefinitions="*,Auto" Padding="0.10">
 
             <Button
@@ -38,7 +39,7 @@
                     Margin="100,0,0,0"/>
         </Grid>
 
-        
+        <!-- List content -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout
                 Spacing="25">
@@ -64,7 +65,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Padding="10" ColumnDefinitions="70*,20*,2*,10*" MaximumHeightRequest="70">
-                                <Label Text="{Binding Name}" VerticalOptions="Center">
+                                <Label Text="{Binding Data}" VerticalOptions="Center">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer 
                                             Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
@@ -93,7 +94,7 @@
         </ScrollView>
 
 
-
+        <!-- Bottom bar -->
         <Grid Grid.Row="2" Padding="0.10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
