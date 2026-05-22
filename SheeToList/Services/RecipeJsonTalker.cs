@@ -100,7 +100,9 @@ namespace SheeToList.Services
                         { 
                             Name = $"{ingredient.Name} ({productToBuy.Name})", 
                             IsChecked = false,
-                            Categorie = ingredient.Categorie
+                            Categorie = ingredient.Categorie,
+                            Quantity = ingredient.Quantity,
+                            QuantityUnit = ingredient.QuantityUnit
                         })
                 );
             }
@@ -132,7 +134,9 @@ namespace SheeToList.Services
                             { 
                                 Name = $"{ingredient.Name} ({product.Name})", 
                                 IsChecked = false,
-                                Categorie = ingredient.Categorie
+                                Categorie = ingredient.Categorie,
+                                Quantity = ingredient.Quantity * product.Quantity,
+                                QuantityUnit = ingredient.QuantityUnit
                             });
                         }
                         importedList.Remove(product);
