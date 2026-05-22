@@ -93,6 +93,7 @@ namespace SheeToList.Services
         //Tune data to split items separated by commas and remove empty entries
         private static ObservableCollection<ProductToBuy> TuneData(IList<IList<Object>> importedData)
         {
+            
             ObservableCollection<ProductToBuy> listProducts = [.. importedData
                  .SelectMany(row => row
                  .OfType<string>()
@@ -105,12 +106,30 @@ namespace SheeToList.Services
                         : [itemName]
                 )
             )
-            .Select(name => new ProductToBuy { Name = name, IsChecked = false })];
+            .Select(name => CreateProductFromData(name))];
 
              var  listProductsSorted =RecipeJsonTalker.RecipeCheckInList(listProducts).OrderBy(item => item.Name).ToList();
               listProducts = new ObservableCollection<ProductToBuy>(listProductsSorted);
 
             return listProducts;
+        }
+
+        public static ProductToBuy CreateProductFromData(string data)
+        {
+            // pomme -1-unit
+            string?[] subData = new string[3];
+            var splitData = data.Split('-');
+            for (int i = 0; i < Math.Min(splitData.Length, 3); i++)
+            {
+                subData[i] = splitData[i];
+            }
+
+            int quantity = int.TryParse(subData[1] ?? string.Empty, out int  quantityValue) ? quantityValue : 1;
+            QuantityUnit unit = Enum.TryParse(subData[2] ?? string.Empty, out QuantityUnit dataUnit) ? dataUnit : QuantityUnit.unit;
+            ProductToBuy product = new() { Name = subData[0] ?? string.Empty, IsChecked = false, Quantity = quantity, QuantityUnit = unit};
+
+            Debug.WriteLine($"product parsed: {product.Name} {product.Data}");
+            return product;
         }
     }
 }
