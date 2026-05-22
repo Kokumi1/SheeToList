@@ -9,7 +9,6 @@ using SheeToList.Model;
 using SheeToList.Services;
 using SheeToList.View;
 using SheeToList.Utils;
-using System.Threading.Tasks;
 using SheeToList.Resources.String;
 
 namespace SheeToList
@@ -24,25 +23,25 @@ namespace SheeToList
 
         }
 
-        public async Task<(String? name, string? category)> ItemNameAskerAsync( string initialValue = "")
+        public async Task<(String? name, string? category, int? quantity, QuantityUnit? unit)> ItemNameAskerAsync( string initialValue = "")
         {
             var popup = new TypeOnlyPopup(initialValue);
             this.ShowPopup(popup);
             var result = await popup.WaitForResultAsync();
-            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category);
-            return (result?.Name, result?.Category);
+            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category + ", quantity: " + result?.Quantity + ", unit: " + result?.Unit);
+            return (result?.Name, result?.Category, result?.Quantity, result?.Unit);
             //return  await DisplayPromptAsync(title, message, accept: AppString.pick_popup_valid, cancel: AppString.popup_category_cancel, initialValue: initialValue);
         }
     
-        public async Task<(string? name, string? category)> ItemNameOrPickAskerAsync()
+        public async Task<(string? name, string? category, int? quantity, QuantityUnit? unit)> ItemNameOrPickAskerAsync()
         {
             var popup = new PickOrTypePopup( );
             // Si vous voulez afficher un titre: vous pouvez envelopper popup avec un layout contenant un Label
             // Affiche le popup et attend le résultat
             this.ShowPopup(popup);
             var result = await popup.WaitForResultAsync();
-            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category );
-            return (result?.Name, result?.Category);
+            Debug.WriteLine("result: " + result?.Name + ", category: " + result?.Category + ", quantity: " + result?.Quantity + ", unit: " + result?.Unit   );
+            return (result?.Name, result?.Category, result?.Quantity, result?.Unit);
         }
 
         private async void Recipe_Button_Clicked(object sender, EventArgs e)
@@ -54,7 +53,6 @@ namespace SheeToList
             await Navigation.PushAsync(new CategoryListPage());
         }
         #endregion
-
 
     }
 
@@ -225,30 +223,25 @@ namespace SheeToList
         //----------------------
         //Data manament
         #region Data Management
+        // Ajoute un produit: affiche un popup pour entrer le nom du produit, puis l'ajoute à la liste ou incrémente la quantité si déjà présent
         public async void AddProduct()
         {
-            var (name, category) = await _page.ItemNameOrPickAskerAsync();
-            Debug.WriteLine($"AddProduct called with name: {name}, category: {category}");
+            var (name, category, quantity, unit) = await _page.ItemNameOrPickAskerAsync();
+            Debug.WriteLine($"AddProduct called with name: {name}, category: {category}, quantity: {quantity}, unit: {unit}");
 
             if (string.IsNullOrWhiteSpace(name)) return;
-            if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) //Check for duplicates
+            //Check for duplicates
+            if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) 
             {
+                var p = Products.First(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                p.Quantity += quantity ?? 0;
+
                 await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Main_Warn, AppString.General_ok);
-                return;
             }
-            ProductToBuy products = new() { Name = name, IsChecked = false };
-            // Si une catégorie a été détectée via les suggestions, l'assigner directement
-            if (!string.IsNullOrWhiteSpace(category) && 
-                Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
+            else
             {
-                    products.Categorie = parsedCategory;
+                AddNewItem(name, category, quantity, unit);
             }
-
-            var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
-            Debug.WriteLine($"Recipe check found {recipeCheck.Count} related products");
-            Debug.WriteLine("Related products: " + string.Join(", ", recipeCheck.Select(p => p.Name+ " categorie "+ p.Categorie)));
-
-            Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));
             _filteredProducts = null;
 
             CategoryDefiner.AssignCategories(Products, overwriteExisting: false);
@@ -257,15 +250,37 @@ namespace SheeToList
             await SaveData();
         }
 
+        private void AddNewItem(string name, string? category, int? quantity, QuantityUnit? unit)
+        {
+            ProductToBuy products = new() { Name = name, IsChecked = false };
+            // Si une catégorie a été détectée via les suggestions, l'assigner directement
+            if (!string.IsNullOrWhiteSpace(category) &&
+                Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
+            {
+                products.Categorie = parsedCategory;
+            }   
+            if(quantity != null) products.Quantity = quantity.Value;
+            if(unit != null) products.QuantityUnit = unit.Value;
+
+            var recipeCheck = RecipeJsonTalker.RecipeCheckSingle(products);
+            Debug.WriteLine($"Recipe check found {recipeCheck.Count} related products");
+            Debug.WriteLine("Related products: " + string.Join(", ", recipeCheck.Select(p => p.Name + " categorie " + p.Categorie)));
+
+            Products = new ObservableCollection<ProductToBuy>(Products.Concat(recipeCheck));
+        }
+
+        //Edite un produit: affiche un popup pré-rempli avec les infos du produit, et update le produit avec les nouvelles infos
         private async void EditProduct(ProductToBuy Product)
         {
-            var (name, category) = await _page.ItemNameAskerAsync(Product.Name);
+            var (name, category, quantity, unit) = await _page.ItemNameAskerAsync(Product.Name);
             if (string.IsNullOrWhiteSpace(name) || Product == null) return;
             Product.Name = name;
             if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
             {
                 Product.Categorie = parsedCategory;
             }
+            if (quantity != null) Product.Quantity = quantity.Value;
+            if (unit != null) Product.QuantityUnit = unit.Value;
             _filteredProducts = null;
 
             SortProducts();

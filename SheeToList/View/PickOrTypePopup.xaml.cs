@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using CommunityToolkit.Maui.Views;
 using SheeToList.Model;
 using SheeToList.Resources.String;
@@ -14,17 +12,22 @@ using SheeToList.Utils;
 namespace SheeToList.View;
 
 /// <summary>
-/// Représente un produit sélectionné avec son nom et sa catégorie
+/// Représente un produit sélectionné avec son nom, sa catégorie, sa quantité et l'unité de mesure
 /// </summary>
-public record ProductSelection(string Name, string? Category);
+public record ProductSelection(string Name, string? Category, int? Quantity, QuantityUnit? Unit);
 
 
 public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
 {
+    #region UI Texts
     public string PopupTitle => AppString.popup_type_select_placeholder;
     public string TitleText => AppString.popup_type_title;
     public string TypePlaceholder => AppString.popup_addproduct_placeholder;
     public string typeLabel => AppString.popup_addproduct_title;
+    public string QuantityLabel => AppString.popup_quantity;
+    #endregion
+
+
     readonly TaskCompletionSource<ProductSelection?> _tcs = new();
     public IReadOnlyList<string> Items { get; set; }
     public IReadOnlyList<SuggestionItem> CategoriesProducts { get; set; }
@@ -51,6 +54,30 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         }
     }
 
+    public int? _quantity;
+    public int? Quantity
+    {
+        get => _quantity;
+        set
+        {
+            if (_quantity == value) return;
+            _quantity = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public QuantityUnit? _unit;
+    public QuantityUnit? Unit
+    {
+        get => _unit;
+        set
+        {
+            if (_unit == value) return;
+            _unit = value;
+            OnPropertyChanged();
+        }
+    }
+
     //----------------------------------
     #region Setup
     public PickOrTypePopup(string initialValue="")
@@ -66,9 +93,12 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         PopulatePicker();
         PopulateCategoriesProducts();
         PopulateCategoryPicker();
+        PopulateUnitPicker();
+
         UpdateTabVisual();
     }
 
+    // Populate the CategoriesProducts list with all products
     private async void PopulateCategoriesProducts()
     {
         var products = KeywordFlattener.KeywordFlattening();
@@ -77,6 +107,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             .ToList();
     }
 
+    // Populate the recipe picker with all recipe names from RecipeJsonTalker
     private async void PopulatePicker()
     {
         if(RecipeJsonTalker.LoadAsync() != null)
@@ -99,6 +130,20 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             }
         });
     }
+
+    //Populate the unit picker with all QuantityUnit values
+    private void PopulateUnitPicker()
+    {
+        var units = Enum.GetNames<QuantityUnit>()
+            .OrderBy(u => u)
+            .ToList();
+        foreach (var unit in units)
+        {
+            PickerUnit.Items.Add(unit);
+        }
+    }
+
+    // Populate the category picker with all Category values
     private void PopulateCategoryPicker()
     {
         var categories = Enum.GetNames<Category>()
@@ -196,6 +241,19 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             PickerList.Title = AppString.popup_type_select_placeholder;
         }
     }
+    #endregion
+
+
+    //-------------------------------
+    #region UI
+    void UpdateTabVisual()
+    {
+        var selectedColor = Colors.BlueViolet; // couleur onglet actif
+        var normalColor = Color.FromArgb("#202020"); // couleur onglet inactif
+
+        BtnType.BackgroundColor = TypePanel.IsVisible ? selectedColor : normalColor;
+        BtnPick.BackgroundColor = PickPanel.IsVisible ? selectedColor : normalColor;
+    }
 
     void OnTabClicked(object? sender, EventArgs e)
     {
@@ -211,19 +269,6 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         }
         UpdateTabVisual();
     }
-    #endregion
-
-
-    //-------------------------------
-    #region UI
-    void UpdateTabVisual()
-    {
-        var selectedColor = Colors.BlueViolet; // couleur onglet actif
-        var normalColor = Color.FromArgb("#202020"); // couleur onglet inactif
-
-        BtnType.BackgroundColor = TypePanel.IsVisible ? selectedColor : normalColor;
-        BtnPick.BackgroundColor = PickPanel.IsVisible ? selectedColor : normalColor;
-    }
 
     async void OnAcceptClicked(object? sender, EventArgs e)
     {
@@ -238,15 +283,15 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             category = PickerCategoryList.SelectedIndex >= 0 ? PickerCategoryList.Items[PickerCategoryList.SelectedIndex] : category?.Trim('[', ']');
 
             if (!string.IsNullOrWhiteSpace(productName))
-                result = new ProductSelection(productName, category);
+                result = new ProductSelection(productName, category, Quantity, Unit);
         }
         else if (PickPanel.IsVisible && PickerList.SelectedIndex >= 0)
         {
             var productName = PickerList.Items[PickerList.SelectedIndex];
-            result = new ProductSelection(productName, null); // Pas de catégorie pour les recettes
+            result = new ProductSelection(productName, null, Quantity, Unit); // Pas de catégorie pour les recettes
         }
         
-        Debug.WriteLine($"PickOrTypePopup result: Name={result?.Name}, Category={result?.Category}");
+        Debug.WriteLine($"PickOrTypePopup result: Name={result?.Name}, Category={result?.Category} , quantity={result?.Quantity}, unit={result?.Unit}");
 
         _tcs.TrySetResult(result);
         _ = CloseAsync();
@@ -258,6 +303,7 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         CloseAsync();
     }
 
+    //--------------------------------
     void PickerCategoryList_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (PickerCategoryList.SelectedIndex >= 0 && PickerCategoryList.SelectedIndex < PickerCategoryList.Items.Count)
@@ -269,6 +315,19 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         else
         {
             PickerCategoryList.Title = AppString.popup_type_select_placeholder;
+        }
+    }
+
+    void PickerUnit_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (PickerUnit.SelectedIndex >= 0 && PickerUnit.SelectedIndex < PickerUnit.Items.Count)
+        {
+            var chosen = PickerUnit.Items[PickerUnit.SelectedIndex];
+            Unit = Enum.Parse<QuantityUnit>(chosen);
+        }
+        else
+        {
+            Unit = null;
         }
     }
     #endregion

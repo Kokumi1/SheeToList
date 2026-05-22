@@ -22,12 +22,12 @@ public partial class RecipePage : ContentPage
 		return await DisplayPromptAsync(title, message, accept: AppString.pick_popup_valid, cancel: AppString.popup_category_cancel, initialValue: initialValue);
 	}
 
-	public async Task<(string? name, string? category)> ItemNameOnlyPopupAskerAsync(string title, string initialValue = "")
+	public async Task<(string? name, string? category, int? quantity, QuantityUnit? unit)> ItemNameOnlyPopupAskerAsync(string title, string initialValue = "")
 	{
 		var popup = new TypeOnlyPopup(initialValue);
 		this.ShowPopup(popup);
 		var result = await popup.WaitForResultAsync();
-		return (result?.Name, result?.Category);
+		return (result?.Name, result?.Category, result?.Quantity, result?.Unit);
 	}
 }
 
@@ -66,7 +66,7 @@ public class RecipeViewModel : INotifyPropertyChanged
 
 	private async void AddIngredient()
 	{
-		var (name, category) = await _page.ItemNameOnlyPopupAskerAsync(AppString.popup_add);
+		var (name, category, quantity, unit) = await _page.ItemNameOnlyPopupAskerAsync(AppString.popup_add);
 		if (string.IsNullOrWhiteSpace(name)) return;
 		if (RecipeIngredientList.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))      //Check for duplicates
 		{
@@ -74,7 +74,7 @@ public class RecipeViewModel : INotifyPropertyChanged
 			return;
 		}
 
-		ProductToBuy  ingredient = new() { Name = name.Trim(), IsChecked = false};
+		ProductToBuy  ingredient = new() { Name = name.Trim(), Quantity = quantity ?? 1, QuantityUnit = unit ?? QuantityUnit.unit, IsChecked = false};
         // Assigner la catégorie si elle a été détectée
         if (!string.IsNullOrWhiteSpace(category) &&
                 Enum.TryParse<Category>(category, ignoreCase: true, out var parsedCategory))
@@ -89,7 +89,7 @@ public class RecipeViewModel : INotifyPropertyChanged
 
 	private async void EditIngredient(ProductToBuy ingredient)
 	{
-		var (newName, newCategory) = await _page.ItemNameOnlyPopupAskerAsync(AppString.popup_rename, ingredient.Name);
+		var (newName, newCategory, newQuantity, newUnit) = await _page.ItemNameOnlyPopupAskerAsync(AppString.popup_rename, ingredient.Name);
 		if (string.IsNullOrWhiteSpace(newName)) return;
 		if (RecipeIngredientList.Any(p => p.Name.Equals(newName, StringComparison.OrdinalIgnoreCase) && p != ingredient))      //Check for duplicates
 		{
@@ -102,9 +102,13 @@ public class RecipeViewModel : INotifyPropertyChanged
 		{
 			ingredient.Categorie = parsedCategory;
 		}
+        if (newQuantity.HasValue)
+            ingredient.Quantity = newQuantity.Value;
+		if(newUnit.HasValue)
+            ingredient.QuantityUnit = newUnit.Value;
 
-		SaveRecipeChanges();
-		OnPropertyChanged(nameof(RecipeIngredientList));
+        SaveRecipeChanges();
+        OnPropertyChanged(nameof(RecipeIngredientList));
 	}
 
 	private async void DeleteIngredient(ProductToBuy ingredient)

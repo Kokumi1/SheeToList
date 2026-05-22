@@ -55,6 +55,7 @@ namespace SheeToList.Services
         {
             Debug.WriteLine("Loading recipes from JSON.");
             var filePath = GetFilePath("saveRecipes.json");
+            Debug.WriteLine($"Looking for file at: {filePath}");
             var recipes = new ObservableCollection<Recipe>();
 
             if (File.Exists(filePath))
@@ -72,9 +73,9 @@ namespace SheeToList.Services
                     Name = "Hamburger",
                     Ingredients =
                     [
-                        new() { Name = "Steak haché", IsChecked = false },
-                        new () { Name = "Pain hamburger", IsChecked = false },
-                        new () { Name = "fromage", IsChecked = false }
+                        new() { Name = "Steak haché", IsChecked = false, Quantity = 100, QuantityUnit = QuantityUnit.g },
+                        new () { Name = "Pain hamburger", IsChecked = false, Quantity = 1, QuantityUnit = QuantityUnit.unit },
+                        new () { Name = "fromage", IsChecked = false, Quantity = 1, QuantityUnit = QuantityUnit.unit }
                     ]
                 });
                 SaveAsync(recipes.ToList()).Wait();
@@ -99,7 +100,9 @@ namespace SheeToList.Services
                         { 
                             Name = $"{ingredient.Name} ({productToBuy.Name})", 
                             IsChecked = false,
-                            Categorie = ingredient.Categorie
+                            Categorie = ingredient.Categorie,
+                            Quantity = ingredient.Quantity,
+                            QuantityUnit = ingredient.QuantityUnit
                         })
                 );
             }
@@ -131,7 +134,9 @@ namespace SheeToList.Services
                             { 
                                 Name = $"{ingredient.Name} ({product.Name})", 
                                 IsChecked = false,
-                                Categorie = ingredient.Categorie
+                                Categorie = ingredient.Categorie,
+                                Quantity = ingredient.Quantity * product.Quantity,
+                                QuantityUnit = ingredient.QuantityUnit
                             });
                         }
                         importedList.Remove(product);
