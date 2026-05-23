@@ -130,14 +130,21 @@ namespace SheeToList.Services
                     else { 
                         foreach (var ingredient in recipeDictionary[productNameLower])
                         {
-                            importedList.Add(new ProductToBuy 
-                            { 
-                                Name = $"{ingredient.Name} ({product.Name})", 
-                                IsChecked = false,
-                                Categorie = ingredient.Categorie,
-                                Quantity = ingredient.Quantity * product.Quantity,
-                                QuantityUnit = ingredient.QuantityUnit
-                            });
+                            //if the ingredient already exists in the list, add the quantity, otherwise add it to the list
+                            if (importedList.Any(p => p.Name.Equals($"{ingredient.Name} ({product.Name})", StringComparison.OrdinalIgnoreCase)))
+                            {
+                                var existingProduct = importedList.First(p => p.Name.Equals($"{ingredient.Name} ({product.Name})", StringComparison.OrdinalIgnoreCase));
+                                existingProduct.Quantity += ingredient.Quantity * product.Quantity;
+                            }
+                            else
+                                importedList.Add(new ProductToBuy
+                                {
+                                    Name = $"{ingredient.Name} ({product.Name})",
+                                    IsChecked = false,
+                                    Categorie = ingredient.Categorie,
+                                    Quantity = ingredient.Quantity * product.Quantity,
+                                    QuantityUnit = ingredient.QuantityUnit
+                                });
                         }
                         importedList.Remove(product);
                     }
