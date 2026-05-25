@@ -116,9 +116,9 @@ namespace SheeToList.Services
 
         public static ProductToBuy CreateProductFromData(string data)
         {
-            // pomme -1-unit
+            // pomme :1:unit
             string?[] subData = new string[3];
-            var splitData = data.Split('-');
+            var splitData = data.Split(':');
             for (int i = 0; i < Math.Min(splitData.Length, 3); i++)
             {
                 subData[i] = splitData[i];
