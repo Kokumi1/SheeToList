@@ -72,6 +72,8 @@
 		<PackageReference Include="Google.Apis.Sheets.v4" Version="1.73.0.4061" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.41" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.3" />
+		<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.8.0" />
+		<PackageReference Include="Azure.Identity" Version="1.14.0" />
 	</ItemGroup>
 
 	<ItemGroup>

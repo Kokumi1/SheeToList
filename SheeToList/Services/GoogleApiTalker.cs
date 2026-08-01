@@ -1,10 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using SheeToList.Model;
 using SheeToList.Resources.String;
+using Azure.Security.KeyVault.Secrets;
+using Azure.Identity;
 
 namespace SheeToList.Services
 {
@@ -12,56 +15,28 @@ namespace SheeToList.Services
     {
         private static GoogleCredential credential;
 
-
-        private static string GetCredentialPath()
+        // Retrieve the Google service account JSON from Azure Key Vault.
+        // The Key Vault URI must be provided via environment variable "KEY_VAULT_URI" and the secret
+        // name is expected to be "GoogleServiceAccount".
+        private static string GetCredentialJsonFromKeyVault()
         {
-            var filename = "ncredential.json";
-
-#if ANDROID
-            var filepath = Path.Combine(FileSystem.AppDataDirectory, filename);
-            
-            if (!File.Exists(filepath))
+            var kvUri = Environment.GetEnvironmentVariable("KEY_VAULT_URI");
+            if (string.IsNullOrEmpty(kvUri))
             {
-                using var stream = FileSystem.OpenAppPackageFileAsync(filename);
-                using var fileStream = File.Create(filepath);
-                Task.Run(async () => await (await stream).CopyToAsync(fileStream)).Wait();
-            }
-            
-
-            //var credentialTask = Task.Run(async () => await GetCredentialPathAsync(filename));
-            //filepath = credentialTask.Result;
-            var file = File.ReadAllText(filepath);
-            return filepath;
-#else
-            return Path.Combine(AppContext.BaseDirectory, filename);
-#endif
-        }
-
-        private async static Task<string> GetCredentialPathAsync(string filename)
-        {
-            
-            var filepath = Path.Combine(FileSystem.AppDataDirectory, filename);
-            var storedCredential = await SecureStorage.GetAsync("credential_path");
-            if (string.IsNullOrEmpty(storedCredential))
-            {
-                // Copier depuis les ressources et stocker de manière sécurisée
-                using var stream = await FileSystem.OpenAppPackageFileAsync(filename);
-                using var reader = new StreamReader(stream);
-                var credentialContent = await reader.ReadToEndAsync();
-
-                // Stocker dans le secure storage (chiffré par le système)
-                await SecureStorage.SetAsync("google_credential", credentialContent);
+                throw new InvalidOperationException("Environment variable KEY_VAULT_URI is not set.");
             }
 
-            return filepath;
+            var client = new SecretClient(new Uri(kvUri), new DefaultAzureCredential());
+            var secret = client.GetSecret("GoogleServiceAccount");
+            return secret.Value.Value;
         }
 
         private static SheetsService Service
         {
             get
             {
-                credential = CredentialFactory.FromFile<ServiceAccountCredential>(GetCredentialPath()).ToGoogleCredential()
-                .CreateScoped(SheetsService.Scope.Spreadsheets);
+                var credentialJson = GetCredentialJsonFromKeyVault();
+                credential = GoogleCredential.FromJson(credentialJson).CreateScoped(SheetsService.Scope.Spreadsheets);
                 return new SheetsService(new BaseClientService.Initializer()
                 {
                     HttpClientInitializer = credential,
