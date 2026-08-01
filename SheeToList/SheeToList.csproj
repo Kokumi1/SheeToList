@@ -49,6 +49,14 @@
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
+		<AndroidKeyStore>true</AndroidKeyStore>
+		<AndroidSigningKeyStore>sheetolist.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias>sheetolist</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass>Koku114</AndroidSigningKeyPass>
+		<AndroidSigningStorePass>Koku114</AndroidSigningStorePass>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
