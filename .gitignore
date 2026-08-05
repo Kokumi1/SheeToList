@@ -369,3 +369,6 @@ FodyWeavers.xsd
 /SheeToList/Resources/Raw/ncredential.json
 /SheeToList/Resources/String/Redacted.resx
 /SheeToList/Resources/String/Redacted.Designer.cs
+/.appmod/.migration/migration.diff
+/.appmod/.migration/plan.md
+/.appmod/.migration/progress.md
