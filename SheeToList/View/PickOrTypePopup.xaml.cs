@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Maui.Views;
 using SheeToList.Model;
@@ -61,8 +62,8 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         set
         {
             if (_quantity == value) return;
-            _quantity = value;
-            OnPropertyChanged();
+                _quantity = value;
+                OnPropertyChanged();
         }
     }
     
@@ -186,6 +187,15 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
         Debug.WriteLine("Entry text changed: " + e.NewTextValue);
         // keep SearchText in sync with Entry text
         SearchText = e.NewTextValue ?? string.Empty;
+    }
+
+    private void QuantityEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var entry = (Entry)sender;
+        var filtre = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+
+        if (filtre != e.NewTextValue)
+            entry.Text = filtre;
     }
 
     void SuggestionsList_SelectionChanged(object? sender, Microsoft.Maui.Controls.SelectionChangedEventArgs e)

@@ -201,6 +201,14 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
         _tcs.TrySetResult(null);
         CloseAsync();
     }
+    private void QuantityEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var entry = (Entry)sender;
+        var filtre = new string(e.NewTextValue.Where(char.IsDigit).ToArray());
+
+        if (filtre != e.NewTextValue)
+            entry.Text = filtre;
+    }
 
     void PickerList_SelectedIndexChanged(object? sender, EventArgs e)
     {

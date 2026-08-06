@@ -60,7 +60,8 @@
                 <CollectionView x:Name="ItemsList"
                  ItemsSource="{Binding ToBuyProductsGrouped}"
                                 IsGrouped="True"
-                                SelectionMode="None">
+                                SelectionMode="None"
+                                >
                     <CollectionView.GroupHeaderTemplate>
                         <DataTemplate>
                             <Grid BackgroundColor="{StaticResource PrimaryDark}" Padding="10">
@@ -71,14 +72,16 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Padding="10" ColumnDefinitions="70*,20*,2*,10*" MaximumHeightRequest="70">
-                                <Label Text="{Binding Data}" VerticalOptions="Center">
-                                    <Label.GestureRecognizers>
+                            <Grid Padding="10" ColumnDefinitions="70*,20*,2*,10*" MaximumHeightRequest="90">
+                                <Grid RowDefinitions="40,20">
+                                    <Label Text="{Binding Name}" VerticalOptions="Center" Grid.Row="0"/>
+                                    <Label Text="{Binding QuantityAndUnitForDisplay}" VerticalOptions="Center" Grid.Row="1"/>
+                                    <Grid.GestureRecognizers>
                                         <TapGestureRecognizer 
-                                            Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
-                                            CommandParameter="{Binding .}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
+                                                Command="{Binding BindingContext.EditItemCommand, Source={x:Reference ItemsList}}"
+                                                CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
                                 <ImageButton 
                                     Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ItemsList}}"
                                     CommandParameter="{Binding .}"

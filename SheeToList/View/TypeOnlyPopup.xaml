@@ -31,7 +31,7 @@
             <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
                 <Label Text="{Binding QuantityLabel}" FontAttributes="Bold" 
            VerticalTextAlignment="Center" TextColor="{StaticResource WhiteText}" Padding="10"/>
-                <Entry Text="{Binding Quantity}" TextColor="{StaticResource WhiteText}" />
+                <Entry Text="{Binding Quantity}" Keyboard="Numeric" TextColor="{StaticResource WhiteText}" TextChanged="QuantityEntry_TextChanged" />
                 <Picker x:Name="PickerUnit" SelectedIndexChanged="PickerUnit_SelectedIndexChanged" 
             BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
             </HorizontalStackLayout>
