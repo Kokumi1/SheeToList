@@ -3,37 +3,47 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="SheeToList.View.TypeOnlyPopup"
-               BackgroundColor="{StaticResource BackgroundSecondary}">
+         BackgroundColor="{StaticResource BackgroundSecondary}"> 
 
     <toolkit:Popup.Resources>
         <Style x:Key="ButtonColor" TargetType="Button">
-            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundPrimary}"/>
-            <Setter Property="TextColor" Value="{StaticResource WhiteText}"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundPrimary}"/> 
+           <Setter Property="TextColor" Value="{StaticResource WhiteText}"/>
         </Style>
         <Style x:Key="VerticalLayoutBackground" TargetType="VerticalStackLayout" >
-            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundSecondary}"/>
-            <Setter Property="Spacing" Value="10"/>
+               <Setter Property="BackgroundColor" Value="{StaticResource BackgroundSecondary}"/> 
+               <Setter Property="Spacing" Value="10"/> 
         </Style>
         <Style x:Key="StackLayoutBackground" TargetType="StackLayout" >
-            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundSecondary}"/>
-            <Setter Property="Spacing" Value="8"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource BackgroundSecondary}"/> 
+              <Setter Property="Spacing" Value="8"/> 
+        </Style>
+        <Style x:Key="PickerStyle" TargetType="Picker">
+               <Setter Property="BackgroundColor" Value="{StaticResource BackgroundPrimary}"/> 
+             <Setter Property="TextColor" Value="{StaticResource WhiteText}"/> 
+        </Style>
+        <Style x:Key="EntryStyle" TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="{StaticResource BackgroundPrimary}"/> 
+             <Setter Property="TextColor" Value="{StaticResource WhiteText}"/> 
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource WhiteText}"/>
         </Style>
     </toolkit:Popup.Resources>
 
     <VerticalStackLayout WidthRequest="320" Style="{StaticResource VerticalLayoutBackground}">
-        <Label x:Name="MessageText" VerticalOptions="Center" TextColor="{StaticResource WhiteText}"/>
+        <Label x:Name="MessageText" VerticalOptions="Center" Style="{StaticResource LabelStyle}"/>
 
         
         <StackLayout x:Name="TypePanel" Style="{StaticResource StackLayoutBackground}" HeightRequest="500">
-            <Label Text="{Binding EntryNameTitle}" FontAttributes="Bold" TextColor="{StaticResource WhiteText}"/>
-            <Entry x:Name="EntryName" Placeholder="{Binding EntryNamePlaceholder}" TextColor="{StaticResource WhiteText}" BackgroundColor="{StaticResource BackgroundPrimary}" TextChanged="EntryName_TextChanged"/>
+            <Label Text="{Binding EntryNameTitle}" FontAttributes="Bold" Style="{StaticResource LabelStyle}"/>
+            <Entry x:Name="EntryName" Placeholder="{Binding EntryNamePlaceholder}" Style="{StaticResource EntryStyle}" TextChanged="EntryName_TextChanged"/>
             <!-- quantity -->
             <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
                 <Label Text="{Binding QuantityLabel}" FontAttributes="Bold" 
-           VerticalTextAlignment="Center" TextColor="{StaticResource WhiteText}" Padding="10"/>
-                <Entry Text="{Binding Quantity}" Keyboard="Numeric" TextColor="{StaticResource WhiteText}" TextChanged="QuantityEntry_TextChanged" />
-                <Picker x:Name="PickerUnit" SelectedIndexChanged="PickerUnit_SelectedIndexChanged" 
-            BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
+           VerticalTextAlignment="Center" Style="{StaticResource LabelStyle}" Padding="10"/>
+                <Entry Text="{Binding Quantity}" Keyboard="Numeric"  TextChanged="QuantityEntry_TextChanged" Style="{StaticResource EntryStyle}"/>
+                <Picker x:Name="PickerUnit" SelectedIndexChanged="PickerUnit_SelectedIndexChanged" Style="{StaticResource PickerStyle}"/>
             </HorizontalStackLayout>
 
             <!-- Suggestion-->
@@ -46,8 +56,8 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <HorizontalStackLayout Padding="10" VerticalOptions="Center" >
-                            <Label Text="{Binding Name}" Padding="10" TextColor="{StaticResource WhiteText}"  />
-                            <Label Text="{Binding Category}" Padding="10" TextColor="{StaticResource WhiteText}" />
+                            <Label Text="{Binding Name}" Padding="10" Style="{StaticResource LabelStyle}"  />
+                            <Label Text="{Binding Category}" Padding="10" Style="{StaticResource LabelStyle}" />
                             
                         </HorizontalStackLayout>
                     </DataTemplate>
@@ -55,8 +65,8 @@
             </CollectionView>
 
             <!-- Category -->
-            <Label Text="Catégories" FontAttributes="Bold" TextColor="{StaticResource WhiteText}" Margin="0,10,0,0"/>
-            <Picker x:Name="PickerCategoryList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" BackgroundColor="{StaticResource BackgroundPrimary}" TextColor="{StaticResource WhiteText}"/>
+            <Label Text="Catégories" FontAttributes="Bold" Style="{StaticResource LabelStyle}" Margin="0,10,0,0"/>
+            <Picker x:Name="PickerCategoryList" Title="Sélectionner..." SelectedIndexChanged="PickerList_SelectedIndexChanged" Style="{StaticResource PickerStyle}"/>
         </StackLayout>
 
         <!-- Buttons -->
