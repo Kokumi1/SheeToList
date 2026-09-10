@@ -1,12 +1,58 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="SheeToList.View.HelpPopup.RecipeListHelpPopup"
-             Title="RecipeListHelpPopup">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-</ContentPage>
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}">
+
+
+    <toolkit:Popup.Resources>
+        <Style x:Key="ButtonColor" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource BackgroundPrimary}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource WhiteText}}" />
+        </Style>
+        <Style x:Key="VerticalLayoutBackground" TargetType="VerticalStackLayout" >
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}" />
+            <Setter Property="Spacing" Value="10"/>
+        </Style>
+        <Style x:Key="StackLayoutBackground" TargetType="StackLayout" >
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}" />
+            <Setter Property="Spacing" Value="8"/>
+        </Style>
+        <Style x:Key="PickerStyle" TargetType="Picker">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundPrimary}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource WhiteText}}" />
+        </Style>
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundPrimary}}" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource WhiteText}}" />
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource WhiteText}}" />
+        </Style>
+    </toolkit:Popup.Resources>
+
+    <ScrollView HeightRequest="480" WidthRequest="320" Padding="0">
+        <VerticalStackLayout Style="{StaticResource VerticalLayoutBackground}"
+                       Padding="0">
+
+            <Label 
+                 Text="Ce popup est la pour vous aidé à utiliser l'application."
+                 VerticalOptions="Start" 
+                 HorizontalOptions="Center"
+                 Style="{StaticResource LabelStyle}"/>
+
+            <Image Source="recipetopscreen.png" HeightRequest="200" WidthRequest="300" 
+       Aspect="AspectFit"/>
+
+            <Label Text="Ceci est l'écran qui vous permettra de gérer les recettes enregistrées dans l'application.
+                   &#10;Les recettes sont indiquées avec leur nom. Appuyez dessus pour voir la liste des ingrédients associés. 
+                   &#10;Appuyez sur la poubelle pour supprimer la recette
+                   &#10;Appuyez sur la flèche en haut de l'écran pour retourner à la liste de course.
+                   &#10;&#10;Pour ajouter une nouvelle recette: appuyez sur le '+' en bas de l'écran." 
+                   
+       Style="{StaticResource LabelStyle}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</toolkit:Popup>

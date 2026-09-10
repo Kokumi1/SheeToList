@@ -52,10 +52,10 @@
 
             <Image Source="mainbottombar.png" HeightRequest="100" WidthRequest="300" Aspect="AspectFit"/>
 
-            <Label Text="Ceci la bar du bas. Grace au bouton proposés:
-                   &#10;Pour ajouter un produit à la liste de course: appuyez sur le '+' afin d'ouvrir la fenêtre qui vous permettras de renseigné le nom et la quantité.
-                   &#10;Si vous souhaitez effacer toute la liste appuyer sur le bouton 'X'.
-                   &#10;Le bouton 'Révelez tout' afficheras les produits que vous avez coché. R'appuyez dessus pour les masquer à nouveau."
+            <Label Text="Ceci est la barre du bas. Grâce au bouton proposé :
+                   &#10;Pour ajouter un produit à la liste de course : appuyez sur le '+' afin d'ouvrir la fenêtre qui vous permettra de renseigner le nom et la quantité.
+                   &#10;Si vous souhaitez effacer toute la liste, appuyez sur le bouton 'X'.
+                   &#10;Le bouton 'Révelez tout' affichera les produits que vous avez cochés. R'appuyez dessus pour les masquer à nouveau."
                    Style="{StaticResource LabelStyle}"/>
 
         </VerticalStackLayout>
