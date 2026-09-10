@@ -7,6 +7,7 @@ using CommunityToolkit.Maui.Extensions;
 using SheeToList.Model;
 using SheeToList.Resources.String;
 using SheeToList.Services;
+using SheeToList.View.HelpPopup;
 
 namespace SheeToList.View;
 
@@ -29,6 +30,11 @@ public partial class RecipePage : ContentPage
 		var result = await popup.WaitForResultAsync();
 		return (result?.Name, result?.Category, result?.Quantity, result?.Unit);
 	}
+    private void HelpButton_Clicked(object sender, EventArgs e)
+    {
+        var popup = new RecipePageHepPopup();
+        this.ShowPopup(popup);
+    }
 }
 
 public class RecipeViewModel : INotifyPropertyChanged

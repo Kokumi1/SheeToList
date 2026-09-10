@@ -101,7 +101,7 @@
 	  <MauiXaml Update="View\HelpPopup\RecipeListHelpPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\HelpPopup\RecipePageHepPopup.xaml">
+	  <MauiXaml Update="View\HelpPopup\RecipePageHelpPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\PickOrTypePopup.xaml">
@@ -150,6 +150,9 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Redacted.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\HelpPopup\RecipePageHelpPopup.xaml.cs">
+	    <DependentUpon>RecipePageHelpPopup.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 

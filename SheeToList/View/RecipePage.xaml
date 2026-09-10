@@ -17,6 +17,8 @@
     </ContentPage.Resources>
 
     <Grid RowDefinitions="20,90,*,Auto,50" Padding="30,0">
+        
+        
 
         <Label Text="{Binding RecetteTitle}" FontSize="Title" TextColor="{StaticResource PrimaryDark}" FontAttributes="Bold"
                Grid.Row="1" VerticalOptions="Center">
@@ -26,6 +28,14 @@
                     />
             </Label.GestureRecognizers>
         </Label>
+        
+        <Button
+            Clicked="HelpButton_Clicked"
+            Text="? Aide"
+            Grid.Row="1"
+            HorizontalOptions="End"
+            VerticalOptions="Center"
+            />
 
         <ScrollView Grid.Row="2">
             <VerticalStackLayout  Spacing="25">
