@@ -33,10 +33,10 @@
 
     <ScrollView HeightRequest="480" WidthRequest="320" Padding="0">
         <VerticalStackLayout Style="{StaticResource VerticalLayoutBackground}"
-                           Padding="20">
+                           Padding="0">
 
             <Label 
-            Text="Ce popup est la pour vous aidé à utiliser l'application et merci de l'utiliser."
+            Text="Ce popup est la pour vous aidé à utiliser l'application."
             VerticalOptions="Start" 
             HorizontalOptions="Center"
             Style="{StaticResource LabelStyle}"/>
@@ -44,7 +44,19 @@
             <Image Source="maintopscreen.png" HeightRequest="200" WidthRequest="300" 
                    Aspect="AspectFit"/>
 
-            <Label Text="lorem ipsum" Style="{StaticResource LabelStyle}"/>
+            <Label Text="Ceci est la barre du dessus. Vous y retrouverez les boutons qui vous amèneront à la liste des recettes et des catégories.                  
+                   &#10;En dessous, vous avez la liste des courses classée par catégorie.
+                   &#10;Ici, la pomme est classée dans les fruits. 
+                   &#10;Appuyez sur la poubelle pour supprimer le produit de la liste. Cochez la case pour indiquer que vous l'avez ajouté à votre caddie." 
+                   Style="{StaticResource LabelStyle}"/>
+
+            <Image Source="mainbottombar.png" HeightRequest="100" WidthRequest="300" Aspect="AspectFit"/>
+
+            <Label Text="Ceci la bar du bas. Grace au bouton proposés:
+                   &#10;Pour ajouter un produit à la liste de course: appuyez sur le '+' afin d'ouvrir la fenêtre qui vous permettras de renseigné le nom et la quantité.
+                   &#10;Si vous souhaitez effacer toute la liste appuyer sur le bouton 'X'.
+                   &#10;Le bouton 'Révelez tout' afficheras les produits que vous avez coché. R'appuyez dessus pour les masquer à nouveau."
+                   Style="{StaticResource LabelStyle}"/>
 
         </VerticalStackLayout>
     </ScrollView>
