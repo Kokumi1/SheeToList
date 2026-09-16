@@ -1,12 +1,48 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="SheeToList.View.HelpPopup.CategoryDetailHelpPopup"
-             Title="CategoryDetailHelpPopup">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-</ContentPage>
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}">
+
+    <toolkit:Popup.Resources>
+        <Style x:Key="VerticalLayoutBackground" TargetType="VerticalStackLayout" >
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}" />
+            <Setter Property="Spacing" Value="10"/>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource WhiteText}}" />
+        </Style>
+    </toolkit:Popup.Resources>
+
+    <ScrollView HeightRequest="480" WidthRequest="320" Padding="0">
+        <VerticalStackLayout Style="{StaticResource VerticalLayoutBackground}"
+                 Padding="0">
+
+            <Label 
+Text="Ce popup est la pour vous aidé à utiliser l'application."
+VerticalOptions="Start" 
+HorizontalOptions="Center"
+Style="{StaticResource LabelStyle}"/>
+
+            <Label
+          Text="Ceci est la liste des mots-clés qui sont utiliser pour organiser les ingrédients."
+          Style="{StaticResource LabelStyle}"/>
+
+            <Image Source="categorykeyword.png" HeightRequest="200" WidthRequest="300" 
+ Aspect="AspectFit"/>
+            <Label
+          Text="En touchant un mot-clé, vous pourrez le modifier. Cela permettra à l'application de trier les ingrédients dans la catégorie que vous souhaitez.
+          "
+          Style="{StaticResource LabelStyle}"/>
+
+            <HorizontalStackLayout>
+                <Image Source="addbutton.png" HeightRequest="50" WidthRequest="50" Aspect="AspectFit"/>
+                <Label
+                    Text="En appuyant sur ce bouton, vous pouvez ajouter un nouveau mot-clé. et ainsi organiser vos ingrédients selon vos besoins."
+                    Style="{StaticResource LabelStyle}"
+                />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</toolkit:Popup>

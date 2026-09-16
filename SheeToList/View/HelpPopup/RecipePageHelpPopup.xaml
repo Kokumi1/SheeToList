@@ -6,25 +6,9 @@
                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}">
 
     <toolkit:Popup.Resources>
-        <Style x:Key="ButtonColor" TargetType="Button">
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource BackgroundPrimary}}" />
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource WhiteText}}" />
-        </Style>
         <Style x:Key="VerticalLayoutBackground" TargetType="VerticalStackLayout" >
             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}" />
             <Setter Property="Spacing" Value="10"/>
-        </Style>
-        <Style x:Key="StackLayoutBackground" TargetType="StackLayout" >
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}" />
-            <Setter Property="Spacing" Value="8"/>
-        </Style>
-        <Style x:Key="PickerStyle" TargetType="Picker">
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundPrimary}}" />
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource WhiteText}}" />
-        </Style>
-        <Style x:Key="EntryStyle" TargetType="Entry">
-            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundPrimary}}" />
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource WhiteText}}" />
         </Style>
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource WhiteText}}" />
@@ -40,6 +24,19 @@
       VerticalOptions="Start" 
       HorizontalOptions="Center"
       Style="{StaticResource LabelStyle}"/>
+
+            <Label
+                Text="En touchant le nom de la recette en haut de l'écran, vous pouvez modifier le nom de cette recette."
+                Style="{StaticResource LabelStyle}"/>
+
+            <Image Source="recipeingrediant.png" HeightRequest="100" WidthRequest="300" 
+       Aspect="AspectFit"/>
+            <Label
+                Text="Sur cette ligne, vous voyez les informations sur 1 ingrédient. 
+                &#10;Vous pouvez modifier son nom, sa catégorie ou la quantité. Vous pouvez supprimer l'ingrédient en touchant la poubelle.
+                &#10;Si la catégorie d'un ingrédient reste à 'Autre', alors l'application se chargera du triage de l'ingrédient, mais cela peut entraîner des erreurs.
+                "
+                Style="{StaticResource LabelStyle}"/>
 
         </VerticalStackLayout>
     </ScrollView>
