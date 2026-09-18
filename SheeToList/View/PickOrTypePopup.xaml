@@ -95,6 +95,8 @@
 
         <!-- Buttons -->
         <HorizontalStackLayout Spacing="8" HorizontalOptions="End" BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource BackgroundSecondary}}" >
+            <Button Clicked="HelpButton_Clicked" Text="? Aide" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,0,80,0"/>
+            
             <Button Text="Annuler" Clicked="OnCancelClicked"  Style="{StaticResource ButtonColor}"/>
             <Button Text="Valider" Clicked="OnAcceptClicked"  Style="{StaticResource ButtonColor}"/>
         </HorizontalStackLayout>

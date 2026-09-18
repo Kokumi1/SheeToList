@@ -38,7 +38,7 @@ Style="{StaticResource LabelStyle}"/>
 
             <HorizontalStackLayout>
                 <Image Source="addbutton.png" HeightRequest="50" WidthRequest="50" Aspect="AspectFit"/>
-                <Label
+                <Label MaximumWidthRequest="250" Margin="10,0,0,0"
                     Text="En appuyant sur ce bouton, vous pouvez ajouter un nouveau mot-clé. et ainsi organiser vos ingrédients selon vos besoins."
                     Style="{StaticResource LabelStyle}"
                 />

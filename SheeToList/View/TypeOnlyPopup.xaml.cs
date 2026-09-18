@@ -5,11 +5,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Maui.Views;
 using SheeToList.Model;
 using SheeToList.Resources.String;
 using SheeToList.Services;
 using SheeToList.Utils;
+using SheeToList.View.HelpPopup;
 
 namespace SheeToList.View;
 
@@ -234,6 +236,15 @@ public partial class TypeOnlyPopup : Popup, INotifyPropertyChanged
         else
         {
             Unit = null;
+        }
+    }
+
+    private void HelpButton_Clicked(object sender, EventArgs e)
+    {
+        var popup = new PickTypeHelpPopup();
+        if (Application.Current?.MainPage is Page page)
+        {
+            page.ShowPopup(popup);
         }
     }
     #endregion
