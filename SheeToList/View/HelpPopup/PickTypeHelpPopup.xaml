@@ -15,10 +15,28 @@
         </Style>
     </toolkit:Popup.Resources>
 
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ScrollView HeightRequest="480" WidthRequest="320" Padding="0">
+        <VerticalStackLayout Style="{StaticResource VerticalLayoutBackground}"
+                   Padding="0">
+
+            <Label 
+          Text="Ce popup est la pour vous aidé à utiliser l'application. &#10;Ici vous pouvez ajouter un nouveau produit à la liste"
+          VerticalOptions="Start" 
+          HorizontalOptions="Center"
+          Style="{StaticResource LabelStyle}"/>
+
+            <Image Source="addpopup2.png" HeightRequest="200" WidthRequest="300" 
+Aspect="AspectFit"/>
+            <Label Text="Pour ajouter les ingrédients d'une recette, appuyez sur 'Choisir', puis sélectionnez la recette dans la liste déroulante."
+                   />
+
+            <Image Source="addpopup.png" HeightRequest="200" WidthRequest="300" 
+Aspect="AspectFit"/>
+            <Label Text="Ici c'est pour ajouter un produit en son nom.
+                   &#10;Vous pouvez aussi choisir la quantité.
+                   &#10;Si vous avez sélectionné un produit dans la liste des suggestions, la catégorie sera renseignée automatiquement mais vous pouvez le rectifier.
+                   &#10;Si aucune catégorie n'est renseignée, l'application peut le deviner avec les mots clés dans la liste des catégories."/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </toolkit:Popup>
