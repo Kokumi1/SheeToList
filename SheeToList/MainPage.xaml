@@ -41,9 +41,8 @@
                 Clicked="HelpButton_Clicked"
                 Text="? Aide"
                 Grid.Column="1"
-                HorizontalOptions="Start"
+                HorizontalOptions="End"
                 VerticalOptions="Center"
-                Margin="0,0,100,0"
                 />
         </Grid>
 
