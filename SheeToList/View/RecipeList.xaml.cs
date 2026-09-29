@@ -2,9 +2,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Extensions;
 using SheeToList.Model;
 using SheeToList.Resources.String;
 using SheeToList.Services;
+using SheeToList.View.HelpPopup;
 
 namespace SheeToList.View;
 
@@ -23,6 +25,11 @@ public partial class RecipeList : ContentPage
     public async void GotoRecipeDetailPage(Recipe recipe)
     {
         await Navigation.PushAsync(new RecipePage(recipe));
+    }
+    private void HelpButton_Clicked(object sender, EventArgs e)
+    {
+        var popup = new RecipeListHelpPopup();
+        this.ShowPopup(popup);
     }
 }
 

@@ -8,6 +8,7 @@ using CommunityToolkit.Maui.Extensions;
 using SheeToList.Model;
 using SheeToList.Services;
 using SheeToList.View;
+using SheeToList.View.HelpPopup;
 using SheeToList.Utils;
 using SheeToList.Resources.String;
 
@@ -54,6 +55,11 @@ namespace SheeToList
         }
         #endregion
 
+        private void HelpButton_Clicked(object sender, EventArgs e)
+        {
+            var popup = new MainHelpPopup();
+            this.ShowPopup(popup);
+        }
     }
 
 

@@ -6,6 +6,13 @@
     
     <Grid RowDefinitions="50,*,Auto,50" Padding="30,0">
 
+        <Button
+Clicked="HelpButton_Clicked"
+Text="? Aide"
+HorizontalOptions="End"
+VerticalOptions="Center"
+/>
+
         <StackLayout Padding="16" Spacing="12" Grid.Row="1">
             <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HorizontalOptions="Center" />
             <CollectionView x:Name="CategoryList"

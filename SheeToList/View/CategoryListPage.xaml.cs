@@ -3,9 +3,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Extensions;
 using SheeToList.Model;
 using SheeToList.Resources.String;
 using SheeToList.Services;
+using SheeToList.View.HelpPopup;
 
 namespace SheeToList.View;
 
@@ -15,6 +17,12 @@ public partial class CategoryListPage : ContentPage
     {
         InitializeComponent();
         BindingContext = new CategoryListViewModel(this);
+    }
+
+    private void HelpButton_Clicked(object sender, EventArgs e)
+    {
+        var popup = new CategoryListHelpPopup();
+        this.ShowPopup(popup);
     }
 }
 

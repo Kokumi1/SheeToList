@@ -15,15 +15,16 @@ namespace SheeToList.Model
     {
         get => name;
         set { name = value; 
-                OnPropertyChanged(); OnPropertyChanged(nameof(Data)); }
+                OnPropertyChanged();OnPropertyChanged(nameof(Data)); }
     }
-        public int Quantity { get => quantity; 
-            set  { quantity = value; 
-                OnPropertyChanged(); OnPropertyChanged(nameof(Data)); } }
+        public int Quantity { get => quantity;  
+            set  { quantity = value;
+                OnPropertyChanged(); OnPropertyChanged(nameof(QuantityAndUnitForDisplay)); } }
         public QuantityUnit QuantityUnit { get => quantityUnit; 
             set { quantityUnit = value;
-                OnPropertyChanged(); OnPropertyChanged(nameof(Data));
-            } }
+                OnPropertyChanged(); OnPropertyChanged(nameof(QuantityAndUnitForDisplay)); } }
+
+        public string QuantityAndUnitForDisplay { get => $"Quantité: {Quantity} {quantityUnit}"; }
 
         public string Data { get => $"{Name}    {Quantity} {quantityUnit}"; }
 

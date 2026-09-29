@@ -25,7 +25,15 @@
 		</Grid>
 
         <Label Text="Mots-clés: " Grid.Row="1" Margin="10,30,0,10" BackgroundColor="{StaticResource PrimaryDark}" TextColor="{StaticResource PrimaryDarkText}" />
-		
+
+        <Button
+Clicked="HelpButton_Clicked"
+Text="? Aide"
+            Grid.Row="0"
+HorizontalOptions="End"
+VerticalOptions="Center"
+/>
+
         <ScrollView Grid.Row="2">
          <VerticalStackLayout Spacing="25">
 				

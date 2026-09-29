@@ -27,7 +27,7 @@
 		<ApplicationId>com.myself.sheetolist.APIless</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.1.2.8</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.1.4</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
@@ -47,6 +47,14 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
+		<AndroidKeyStore>true</AndroidKeyStore>
+		<AndroidSigningKeyStore>sheetolist.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias>sheetolist</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass>Koku114</AndroidSigningKeyPass>
+		<AndroidSigningStorePass>Koku114</AndroidSigningStorePass>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -78,6 +86,24 @@
 	  <MauiXaml Update="View\CategoryListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\HelpPopup\CategoryDetailHelpPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\HelpPopup\CategoryListHelpPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\HelpPopup\MainHelpPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\HelpPopup\PickTypeHelpPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\HelpPopup\RecipeListHelpPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\HelpPopup\RecipePageHelpPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\PickOrTypePopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -103,6 +129,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\addbutton.png" />
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\addpopup.png" />
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\addpopup2.png" />
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\categorykeyword.png" />
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\categoryscreen.png" />
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\mainbottombar.png" />
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\maintopscreen.png" />
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\recipeingrediant.png" />
+	  <MauiImage Include="Resources\Images\HelpPopupScreenshot\recipetopscreen.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Resources\String\AppString.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -112,6 +150,9 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Redacted.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\HelpPopup\RecipePageHelpPopup.xaml.cs">
+	    <DependentUpon>RecipePageHelpPopup.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
