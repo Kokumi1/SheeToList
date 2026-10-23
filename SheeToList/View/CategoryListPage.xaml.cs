@@ -56,7 +56,7 @@ public class CategoryListViewModel : INotifyPropertyChanged
     {
         IsLoading = true;
         Categories = CategoryJsonTalker.Instance.Categories;
-        Debug.WriteLine("Category instance" + Categories.Count);
+        Debug.WriteLine("Category instance " + Categories.Count);
         OnPropertyChanged(nameof(Categories));
         IsLoading = false;
     }

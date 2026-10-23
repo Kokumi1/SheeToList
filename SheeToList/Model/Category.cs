@@ -5,17 +5,30 @@ namespace SheeToList.Model
     /// </summary>
     public enum Category
     {
-        Épicerie = 0,
-        Fruit = 1,
-        Legume = 2,
-        Viande = 3,
-        Poissons = 4,
-        ProduitLaitier = 5,
-        Boulangerie = 6,
-        Boisson = 7,
-        ProduitMenager = 8,
-        Surgelé = 9,
-        Conserve = 10,
+        Épicerie_salée = 0,
+        Épicerie_sucrée = 1,
+        Petit_déjeuner = 2,
+        Fruits_Et_légumes = 3,
+        Boucherie = 4,
+        Charcuterie = 5,
+        Poissonnerie = 6,
+        Produits_Laitiers = 7,
+        Fromagerie = 8,
+        Boulangerie = 9,
+        Pâtisserie = 10,
+        Boissons = 11,
+        
+        Surgelés = 12,
+        Traiteur = 13,
+        Œufs = 14,
+        Conserve = 15,
+        Animalerie = 16,
+        Bio_Diététique = 17,
+        Bazar_Maison = 18,
+        Hygiène = 19,
+        Entretien = 20,
+        Bébé = 21,
+        Textile = 22,
         Autre = 99
     }
 }

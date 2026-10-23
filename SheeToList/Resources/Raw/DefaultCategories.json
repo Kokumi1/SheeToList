@@ -1,9 +1,9 @@
 {
   "categories": [
     {
-      "name": "Fruits et légumes",
+      "name": "Fruits_et_légumes",
       "keywords": [ "pomme", "poire", "banane", "orange", "citron", "fraise", "raisins", "salade", "tomate", "concombre", "carotte", "courgette", "aubergine", "pommes de terre", "oignon", "ail", "champignon", "brocoli", "chou-fleur", "poivron", "avocat" ,
-                "leg provencal", "poireau", "endive", "choux", "chou ", "betterave", "pdt", "pomme de terre"]
+                "poireau", "endive", "choux", "chou ", "betterave","pdt vapeur"]
     },
     {
       "name": "Boulangerie",
@@ -15,19 +15,19 @@
     },
     {
       "name": "Boucherie",
-      "keywords": [ "steak haché", "steak", "roti", "poulet roti", "entrecôte", "faux-filet", "rumsteck", "côte de bœuf", "escalope de veau", "côtes d'agneau", "gigot", "rôti de porc", "côtes de porc", "filet mignon", "travers", "saucisses", "merguez", "poulet entier", "cuisses de poulet", "blanc de poulet", "dinde", "canard", "lapin","boeuf", "porc","poulet" ]
+      "keywords": [ "steak haché", "steak", "roti", "poulet roti", "entrecôte", "faux-filet", "rumsteck", "côte de bœuf", "escalope de veau", "côtes d'agneau", "côte d'agneau", "gigot", "rôti de porc", "côtes de porc", "côte de porc", "filet mignon", "traver", "saucisse", "merguez", "poulet entier", "cuisses de poulet", "cuisse de poulet", "blanc de poulet", "dinde", "canard", "lapin", "boeuf", "porc", "poulet" ]
     },
     {
       "name": "Charcuterie",
-      "keywords": [ "jambon blanc", "saucisse", "jambon cru", "rosette", "saucisson sec", "chorizo", "mortadelle", "bacon", "lardons", "pâté", "rillettes", "andouille", "boudin noir", "boudin blanc", "saucisse de strasbourg", "knack", "coppa", "pancetta", "terrine", "jambon fumé", "salami", "jambon" ]
+      "keywords": [ "jambon blanc", "saucisse", "jambon cru", "rosette", "saucisson sec", "chorizo", "mortadelle", "bacon", "lardons", "rillettes", "andouille", "boudin noir", "boudin blanc", "saucisse de strasbourg", "knack", "coppa", "pancetta", "terrine", "jambon fumé", "salami", "jambon" ]
     },
     {
       "name": "Poissonnerie",
-      "keywords": [ "saumon", "cabillaud", "colin", "merlu", "thon", "maquereau", "sardine", "dorade", "bar", "truite", "crevette", "moule", "huître", "coquilles saint-jacque", "calamar", "poulpe", "langoustine", "crabe", "homard", "bulot" ]
+      "keywords": [ "saumon", "cabillaud", "colin", "merlu", "thon", "maquereau", "sardine", "dorade", "bar", "truite", "crevette", "moule", "huître", "coquilles saint-jacque", "calamar", "poulpe", "langoustine", "crabe", "homard", "bulot","poisson" ]
     },
     {
       "name": "Traiteur",
-      "keywords": [ "quiche lorraine", "flamekuche", "pizza fraîche", "lasagne", "hachis parmentier", "salade piémontaise", "taboulé", "carottes râpées", "céleri rémoulade", "sushi", "sandwich jambon", "wrap poulet", "gratin dauphinois", "couscous", "paëlla", "chili con carne", "nem", "samoussa", "tarte salée", "croque-monsieur" ]
+      "keywords": [ "quiche lorraine", "flamekuche", "pizza fraîche", "lasagne", "hachis parmentier", "salade piémontaise", "taboulé", "carottes râpées", "céleri rémoulade", "sushi", "sandwich jambon", "wrap poulet", "gratin dauphinois", "couscous", "paëlla", "chili con carne", "nem", "samoussa", "tarte salée", "croque-monsieur","celeri","plat préparé","plats préparé","soupe" ]
     },
     {
       "name": "Fromagerie",
@@ -36,32 +36,32 @@
                 "mimolette", "cousteron", "bleu", "fromage" ]
     },
     {
-      "name": "Produits laitiers",
+      "name": "Produits_laitiers",
       "keywords": [ "lait entier", "lait demi-écrémé", "lait écrémé", "crème fraîche", "beurre doux", "beurre demi-sel", "yaourt nature", "yaourt vanille", "yaourt aux fruits", "fromage blanc", "petit suisse", "skyr", "dessert chocolat", "riz au lait", "liégeois", "flan", "kéfir", "boisson végétale avoine", "boisson soja", "boisson amande", "liégois", "danette" ]
     },
     {
       "name": "Conserve",
-      "Keywords":[ "conserve", "bocal", "boite", "terrine", "rillette", "cornichon", "caperis" ]
+      "Keywords": [ "conserve", "bocal", "boite", "terrine", "rillette", "cornichon", "caperis", "pois chiche", "leg provençale" ]
     },
     {
       "name": "Œufs",
       "keywords": [ "œufs plein air", "œufs bio", "œufs label rouge", "œufs de caille", "blancs d'œufs", "jaunes d'œufs", "œufs extra-frais", "œufs x6", "œufs x10", "œufs x12", "œufs x18", "œufs x20", "œufs fermiers", "œufs oméga 3", "œufs brouillés", "œufs durs", "œufs liquides", "œufs xl", "œufs m", "œufs l" ]
     },
     {
-      "name": "Épicerie salée",
+      "name": "Épicerie_salée",
       "keywords": [ "pâtes", "riz", "semoule", "lentilles", "haricots secs", "pois chiches", "purée", "farine", "huile d'olive", "huile tournesol", "vinaigre", "sel", "poivre", "épices", "sauce tomate", "mayonnaise", "ketchup", "moutarde", "conserves de légumes", "conserves de poisson" ]
     },
     {
-      "name": "Épicerie sucrée",
+      "name": "Épicerie_sucrée",
       "keywords": [ "sucre", "cassonade", "chocolat noir", "chocolat au lait", "biscuits", "cookies", "madeleines", "confiture", "miel", "pâte à tartiner", "compote", "fruits secs", "bonbons", "chewing-gums", "gâteaux", "barres céréales", "sirop d'érable", "sucre vanillé", "levure", "gelée" ]
     },
     {
-      "name": "Petit-déjeuner",
+      "name": "Petit_déjeuner",
       "keywords": [ "café moulu", "café grains", "café capsules", "thé", "infusions", "chocolat en poudre", "céréales", "muesli", "flocons d'avoine", "biscottes", "pain grillé", "brioche tranchée", "confiture", "miel", "nutella", "beurre de cacahuète", "jus d'orange", "jus multifruits", "lait", "yaourt à boire" ]
     },
     {
       "name": "Boissons",
-      "keywords": [ "eau plate", "eau", "eau gazeuse", "soda cola", "limonade", "thé glacé", "jus de pomme", "jus d'orange", "nectar", "sirop", "boisson énergétique", "boisson isotonique", "café glacé", "lait aromatisé", "kombucha", "bière", "vin rouge", "vin blanc", "rosé", "champagne", "cidre", "vin", "coca"]
+      "keywords": [ "eau plate", " eau", "eau gazeuse", "soda cola", "limonade", "thé glacé", "jus de pomme", "jus d'orange", "nectar", "sirop", "boisson énergétique", "boisson isotonique", "café glacé", "lait aromatisé", "kombucha", "bière", "vin rouge", "vin blanc", "rosé", "champagne", "cidre", "vin", "coca"]
     },
     {
       "name": "Surgelés",
@@ -84,11 +84,11 @@
       "keywords": [ "croquettes chien", "pâtée chien", "friandises chien", "croquettes chat", "pâtée chat", "litière", "jouet chat", "jouet chien", "laisse", "collier", "gamelle", "arbre à chat", "shampooing chien", "anti-puces", "nourriture oiseaux", "nourriture poissons", "foin lapin", "nourriture rongeurs", "sac de transport", "os à mâcher" ]
     },
     {
-      "name": "Bio / Diététique",
+      "name": "Bio_Diététique",
       "keywords": [ "farine bio", "riz bio", "pâtes bio", "lait bio", "œufs bio", "fruits bio", "légumes bio", "tofu", "tempeh", "boisson avoine", "boisson soja", "muesli bio", "purée d'amande", "quinoa", "graines de chia", "graines de lin", "spiruline", "barre protéinée", "biscuits sans gluten", "pain sans gluten" ]
     },
     {
-      "name": "Bazar / Maison",
+      "name": "Baza_Maison",
       "keywords": [ "ampoule", "piles", "cintres", "bougies", "allumettes", "briquet", "vaisselle jetable", "gobelets", "assiettes carton", "papier cadeau", "ruban adhésif", "ciseaux", "stylos", "cahier", "bloc-notes", "rallonge électrique", "multiprise", "boîte de rangement", "sac isotherme", "filtre à café" ]
     },
     {

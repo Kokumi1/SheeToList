@@ -154,6 +154,7 @@ namespace SheeToList
             LoadData();
             var _R = RecipeJsonTalker.Instance;
             var _C = CategoryJsonTalker.InitializeAsync();
+            Debug.WriteLine("category count in main " + CategoryJsonTalker.Instance.Categories.Count);
 
             CollectionChangedSetup();
         }

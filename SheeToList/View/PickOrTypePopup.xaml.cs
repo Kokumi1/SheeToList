@@ -151,6 +151,8 @@ public partial class PickOrTypePopup : Popup, INotifyPropertyChanged
             .OrderBy(c => c)
             .ToList();
 
+        Debug.WriteLine("Categories for picker: " + string.Join(", ", categories));
+
         foreach (var category in categories)
         {
             PickerCategoryList.Items.Add(category);

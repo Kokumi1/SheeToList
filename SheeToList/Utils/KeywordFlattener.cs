@@ -11,21 +11,23 @@ namespace SheeToList.Utils
         // Mots-clés par défaut pour chaque catégorie, utilisés si le chargement depuis le store échoue ou est vide.
         private static readonly Dictionary<Category, string[]> DefaultKeywords = new()
         {
-            { Category.Surgelé, new[] { "surgeles", "congele", "glace", "pdt sautees", "pdt rissolees", "frite", "frites", "cordon bleu"} },
-            {Category.Épicerie, new[] { "épicerie", "epicerie", "conserve","plats préparés", "conserves", "sauce", "sauces", "pate", "pates",
+            { Category.Surgelés, new[] { "surgeles", "congele", "glace", "pdt sautees", "pdt rissolees", "frite", "frites", "cordon bleu"} },
+            {Category.Épicerie_salée, new[] { "épicerie", "epicerie", "conserve","plats préparés", "conserves", "sauce", "sauces", "pate", "pates",
                 "cereale", "patate", "pdt", "legumineuse", "flageolets", "pois", "tarte", "flamekuche","pizza", "huile", "vinaigre",
                 "vin blanc", "moutarde", "mayonnaise", "ketchup", "soupe", "bouillon","carbonara", "epinards creme", "lentille", "lentilles", "semoule"}  },
-            { Category.Fruit, new[] { "pomme", "banane", "orange", "fraise", "raisin", "kiwi", "citron", "ananas", "poire", "clementine" } },
-            { Category.Legume, new[] { "tomate", "carotte", "salade", "laitue", "poivron", "oignon", "courgette", "concombre", "aubergine", "haricots",
-                "leg provencal", "poireau", "endive", "choux", "chou ", "leg" } },
-            { Category.Viande, new[] { "poulet", "boeuf", "porc", "agneau", "steak", "saucisse", "dinde", "roti", "chippolata", "charcuterie", "jambon", "boudin" } },
-            { Category.Poissons, new[] {"poisson", "saumon", "thon", "crevette", "merlan", "truite", "morue", "cabillaud" } },
-            { Category.ProduitLaitier, new[] { "lait", "yaourt", "fromage", "beurre", "crème", "yaourt", "maroilles", "caprice des dieux", "port salut",
+            { Category.Fruits_Et_légumes, new[] { "pomme", "banane", "orange", "fraise", "raisin", "kiwi", "citron", "ananas", "poire",("clementine")} },
+            { Category.Boucherie, new[] { "poulet", "boeuf", "porc", "agneau", "steak", "saucisse", "dinde", "roti", "chippolata", "charcuterie", "jambon", "boudin" } },
+            { Category.Poissonnerie, new[] {"poisson", "saumon", "thon", "crevette", "merlan",("pdt sautees"), ("pdt rissolees"), ("frite"), ("frites"), ("cordon bleu")} },
+            {Category.Épicerie_sucrée, new[] {("épicerie"), ("epicerie"), ("conserve"),("plats préparés"), ("conserves"), ("sauce"), ("sauces"), ("pate"), ("pates"),
+                ("cereale"), ("patate"), ("pdt"), ("legumineuse"), ("flageolets"), ("pois"), ("tarte"), ("flamekuche"),("pizza"), ("huile"), ("vinaigre"),
+                ("vin blanc"), ("moutarde"), ("mayonnaise"), ("ketchup"), ("soupe"), ("bouillon"),("carbonara"), ("epinards creme"), ("lentille"), ("lentilles"), ("semoule")}  },
+            { Category.Fruits_Et_légumes, new[] {("pomme"), ("banane"), ("orange"), ("fraise"), ("raisin"), ("kiwi"), ("citron"), ("ananas"), ("poire"), ("clementine")} },
+            { Category.Produits_Laitiers, new[] {("lait"), ("yaourt"), ("fromage"), ("beurre"), ("crème"), ("yaourt"), ("maroilles"), ("caprice des dieux"), ("port salut"),
                 "chausse aux moines", "buche de chevre", "pave d'affinois","chevre nature", "rocamadour", "petit basque", "etorki", "st albray", "boursin",
                 "mimolette", "cousteron", "bleu"} },
             { Category.Boulangerie, new[] { "pain", "baguette", "croissant", "brioche", "pain de mie" } },
-            { Category.Boisson, new[] { "eau", "jus", "soda", "coca", "vin", "biere", "café" } },
-            { Category.ProduitMenager, new[] { "lessive", "savon", "shampoing", "détergent", "produit vaisselle", "eponges", "papier toilette" } },
+            { Category.Boissons, new[] { "eau", "jus", "soda", "coca", "vin", "biere", "café" } },
+            { Category.Entretien, new[] { "lessive", "savon", "shampoing", "détergent", "produit vaisselle", "eponges", "papier toilette" } },
             { Category.Conserve, new[] { "conserve", "bocal", "boite", "terrine", "rillette", "pate", "cornichon", "olive", "caperis" } }
         };
 
@@ -41,6 +43,7 @@ namespace SheeToList.Utils
             {
                 var store = CategoryJsonTalker.Instance;
                 var storeCategories = store?.Categories;
+                Debug.WriteLine("Categories chargées depuis le store : " + (storeCategories?.Count ?? 0));
 
                 if (storeCategories != null && storeCategories.Count > 0)
                 {

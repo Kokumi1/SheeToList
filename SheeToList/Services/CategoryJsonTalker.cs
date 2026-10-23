@@ -121,6 +121,7 @@ namespace SheeToList.Services
                 await SaveAsync(categories);
             }
 
+            Debug.WriteLine($"Final category count after load: {categories.Count}");
             MainThread.BeginInvokeOnMainThread(() => CategoryJsonTalker.Instance.Categories = categories);
         }
 
