@@ -21,7 +21,6 @@ namespace SheeToList.Utils
             {Category.Épicerie_sucrée, new[] {("épicerie"), ("epicerie"), ("conserve"),("plats préparés"), ("conserves"), ("sauce"), ("sauces"), ("pate"), ("pates"),
                 ("cereale"), ("patate"), ("pdt"), ("legumineuse"), ("flageolets"), ("pois"), ("tarte"), ("flamekuche"),("pizza"), ("huile"), ("vinaigre"),
                 ("vin blanc"), ("moutarde"), ("mayonnaise"), ("ketchup"), ("soupe"), ("bouillon"),("carbonara"), ("epinards creme"), ("lentille"), ("lentilles"), ("semoule")}  },
-            { Category.Fruits_Et_légumes, new[] {("pomme"), ("banane"), ("orange"), ("fraise"), ("raisin"), ("kiwi"), ("citron"), ("ananas"), ("poire"), ("clementine")} },
             { Category.Produits_Laitiers, new[] {("lait"), ("yaourt"), ("fromage"), ("beurre"), ("crème"), ("yaourt"), ("maroilles"), ("caprice des dieux"), ("port salut"),
                 "chausse aux moines", "buche de chevre", "pave d'affinois","chevre nature", "rocamadour", "petit basque", "etorki", "st albray", "boursin",
                 "mimolette", "cousteron", "bleu"} },
@@ -75,6 +74,7 @@ namespace SheeToList.Utils
             // Si aucune paire issue du store, utilise les keywords par défaut
             if (pairs.Count == 0)
             {
+                Debug.WriteLine("Aucune catégorie personnalisée chargée. Utilisation des catégories par défaut.");
                 foreach (var kvp in DefaultKeywords)
                 {
                     foreach (var key in kvp.Value)
