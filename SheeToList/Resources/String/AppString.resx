@@ -253,7 +253,7 @@
     <value>Tape le produit à ajouter.</value>
   </data>
   <data name="Popup_Main_Warn" xml:space="preserve">
-    <value>Ce produit est déjà dans la liste.   Sa quantité est augmenté d'un.</value>
+    <value>Ce produit est déjà dans la liste. Sa quantité est augmenté.</value>
   </data>
   <data name="popup_rename_product" xml:space="preserve">
     <value>Entrer le nouveau nom.</value>

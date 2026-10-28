@@ -235,7 +235,7 @@ namespace SheeToList
             if (Products.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) 
             {
                 var p = Products.First(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                p.Quantity += quantity ?? 0;
+                p.Quantity += quantity ?? 1;
 
                 await _page.DisplayAlertAsync(AppString.popup_warn_title, AppString.Popup_Main_Warn, AppString.General_ok);
             }

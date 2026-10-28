@@ -340,7 +340,7 @@ namespace SheeToList.Resources.String {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Ce produit est déjà dans la liste.   Sa quantité est augmenté d&apos;un..
+        ///   Recherche une chaîne localisée semblable à Ce produit est déjà dans la liste. Sa quantité est augmenté..
         /// </summary>
         internal static string Popup_Main_Warn {
             get {
